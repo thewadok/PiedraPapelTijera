@@ -1,4 +1,4 @@
-package com.kotliners.piedra_papel_o_tijera.ui.theme
+package com.kotliners.piedrapapeltijera.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

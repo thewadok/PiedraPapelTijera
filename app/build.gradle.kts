@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.kotliners.piedra_papel_o_tijera"
+    namespace = "com.kotliners.piedrapapeltijera"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.kotliners.piedra_papel_o_tijera"
+        applicationId = "com.kotliners.piedrapapeltijera"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
@@ -49,7 +49,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
-    implementation("andridx.navigation:navigation-compose:2.8.0")
+    implementation("androidx.navigation:navigation-compose:2.8.0")
     implementation("androidx.compose.material:material-icons-extended-android:1.7.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
     implementation("androidx.lifecycle:lifecycle-runtime-compose-android:2.9.4")

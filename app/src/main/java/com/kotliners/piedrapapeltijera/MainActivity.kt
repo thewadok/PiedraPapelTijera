@@ -1,4 +1,4 @@
-package com.kotliners.piedra_papel_o_tijera
+package com.kotliners.piedrapapeltijera
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -11,7 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.kotliners.piedra_papel_o_tijera.ui.theme.PiedraPapelTijeraTheme
+import com.kotliners.piedrapapeltijera.ui.theme.PiedraPapelTijeraTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

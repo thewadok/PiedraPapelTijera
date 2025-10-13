@@ -1,4 +1,4 @@
-package com.kotliners.piedra_papel_o_tijera
+package com.kotliners.piedrapapeltijera
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

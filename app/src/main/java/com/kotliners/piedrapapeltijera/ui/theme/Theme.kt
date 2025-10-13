@@ -1,6 +1,5 @@
-package com.kotliners.piedra_papel_o_tijera.ui.theme
+package com.kotliners.piedrapapeltijera.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

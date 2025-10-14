@@ -7,7 +7,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
+import androidx.compose.foundation.Image
 //import androidx.appcompat.widget.DialogTitle
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -34,6 +38,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 //import androidx.navigation.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -42,6 +48,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.kotliners.piedrapapeltijera.ui.theme.PiedraPapelTijeraTheme
 import kotlinx.coroutines.delay
+//import java.nio.file.WatchEvent
+
 //import kotlinx.coroutines.launch
 
 /*Rutas*/
@@ -109,13 +117,40 @@ fun SplashScreen(nav: NavHostController){
         }
     }
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().background(Color.Black),
         contentAlignment = Alignment.Center
     ){
-        Text(
-            text = "Splah",
-            style = MaterialTheme. typography.headlineMedium
-        )
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(48.dp)
+        ) {
+            //Una fila con los tres iconos separados
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(0.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.icono_piedra_white),
+                    contentDescription = "Piedra",
+                    modifier = Modifier.size(120.dp)
+                )
+                Image(
+                    painter = painterResource(id = R.drawable.icono_papel_white),
+                    contentDescription = "Papel",
+                    modifier = Modifier.size(120.dp)
+                )
+                Image(
+                    painter = painterResource(id = R.drawable.icono_tijera_white),
+                    contentDescription = "Tijera",
+                    modifier = Modifier.size(120.dp)
+                )
+            }
+            Text(
+                text = "Piedra, Papel o Tijera",
+                style = MaterialTheme.typography.headlineMedium,
+                color = Color.White
+            )
+        }
     }
 }
 

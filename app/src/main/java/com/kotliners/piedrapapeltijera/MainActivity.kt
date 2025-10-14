@@ -21,6 +21,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -32,6 +33,7 @@ import androidx.compose.runtime.LaunchedEffect
 //import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.Color
 //import androidx.navigation.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -163,7 +165,9 @@ fun AppScaffold(
     Scaffold(
         topBar = { TopAppBar(title = { Text(title) }) },
         bottomBar = {
-            NavigationBar {
+            NavigationBar(
+                containerColor = Color(0xFFD500F9)
+            ) {
                 items.forEach { screen ->
                     NavigationBarItem(
                         selected = (current == screen.route),
@@ -194,7 +198,14 @@ fun AppScaffold(
                                 else -> {}
                             }
                         },
-                            label = { Text(screen.title) }
+                        label = { Text(screen.title) },
+                        colors = NavigationBarItemDefaults.colors(
+                            selectedIconColor = Color.White,
+                            selectedTextColor   = Color.White,
+                            indicatorColor      = Color(0xFFFF9800),
+                            unselectedIconColor = Color.White,
+                            unselectedTextColor = Color.White
+                            )
                     )
                 }
             }

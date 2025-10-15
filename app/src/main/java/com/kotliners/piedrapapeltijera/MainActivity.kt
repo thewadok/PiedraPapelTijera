@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.HelpOutline
 import androidx.compose.material.icons.filled.History
@@ -35,11 +36,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.runtime.LaunchedEffect
 //import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 //import androidx.navigation.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -60,6 +63,8 @@ sealed class Screen(val route: String, val title: String){
     data object Ranking : Screen( "ranking", "Ranking")
     data object Setting : Screen("setting", "Ajustes")
     data object Help : Screen("help","Ayuda")
+
+    data object Game : Screen("game","Juego")
 }
 
 //Activity principal, entrada de la app
@@ -85,24 +90,48 @@ fun AppRoot() {
                 startDestination = Screen.Splash.route
             ){
                 composable(Screen.Splash.route) {SplashScreen(nav) }
-                composable(Screen.Home.route) { AppScaffold(nav) { HomeScreen()} }
+                composable(Screen.Home.route) { AppScaffold(nav) { HomeScreen(nav)} }
                 composable(Screen.History.route) { AppScaffold(nav) { HistoryScreen()} }
                 composable(Screen.Ranking.route) { AppScaffold(nav) { RankingScreen()} }
                 composable(Screen.Setting.route) { AppScaffold(nav) { SettingScreen()} }
                 composable(Screen.Help.route) { AppScaffold(nav) { HelpScreen()} }
+                composable(Screen.Game.route) {AppScaffold(nav) { GameScreen()} }
             }
         }
     }
 }
 
 //Pantalla de Inicio
-@Preview(showBackground = true)
 @Composable
-fun HomeScreen() {
-
+fun HomeScreen(nav: NavHostController) {
     //Diseño del HOME
-    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text("Home", style = MaterialTheme.typography.titleLarge)
+    Box(
+        Modifier
+            .fillMaxSize()
+            .background(Color.Black),
+        contentAlignment = Alignment.Center
+    ) {
+        //Boton "Jugar"
+        androidx.compose.material3.Button(
+            onClick = { nav.safeNavigate(Screen.Game.route)},
+            modifier = Modifier
+                .fillMaxWidth(0.8f)
+                .height(72.dp)
+                .shadow(20.dp, RoundedCornerShape(50)),
+            shape = RoundedCornerShape(50),
+            colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF00E5FF),
+                contentColor = Color.Black
+            )
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+
+                Text("Jugar", style = MaterialTheme.typography.titleLarge)
+            }
+        }
     }
 }
 
@@ -145,6 +174,10 @@ fun SettingScreen() = Center ( "Ajustes")
 @Composable
 fun HelpScreen() = Center ( "Ayuda y Reglas")
 
+//Pantalla Juego
+@Composable
+fun GameScreen() = Center ( "Juego")
+
 //Scaffold comun para todas las pantallas menos la de Bienvenida
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -161,6 +194,7 @@ fun AppScaffold(
         Screen.Ranking.route -> Screen.Ranking.title
         Screen.Setting.route -> Screen.Setting.title
         Screen.Help.route -> Screen.Help.title
+        Screen.Game.route -> Screen.Game.title
         else -> "Inicio"
     }
 

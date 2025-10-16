@@ -12,6 +12,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.Image
 //import androidx.appcompat.widget.DialogTitle
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -45,7 +46,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 //import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 //import androidx.navigation.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -62,7 +65,7 @@ import kotlinx.coroutines.delay
 /*Rutas*/
 sealed class Screen(val route: String, val title: String){
     data object Splash : Screen("splash","Splash")
-    data object Home : Screen( "home", "Inicio")
+    data object Home : Screen( "home", "Home")
     data object History : Screen( "history", "Historial")
     data object Ranking : Screen( "ranking", "Ranking")
     data object Setting : Screen("setting", "Ajustes")
@@ -136,7 +139,13 @@ fun HomeScreen(nav: NavHostController) {
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
 
-                Text("Jugar", style = MaterialTheme.typography.titleLarge)
+                Text(
+                    "Jugar",
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        fontSize = 28.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                )
             }
         }
     }
@@ -216,7 +225,7 @@ fun AppScaffold(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(title)},
+                title = { BrandBar(title)},
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Black,
                     titleContentColor = Color.White,
@@ -298,4 +307,30 @@ private fun Center(text: String) {
         )
     }
 }
+
+//Encabezado de marca
+@Composable
+fun BrandBar(title: String) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        modifier = Modifier.padding(start = 0.dp)
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.logo_prov_kotliners),
+            contentDescription = "Logo Kotliners",
+            modifier = Modifier.height(64.dp),
+            contentScale = ContentScale.Fit
+        )
+        Text(
+         text = title,
+            color = Color(0xFFFFEA00),
+            style = MaterialTheme.typography.titleLarge.copy(
+                fontWeight = FontWeight.Bold,
+                fontSize = 28.sp
+            )
+        )
+    }
+}
+
 

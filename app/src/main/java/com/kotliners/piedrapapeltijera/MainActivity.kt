@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.SystemBarStyle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.Image
 //import androidx.appcompat.widget.DialogTitle
@@ -30,17 +31,19 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+//import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.runtime.LaunchedEffect
 //import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.tooling.preview.Preview
+//import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalConsumer
+//import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 //import androidx.navigation.NavHost
@@ -50,10 +53,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.kotliners.piedrapapeltijera.ui.theme.PiedraPapelTijeraTheme
+//import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.delay
+//import kotlinx.coroutines.launch
 //import java.nio.file.WatchEvent
 
-//import kotlinx.coroutines.launch
 
 /*Rutas*/
 sealed class Screen(val route: String, val title: String){
@@ -71,7 +75,10 @@ sealed class Screen(val route: String, val title: String){
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.dark(0xFF000000.toInt()),
+            navigationBarStyle = SystemBarStyle.dark(0xFF000000.toInt())
+        )
         setContent {
             AppRoot()
         }
@@ -207,10 +214,19 @@ fun AppScaffold(
     )
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text(title) }) },
+        topBar = {
+            TopAppBar(
+                title = { Text(title)},
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.Black,
+                    titleContentColor = Color.White,
+                    navigationIconContentColor = Color.White
+                )
+            )
+        },
         bottomBar = {
             NavigationBar(
-                containerColor = Color(0xFFD500F9)
+                containerColor = Color.Black
             ) {
                 items.forEach { screen ->
                     NavigationBarItem(
@@ -244,9 +260,9 @@ fun AppScaffold(
                         },
                         label = { Text(screen.title) },
                         colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = Color.White,
+                            selectedIconColor = Color.Black,
                             selectedTextColor   = Color.White,
-                            indicatorColor      = Color(0xFFFF9800),
+                            indicatorColor      = Color(0xFFFFEA00),
                             unselectedIconColor = Color.White,
                             unselectedTextColor = Color.White
                             )
@@ -274,3 +290,4 @@ private fun Center(text: String) {
         Text(text, style = MaterialTheme.typography.titleLarge)
     }
 }
+

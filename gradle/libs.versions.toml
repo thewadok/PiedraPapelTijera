@@ -11,6 +11,7 @@ activityCompose = "1.11.0"
 composeBom = "2024.09.00"
 navigation = "2.9.5"
 coroutines = "1.10.2"
+material = "1.13.0"
 
 
 [libraries]
@@ -34,6 +35,7 @@ androidx-compose-material-icons-extended = { module = "androidx.compose.material
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlinx-coroutines-core    = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core",    version.ref = "coroutines" }
 kotlinx-coroutines-test    = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test",    version.ref = "coroutines" }
+google-material = { module = "com.google.android.material:material", version.ref = "material" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -286,8 +286,16 @@ private fun NavHostController.safeNavigate(route: String) {
 //Helper visual para centrar el texto a pantalla completa
 @Composable
 private fun Center(text: String) {
-    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(text, style = MaterialTheme.typography.titleLarge)
+    Box(
+        Modifier
+            .fillMaxSize()
+            .background(Color.Black),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(text,
+            style = MaterialTheme.typography.titleLarge,
+            color = Color.White
+        )
     }
 }
 

@@ -55,7 +55,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.google.material)
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.34.0")
+    implementation(libs.google.accompanist.systemuicontroller)
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)

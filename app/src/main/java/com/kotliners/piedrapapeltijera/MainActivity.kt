@@ -105,7 +105,7 @@ fun AppRoot() {
                 composable(Screen.Ranking.route) { AppScaffold(nav) { RankingScreen()} }
                 composable(Screen.Setting.route) { AppScaffold(nav) { SettingScreen()} }
                 composable(Screen.Help.route) { AppScaffold(nav) { HelpScreen()} }
-                composable(Screen.Game.route) {AppScaffold(nav) { GameScreen()} }
+
             }
         }
     }

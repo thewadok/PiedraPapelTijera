@@ -50,7 +50,7 @@ sealed class Screen(val route: String, val title: String){
     data object Game : Screen("game","Juego")
 }
 
-//Activity principal, entrada de la app
+//Activity principal
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,19 +93,18 @@ fun HomeScreen(nav: NavHostController) {
     //Diseño del HOME
     Box(
         Modifier
-            .fillMaxSize()
-            .background(Color.Black),
+            .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         //Boton "Jugar"
-        androidx.compose.material3.Button(
+        Button(
             onClick = { nav.safeNavigate(Screen.Game.route)},
             modifier = Modifier
                 .fillMaxWidth(0.8f)
                 .height(72.dp)
                 .shadow(20.dp, RoundedCornerShape(50)),
             shape = RoundedCornerShape(50),
-            colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+            colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFF00E5FF),
                 contentColor = Color.Black
             )
@@ -255,7 +254,17 @@ fun AppScaffold(
                 }
             }
         }
-    ) { inner -> Box(Modifier.padding(inner)) { content()} }
+    ) { inner ->
+        Box(
+            Modifier
+                .padding(inner)
+                .fillMaxSize()
+                .background(Color.Black)
+
+        ) {
+            content()
+        }
+    }
 }
 
 //Extesión de NavHostController para navegar sin duplicar
@@ -273,8 +282,7 @@ private fun NavHostController.safeNavigate(route: String) {
 private fun Center(text: String) {
     Box(
         Modifier
-            .fillMaxSize()
-            .background(Color.Black),
+            .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         Text(text,

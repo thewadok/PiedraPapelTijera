@@ -37,18 +37,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.kotliners.piedrapapeltijera.ui.theme.PiedraPapelTijeraTheme
 import kotlinx.coroutines.delay
-
-/*Rutas*/
-sealed class Screen(val route: String, val title: String){
-    data object Splash : Screen("splash","Splash")
-    data object Home : Screen( "home", "Home")
-    data object History : Screen( "history", "Historial")
-    data object Ranking : Screen( "ranking", "Ranking")
-    data object Setting : Screen("setting", "Ajustes")
-    data object Help : Screen("help","Ayuda")
-
-    data object Game : Screen("game","Juego")
-}
+import com.kotliners.piedrapapeltijera.navigation.Screen
+import com.kotliners.piedrapapeltijera.navigation.safeNavigate
 
 //Activity principal
 class MainActivity : ComponentActivity() {
@@ -264,16 +254,6 @@ fun AppScaffold(
         ) {
             content()
         }
-    }
-}
-
-//Extesión de NavHostController para navegar sin duplicar
-private fun NavHostController.safeNavigate(route: String) {
-    if (currentDestination?.route == route) return
-    navigate(route) {
-        popUpTo(graph.startDestinationId) { saveState = true }
-        launchSingleTop = true
-        restoreState = true
     }
 }
 

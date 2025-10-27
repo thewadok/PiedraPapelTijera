@@ -36,6 +36,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.kotliners.piedrapapeltijera.ui.theme.PiedraPapelTijeraTheme
+import com.kotliners.piedrapapeltijera.ui.theme.*
 import kotlinx.coroutines.delay
 import com.kotliners.piedrapapeltijera.navigation.Screen
 import com.kotliners.piedrapapeltijera.navigation.safeNavigate
@@ -45,8 +46,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge(
-            statusBarStyle = SystemBarStyle.dark(0xFF000000.toInt()),
-            navigationBarStyle = SystemBarStyle.dark(0xFF000000.toInt())
+            statusBarStyle = SystemBarStyle.dark(FondoNegro.value.toInt()),
+            navigationBarStyle = SystemBarStyle.dark(FondoNegro.value.toInt())
         )
         setContent {
             AppRoot()
@@ -95,8 +96,8 @@ fun HomeScreen(nav: NavHostController) {
                 .shadow(20.dp, RoundedCornerShape(50)),
             shape = RoundedCornerShape(50),
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF00E5FF),
-                contentColor = Color.Black
+                containerColor = AzulNeon,
+                contentColor = TextoNegro
             )
         ) {
             Row(
@@ -127,7 +128,7 @@ fun SplashScreen(nav: NavHostController){
         }
     }
     Box(
-        modifier = Modifier.fillMaxSize().background(Color.Black),
+        modifier = Modifier.fillMaxSize().background(FondoNegro),
         contentAlignment = Alignment.Center
     ) {
         Image(
@@ -192,15 +193,15 @@ fun AppScaffold(
             TopAppBar(
                 title = { BrandBar(title)},
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.Black,
-                    titleContentColor = Color.White,
-                    navigationIconContentColor = Color.White
+                    containerColor = FondoNegro,
+                    titleContentColor = TextoBlanco,
+                    navigationIconContentColor = TextoBlanco
                 )
             )
         },
         bottomBar = {
             NavigationBar(
-                containerColor = Color.Black
+                containerColor = FondoNegro
             ) {
                 items.forEach { screen ->
                     NavigationBarItem(
@@ -234,11 +235,11 @@ fun AppScaffold(
                         },
                         label = { Text(screen.title) },
                         colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = Color.Black,
-                            selectedTextColor   = Color.White,
-                            indicatorColor      = Color(0xFFFFEA00),
-                            unselectedIconColor = Color.White,
-                            unselectedTextColor = Color.White
+                            selectedIconColor = TextoNegro,
+                            selectedTextColor   = TextoBlanco,
+                            indicatorColor      = AmarilloNeon,
+                            unselectedIconColor = TextoBlanco,
+                            unselectedTextColor = TextoBlanco
                             )
                     )
                 }
@@ -249,7 +250,7 @@ fun AppScaffold(
             Modifier
                 .padding(inner)
                 .fillMaxSize()
-                .background(Color.Black)
+                .background(FondoNegro)
 
         ) {
             content()
@@ -267,7 +268,7 @@ private fun Center(text: String) {
     ) {
         Text(text,
             style = MaterialTheme.typography.titleLarge,
-            color = Color.White
+            color = TextoBlanco
         )
     }
 }
@@ -288,7 +289,7 @@ fun BrandBar(title: String) {
         )
         Text(
          text = title,
-            color = Color(0xFFFFEA00),
+            color = AmarilloNeon,
             style = MaterialTheme.typography.titleLarge.copy(
                 fontWeight = FontWeight.Bold,
                 fontSize = 28.sp

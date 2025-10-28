@@ -40,6 +40,8 @@ import com.kotliners.piedrapapeltijera.ui.theme.*
 import kotlinx.coroutines.delay
 import com.kotliners.piedrapapeltijera.navigation.Screen
 import com.kotliners.piedrapapeltijera.navigation.safeNavigate
+import androidx.compose.material.icons.automirrored.filled.HelpOutline
+
 
 //Activity principal
 class MainActivity : ComponentActivity() {
@@ -226,9 +228,10 @@ fun AppScaffold(
                                 )
 
                                 Screen.Help -> Icon(
-                                    Icons.Default.HelpOutline,
+                                    Icons.AutoMirrored.Filled.HelpOutline,
                                     contentDescription = null
                                 )
+
 
                                 else -> {}
                             }

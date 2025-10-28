@@ -1,4 +1,4 @@
-package data
+package com.data
 
 import androidx.room.TypeConverter
 class Converters {

@@ -11,7 +11,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.HelpOutline
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Leaderboard
@@ -24,7 +23,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -41,6 +39,14 @@ import kotlinx.coroutines.delay
 import com.kotliners.piedrapapeltijera.navigation.Screen
 import com.kotliners.piedrapapeltijera.navigation.safeNavigate
 import androidx.compose.material.icons.automirrored.filled.HelpOutline
+import com.kotliners.piedrapapeltijera.ui.screens.HomeScreen
+import com.kotliners.piedrapapeltijera.ui.screens.SplashScreen
+import com.kotliners.piedrapapeltijera.ui.screens.HistoryScreen
+import com.kotliners.piedrapapeltijera.ui.screens.RankingScreen
+import com.kotliners.piedrapapeltijera.ui.screens.SettingScreen
+import com.kotliners.piedrapapeltijera.ui.screens.HelpScreen
+import com.kotliners.piedrapapeltijera.ui.screens.GameScreen
+import com.kotliners.piedrapapeltijera.ui.components.BrandBar
 
 
 //Activity principal
@@ -159,8 +165,8 @@ fun SettingScreen() = Center ( "Ajustes")
 fun HelpScreen() = Center ( "Ayuda y Reglas")
 
 //Pantalla Juego
-@Composable
-fun GameScreen() = Center ( "Juego")
+//@Composable
+//fun GameScreen() = Center ( "Juego")
 
 //Scaffold comun para todas las pantallas menos la de Bienvenida
 @OptIn(ExperimentalMaterial3Api::class)

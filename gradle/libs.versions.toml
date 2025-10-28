@@ -13,6 +13,8 @@ navigation = "2.9.5"
 coroutines = "1.10.2"
 material = "1.13.0"
 accompanist = "0.36.0"
+room = "2.6.1"
+ksp = "2.0.21-1.0.25"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -37,9 +39,14 @@ kotlinx-coroutines-core    = { module = "org.jetbrains.kotlinx:kotlinx-coroutine
 kotlinx-coroutines-test    = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test",    version.ref = "coroutines" }
 google-material = { module = "com.google.android.material:material", version.ref = "material" }
 google-accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+androidx-room-ktx     = { module = "androidx.room:room-ktx",     version.ref = "room" }
+androidx-room-compiler= { module = "androidx.room:room-compiler",version.ref = "room" }
+androidx-room-rxjava3 = { module = "androidx.room:room-rxjava3", version.ref = "room" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-
+ksp                   = { id = "com.google.devtools.ksp", version.ref = "ksp" }

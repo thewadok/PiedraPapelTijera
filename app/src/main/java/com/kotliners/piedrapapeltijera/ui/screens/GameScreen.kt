@@ -29,7 +29,7 @@ fun GameScreen() {
     var userMove by remember { mutableStateOf<Move?>(null) }
     var computerMove by remember { mutableStateOf<Move?>(null) }
     var result by remember { mutableStateOf<GameResult?>(null) }
-    var betAmount by remember { mutableStateOf(10) } // apuesta inicial mínima
+    var betAmount by remember { mutableIntStateOf(10) } // apuesta inicial mínima
     var message by remember { mutableStateOf("") }
     var playerState by remember { mutableStateOf(PlayerState()) }
 

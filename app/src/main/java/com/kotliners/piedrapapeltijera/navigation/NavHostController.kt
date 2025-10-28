@@ -2,7 +2,7 @@ package com.kotliners.piedrapapeltijera.navigation
 
 import androidx.navigation.NavHostController
 
-//Extesión de NavHostController para navegar sin duplicar
+//Con esta clase podemos navegar sin duplicaciones en caso de estar en la misma ruta
 fun NavHostController.safeNavigate(route: String) {
     if (currentDestination?.route == route) return
     navigate(route) {

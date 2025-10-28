@@ -1,4 +1,4 @@
-package com.data
+package com.kotliners.piedrapapeltijera.data
 
 import android.content.Context
 import androidx.room.Database

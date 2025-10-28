@@ -1,6 +1,6 @@
 package com.kotliners.piedrapapeltijera
 import android.app.Application
-import data.AppDatabase
+import com.kotliners.piedrapapeltijera.data.AppDatabase
 
 class GameApplication : Application() {
 

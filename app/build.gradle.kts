@@ -35,15 +35,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    // AÑADE ESTE BLOQUE NUEVO
-    kotlin {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_1_8) // O JVM_11 si realmente lo necesitas
-        }
+
+    kotlinOptions {
+        jvmTarget = "11"
     }
-    //kotlinOptions {
-        //jvmTarget = "11"
-    //}
     buildFeatures {
         compose = true
     }

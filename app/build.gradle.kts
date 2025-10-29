@@ -4,8 +4,12 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+<<<<<<< HEAD
     //id("com.google.devtools.ksp") version "2.0.21-1.0.20" apply false
     alias(libs.plugins.google.devtools.ksp)
+=======
+    alias(libs.plugins.ksp)
+>>>>>>> cacb95b3390833a8a1e21dd61fa1cb26eec0c3a8
 }
 
 android {
@@ -54,6 +58,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+<<<<<<< HEAD
     implementation("androidx.navigation:navigation-compose:2.8.0")
     implementation("androidx.compose.material:material-icons-extended")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
@@ -62,11 +67,33 @@ dependencies {
     implementation("androidx.room:room-runtime:$room_version") //Librería SQLite
     implementation("androidx.room:room-ktx:${room_version}") //Para Corutinas en SQLite
     ksp("androidx.room:room-compiler:${room_version}")
+=======
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.compose.material.icons.extended)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.google.material)
+    implementation(libs.google.accompanist.systemuicontroller)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.rxjava3)
+    implementation(libs.rxandroid)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+
+>>>>>>> cacb95b3390833a8a1e21dd61fa1cb26eec0c3a8
     testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+
+    ksp(libs.androidx.room.compiler)
+
+
 }

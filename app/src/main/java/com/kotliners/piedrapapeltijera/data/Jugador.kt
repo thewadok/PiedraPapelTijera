@@ -12,18 +12,6 @@ import androidx.room.PrimaryKey
 
 data class Jugador(
 
-<<<<<<< HEAD
-        @PrimaryKey(autoGenerate = true)
-        val id_jugador: Int = 0,
-        val nombre_usuario: String,
-        val total_victorias: Int = 0,
-        val total_derrotas: Int = 0,
-        val total_empates: Int = 0
-
-)
-
-
-=======
     @PrimaryKey(autoGenerate = true)
     val id_jugador: Int = 0,
     val nombre_usuario: String,
@@ -32,4 +20,3 @@ data class Jugador(
     val total_empates: Int = 0
 
 )
->>>>>>> main

@@ -48,18 +48,10 @@ androidx-room-ktx     = { module = "androidx.room:room-ktx",     version.ref = "
 androidx-room-compiler= { module = "androidx.room:room-compiler",version.ref = "room" }
 rxjava3 = { module = "io.reactivex.rxjava3:rxjava", version.ref = "rxjava3" }
 rxandroid = { module = "io.reactivex.rxjava3:rxandroid", version.ref = "rxandroid" }
-<<<<<<< HEAD
 
-=======
->>>>>>> main
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-<<<<<<< HEAD
 ksp                   = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-=======
-ksp                   = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-
->>>>>>> main

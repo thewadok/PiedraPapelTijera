@@ -5,11 +5,15 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 <<<<<<< HEAD
+<<<<<<< HEAD
     //id("com.google.devtools.ksp") version "2.0.21-1.0.20" apply false
     alias(libs.plugins.google.devtools.ksp)
 =======
     alias(libs.plugins.ksp)
 >>>>>>> cacb95b3390833a8a1e21dd61fa1cb26eec0c3a8
+=======
+    alias(libs.plugins.ksp)
+>>>>>>> main
 }
 
 android {
@@ -81,7 +85,10 @@ dependencies {
     implementation(libs.rxandroid)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
+<<<<<<< HEAD
 >>>>>>> cacb95b3390833a8a1e21dd61fa1cb26eec0c3a8
+=======
+>>>>>>> main
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
 
@@ -95,5 +102,8 @@ dependencies {
 
     ksp(libs.androidx.room.compiler)
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> main
 }

@@ -4,12 +4,13 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("com.google.devtools.ksp") // Agregando KSP
+    //id("com.google.devtools.ksp") version "2.0.21-1.0.20" apply false
+    alias(libs.plugins.google.devtools.ksp)
 }
 
 android {
     namespace = "com.kotliners.piedrapapeltijera"
-    compileSdk = 36
+    compileSdkVersion(36)
 
     defaultConfig {
         applicationId = "com.kotliners.piedrapapeltijera"
@@ -40,6 +41,7 @@ android {
     buildFeatures {
         compose = true
     }
+    buildToolsVersion = "36.1.0"
 }
 
 dependencies {

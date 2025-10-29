@@ -5,4 +5,5 @@ enum class Resultado { // Creación de Clase Enumerada. Tipo enumerado para la D
     GANAS,
     EMPATAS,
     PIERDES
+
 }

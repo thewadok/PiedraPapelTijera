@@ -15,3 +15,19 @@ class Converters {
         // valueOf() convierte el texto "PIEDRA" al objeto Resultado.GANAS
         return Resultado.valueOf(result)
     }
+
+
+    // Función para ESCRIBIR en la BD: Convierte un Enum a String
+    @TypeConverter
+    fun fromJugada(jugada: Jugada): String {
+        // .name convierte el objeto Jugada.PIEDRA al texto "PIEDRA", "PAPEL" o "TIJERA"
+        return jugada.name
+    }
+
+    @TypeConverter
+    fun fromResultado(resultado: Resultado): String {
+        // .name convierte el objeto Resultado.GANAS al texto "GANAS", "EMPATAS" o "PIERDES"
+        return resultado.name
+    }
+
+}

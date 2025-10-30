@@ -4,41 +4,36 @@ import androidx.compose.runtime.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.kotliners.piedrapapeltijera.R
-import com.kotliners.piedrapapeltijera.game.GameLogic
-import com.kotliners.piedrapapeltijera.game.GameResult
+import com.kotliners.piedrapapeltijera.game.GameController
 import com.kotliners.piedrapapeltijera.game.Move
 import com.kotliners.piedrapapeltijera.game.PlayerState
 import com.kotliners.piedrapapeltijera.ui.theme.FondoNegro
 import com.kotliners.piedrapapeltijera.ui.theme.AmarilloNeon
 import com.kotliners.piedrapapeltijera.ui.theme.TextoBlanco
 
+
 @Composable
 fun GameScreen() {
+    val context = LocalContext.current
+    val playerState = remember { PlayerState() }
+    val controller = remember { GameController(context, playerState) }
 
-    var userMove by remember { mutableStateOf<Move?>(null) }
-    var computerMove by remember { mutableStateOf<Move?>(null) }
-    var result by remember { mutableStateOf<GameResult?>(null) }
-    var betAmount by remember { mutableStateOf(10) } // apuesta inicial mínima
-    var message by remember { mutableStateOf("") }
-    var playerState by remember { mutableStateOf(PlayerState()) }
+    var betAmount by remember { mutableStateOf(10) }
 
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(FondoNegro)
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(FondoNegro)
     ) {
-
-        //Monedas totales y posición
+        // Monedas totales (arriba a la derecha)
         Text(
             text = "${playerState.coins} monedas",
             modifier = Modifier
@@ -48,7 +43,7 @@ fun GameScreen() {
             color = AmarilloNeon
         )
 
-        //Contenido principal
+        // Contenido principal
         Column(
             modifier = Modifier
                 .align(Alignment.Center)
@@ -62,62 +57,43 @@ fun GameScreen() {
                 color = TextoBlanco
             )
 
-            //Selector de apuesta con + y -
+            // Selector de apuesta (+ / -)
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                //Botón de restar apuesta
                 Button(
-                    onClick = {
-                        if (betAmount > 10) betAmount -= 10
-                    },
+                    onClick = { if (betAmount > 10) betAmount -= 10 },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                     contentPadding = PaddingValues(0.dp),
                     elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
                 ) {
-                    Text(
-                        text = "➖",
-                        style = MaterialTheme.typography.headlineLarge,
-                        color = TextoBlanco
-                    )
+                    Text("➖", style = MaterialTheme.typography.headlineLarge, color = TextoBlanco)
                 }
 
-                // Muestra la cantidad actual
                 Text(
-                    text = "$betAmount monedas",
+                    "$betAmount monedas",
                     style = MaterialTheme.typography.titleLarge,
                     color = AmarilloNeon
                 )
 
-                // Botón de sumar apuesta
                 Button(
-                    onClick = {
-                        if (betAmount + 10 <= playerState.coins)
-                            betAmount += 10
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Transparent,
-                        contentColor = TextoBlanco
-                    ),
+                    onClick = { if (betAmount + 10 <= playerState.coins) betAmount += 10 },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                     contentPadding = PaddingValues(0.dp),
                     elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
                 ) {
-                    Text(
-                        text = "➕",
-                        style = MaterialTheme.typography.headlineLarge,
-                        color = TextoBlanco
-                    )
+                    Text("➕", style = MaterialTheme.typography.headlineLarge, color = TextoBlanco)
                 }
             }
 
             Text(
-                text = "Elige tu jugada:",
+                "Elige tu jugada:",
                 style = MaterialTheme.typography.titleMedium,
                 color = TextoBlanco
             )
 
-            //Botones de jugada
+            // Botones de jugada (vista pura)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -125,23 +101,8 @@ fun GameScreen() {
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-
-                //Piedra
                 Button(
-                    onClick = {
-                        if (playerState.bet(betAmount)) {
-                            val (r, c) = GameLogic.play(Move.PIEDRA)
-                            result = r; computerMove = c; userMove = Move.PIEDRA
-                            playerState.updateCoins(r)
-                            message = when (r) {
-                                GameResult.GANAS -> "¡Ganaste ${playerState.lastBet} monedas!"
-                                GameResult.PIERDES -> "Perdiste ${playerState.lastBet} monedas."
-                                else -> "Empate, sin cambios."
-                            }
-                        } else {
-                            message = "Apuesta inválida."
-                        }
-                    },
+                    onClick = { controller.playRound(betAmount, Move.PIEDRA) },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                     contentPadding = PaddingValues(0.dp),
                     elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
@@ -153,22 +114,8 @@ fun GameScreen() {
                     )
                 }
 
-                //Papel
                 Button(
-                    onClick = {
-                        if (playerState.bet(betAmount)) {
-                            val (r, c) = GameLogic.play(Move.PAPEL)
-                            result = r; computerMove = c; userMove = Move.PAPEL
-                            playerState.updateCoins(r)
-                            message = when (r) {
-                                GameResult.GANAS -> "¡Ganaste ${playerState.lastBet} monedas!"
-                                GameResult.PIERDES -> "Perdiste ${playerState.lastBet} monedas."
-                                else -> "Empate, sin cambios."
-                            }
-                        } else {
-                            message = "Apuesta inválida."
-                        }
-                    },
+                    onClick = { controller.playRound(betAmount, Move.PAPEL) },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                     contentPadding = PaddingValues(0.dp),
                     elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
@@ -180,22 +127,8 @@ fun GameScreen() {
                     )
                 }
 
-                //Tijera (tamaño ajustado)
                 Button(
-                    onClick = {
-                        if (playerState.bet(betAmount)) {
-                            val (r, c) = GameLogic.play(Move.TIJERA)
-                            result = r; computerMove = c; userMove = Move.TIJERA
-                            playerState.updateCoins(r)
-                            message = when (r) {
-                                GameResult.GANAS -> "¡Ganaste ${playerState.lastBet} monedas!"
-                                GameResult.PIERDES -> "Perdiste ${playerState.lastBet} monedas."
-                                else -> "Empate, sin cambios."
-                            }
-                        } else {
-                            message = "Apuesta inválida."
-                        }
-                    },
+                    onClick = { controller.playRound(betAmount, Move.TIJERA) },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                     contentPadding = PaddingValues(0.dp),
                     elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
@@ -203,22 +136,20 @@ fun GameScreen() {
                     Image(
                         painter = painterResource(id = R.drawable.icono_tijera_neon),
                         contentDescription = "Tijera",
-                        modifier = Modifier
-                            .size(110.dp)
-                            .padding(end = 4.dp) // pequeño margen para centrar mejor
+                        modifier = Modifier.size(110.dp)
                     )
                 }
             }
 
-            // Resultado y saldo
-            if (result != null) {
+            // Resultado y saldo actual
+            if (controller.lastResult.value != null) {
                 Spacer(Modifier.height(16.dp))
                 Text(
-                    "Jugador: ${userMove?.name} | Banca: ${computerMove?.name}",
+                    "Jugador: ${controller.lastUserMove.value?.name} | Banca: ${controller.lastComputerMove.value?.name}",
                     color = TextoBlanco
                 )
                 Text(
-                    message,
+                    controller.lastMessage.value,
                     style = MaterialTheme.typography.titleMedium,
                     color = TextoBlanco
                 )

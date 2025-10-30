@@ -29,6 +29,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.verticalScroll
+import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
+import androidx.compose.runtime.*
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.runtime.livedata.observeAsState
 
 //Pantalla de Inicio
 /**
@@ -38,11 +42,12 @@ Por defecto: saldo=1000, partidas=0 (solo para ver el diseño).
 @Composable
 fun HomeScreen(
     nav: NavHostController,
-    saldo: Int = 1000,
-    partidas: Int = 0
+    viewModel: MainViewModel = viewModel()
 ) {
     // Diseño del HOME
     val scroll = rememberScrollState()
+    val saldo = viewModel.monedas.observeAsState(0).value
+    val partidas = 0
 
     Box(
         Modifier

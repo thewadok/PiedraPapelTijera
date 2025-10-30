@@ -65,6 +65,8 @@ dependencies {
     implementation(libs.rxkotlin)
     implementation(libs.androidx.room.rxjava3)
     implementation(libs.rxkotlin)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.runtime.livedata)
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)

@@ -17,7 +17,6 @@ class MainActivity : ComponentActivity() {
             navigationBarStyle = SystemBarStyle.dark(FondoNegro.value.toInt())
         )
         setContent {
-            AppRoot()
-        }
+            AppRoot}
     }
 }

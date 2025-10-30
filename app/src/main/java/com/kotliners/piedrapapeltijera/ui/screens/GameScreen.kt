@@ -147,7 +147,7 @@ fun GameScreen() {
                     elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.icono_piedra_color),
+                        painter = painterResource(id = R.drawable.icono_piedra_neon),
                         contentDescription = "Piedra",
                         modifier = Modifier.size(95.dp)
                     )
@@ -174,7 +174,7 @@ fun GameScreen() {
                     elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.icono_papel_color),
+                        painter = painterResource(id = R.drawable.icono_papel_neon),
                         contentDescription = "Papel",
                         modifier = Modifier.size(95.dp)
                     )
@@ -201,7 +201,7 @@ fun GameScreen() {
                     elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.icono_tijera_color),
+                        painter = painterResource(id = R.drawable.icono_tijera_neon),
                         contentDescription = "Tijera",
                         modifier = Modifier
                             .size(110.dp)

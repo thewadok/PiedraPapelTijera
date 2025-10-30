@@ -52,10 +52,12 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
         when (r) {
             GameResult.GANAS -> {
                 viewModel.cambiarMonedas(+betAmount)
+                viewModel.registrarPartida(mov, c, r, betAmount)
                 message = "¡Ganaste $betAmount monedas!"
             }
             GameResult.PIERDES -> {
                 viewModel.cambiarMonedas(-betAmount)
+                viewModel.registrarPartida(mov, c, r, betAmount)
                 message = "Perdiste $betAmount monedas."
             }
             GameResult.EMPATE -> {

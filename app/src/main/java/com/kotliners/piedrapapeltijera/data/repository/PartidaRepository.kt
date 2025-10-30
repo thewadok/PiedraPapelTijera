@@ -30,6 +30,9 @@ class PartidaRepository(private val dao: PartidaDao) {
         return dao.insertar(p).subscribeOn(Schedulers.io())
     }
 
+    fun observarTotalPartidas(): Flowable<Int> =
+        dao.observarTotalPartidas().subscribeOn(Schedulers.io())
+
     fun observarHistorial(): Flowable<List<Partida>> =
         dao.observarHistorial().subscribeOn(Schedulers.io())
 }

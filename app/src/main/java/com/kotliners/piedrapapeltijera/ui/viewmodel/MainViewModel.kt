@@ -71,7 +71,7 @@ class MainViewModel : ViewModel() {
             )
             .also { disposables.add(it) }
     }
-    
+
     override fun onCleared() {
         disposables.clear()
         super.onCleared()

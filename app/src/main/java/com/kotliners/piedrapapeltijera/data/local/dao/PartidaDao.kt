@@ -22,4 +22,7 @@ interface PartidaDao {
 
     @Query("DELETE FROM partidas")
     fun borrarTodo(): Completable
+
+    @Query("SELECT COUNT(*) FROM partidas")
+    fun observarTotalPartidas(): Flowable<Int>
 }

@@ -8,10 +8,14 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import com.kotliners.piedrapapeltijera.MyApp
 import com.kotliners.piedrapapeltijera.data.repository.JugadorRepository
+import com.kotliners.piedrapapeltijera.data.repository.PartidaRepository
+import com.kotliners.piedrapapeltijera.game.Move
+import com.kotliners.piedrapapeltijera.game.GameResult
 
 class MainViewModel : ViewModel() {
 
     private val repo = JugadorRepository(MyApp.db.jugadorDao())
+    private val historial = PartidaRepository(MyApp.db.partidaDao())
     private val disposables = CompositeDisposable()
 
     // Expuesto para la UI
@@ -52,6 +56,22 @@ class MainViewModel : ViewModel() {
             .also { disposables.add(it) }
     }
 
+    // Registramos partida despues de cada jugada
+    fun registrarPartida(
+        movJugador: Move,
+        movCpu: Move,
+        resultado: GameResult,
+        apuesta: Int
+    ) {
+        historial.registrarPartida(movJugador, movCpu, resultado, apuesta)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onComplete = { /* OK */ },
+                onError = { e -> Log.e("MainViewModel", "Error guardando partida", e) }
+            )
+            .also { disposables.add(it) }
+    }
+    
     override fun onCleared() {
         disposables.clear()
         super.onCleared()

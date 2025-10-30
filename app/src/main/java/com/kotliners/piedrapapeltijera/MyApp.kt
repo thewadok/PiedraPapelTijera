@@ -18,6 +18,8 @@ class MyApp : Application() {
             applicationContext,
             AppDatabase::class.java,
             "piedra_papel_tijera.db"
-        ).build()
+        )
+            .fallbackToDestructiveMigration()
+            .build()
     }
 }

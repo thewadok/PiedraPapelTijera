@@ -7,7 +7,6 @@ import com.kotliners.piedrapapeltijera.game.*
 /**
  * Controlador principal del juego.
  *
- * 🧩 Forma parte de la capa "Controlador" del patrón MVC.
  * Se comunica con:
  *  - La vista (GameScreen)
  *  - El modelo (PlayerState + GameLogic)
@@ -50,11 +49,10 @@ class GameController(
     /**
      * Ejecuta una ronda del juego.
      *
-     * 1️⃣ Comprueba si la apuesta es válida.
-     * 2️⃣ Usa GameLogic para decidir el resultado.
-     * 3️⃣ Actualiza las monedas según el resultado.
-     * 4️⃣ Guarda el nuevo estado del jugador.
-     * 5️⃣ Genera un mensaje para mostrar en la vista.
+     * Comprueba si la apuesta es válida.
+     * Actualiza las monedas según el resultado.
+     * Guarda el nuevo estado del jugador.
+     * Genera un mensaje para mostrar en la vista.
      */
     fun playRound(betAmount: Int, move: Move) {
         if (!playerState.bet(betAmount)) {

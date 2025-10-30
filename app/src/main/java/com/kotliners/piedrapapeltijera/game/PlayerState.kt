@@ -21,10 +21,10 @@ data class PlayerState(
     }
 
     /**
-     * 🔸 Carga el número de monedas guardado localmente.
+     * Carga el número de monedas guardado localmente.
      *
-     * 👉 Actualmente usa SharedPreferences.
-     * 👉 Cuando se integre SQLite, este método deberá leer desde la tabla de jugadores (por ejemplo, `player_state`).
+     * Actualmente usa SharedPreferences.
+     * Cuando se integre SQLite, este método deberá leer desde la tabla de jugadores (por ejemplo, `player_state`).
      */
     fun load(context: Context) {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -36,10 +36,10 @@ data class PlayerState(
     }
 
     /**
-     * 🔸 Guarda el número actual de monedas.
+     * Guarda el número actual de monedas.
      *
-     * 👉 Actualmente usa SharedPreferences.
-     * 👉 Cuando esté lista la bbdd, este método actualizará la base de datos SQLite con el nuevo saldo del jugador.
+     * Actualmente usa SharedPreferences.
+     * Cuando esté lista la bbdd, este método actualizará la base de datos SQLite con el nuevo saldo del jugador.
      */
     fun save(context: Context) {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -63,7 +63,7 @@ data class PlayerState(
     }
 
     /**
-     * 🔸 Actualiza las monedas según el resultado del juego.
+     * Actualiza las monedas según el resultado del juego.
      * Si el jugador pierde, nunca puede quedar con saldo negativo.
      */
     fun updateCoins(result: GameResult) {

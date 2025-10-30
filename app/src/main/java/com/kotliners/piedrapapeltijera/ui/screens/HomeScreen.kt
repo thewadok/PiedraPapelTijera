@@ -46,7 +46,7 @@ fun HomeScreen(
     // Diseño del HOME
     val scroll = rememberScrollState()
     val saldo = viewModel.monedas.observeAsState(0).value
-    val partidas = 0
+    val partidas = viewModel.partidas.observeAsState(0).value
 
     Box(
         Modifier

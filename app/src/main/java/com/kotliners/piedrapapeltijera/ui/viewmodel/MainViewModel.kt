@@ -20,6 +20,7 @@ class MainViewModel : ViewModel() {
 
     // Expuesto para la UI
     val monedas = MutableLiveData<Int>()
+    val partidas = MutableLiveData<Int>()
 
     init {
         // Creamos el jugador si no existe
@@ -31,6 +32,11 @@ class MainViewModel : ViewModel() {
                 onNext = { monedas.value = it },
                 onError = { e -> Log.e("MainViewModel", "Error inicializando/observando monedas", e) }
             )
+            .also { disposables.add(it) }
+        //Observamos en tiempo real el total de partidas jugadas
+        historial.observarTotalPartidas()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(onNext = { partidas.value = it })
             .also { disposables.add(it) }
     }
 

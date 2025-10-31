@@ -23,6 +23,12 @@ import com.kotliners.piedrapapeltijera.navigation.Screen
 import com.kotliners.piedrapapeltijera.navigation.safeNavigate
 import com.kotliners.piedrapapeltijera.ui.theme.AzulNeon
 import com.kotliners.piedrapapeltijera.ui.theme.TextoNegro
+/*
+Parte nueva de EDU
+import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
+import androidx.compose.runtime.*
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.runtime.livedata.observeAsState*/
 
 //Pantalla de Inicio
 @Composable
@@ -62,3 +68,17 @@ fun HomeScreen(nav: NavHostController) {
         }
     }
 }
+
+/*
+@Composable
+fun HomeScreen(
+    nav: NavHostController,
+    viewModel: MainViewModel = viewModel()
+) {
+    // Diseño del HOME
+    val scroll = rememberScrollState()
+    val saldo = viewModel.monedas.observeAsState(0).value
+    val partidas = 0
+
+    Box(
+        Modifier*/

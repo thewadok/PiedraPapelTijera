@@ -22,6 +22,9 @@ import com.kotliners.piedrapapeltijera.ui.theme.TextoBlanco
 import com.kotliners.piedrapapeltijera.ui.theme.AmarilloNeon
 import com.kotliners.piedrapapeltijera.ui.theme.RosaNeon
 import com.kotliners.piedrapapeltijera.ui.theme.AzulNeon
+import com.kotliners.piedrapapeltijera.ui.components.TextoLinea
+import com.kotliners.piedrapapeltijera.ui.components.Parrafo
+import com.kotliners.piedrapapeltijera.ui.components.TituloSeccion
 import com.kotliners.piedrapapeltijera.R
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -33,11 +36,8 @@ import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.livedata.observeAsState
 
+
 //Pantalla de Inicio
-/**
-Pendiente de pasar saldo/partidas desde BBDD.
-Por defecto: saldo=1000, partidas=0 (solo para ver el diseño).
- */
 @Composable
 fun HomeScreen(
     nav: NavHostController,
@@ -141,26 +141,22 @@ fun HomeScreen(
 
             Spacer(Modifier.height(16.dp))
 
-            Text(
-                text = "Resultados",
-                color = AmarilloNeon,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            )
+            // Resultados
+            TituloSeccion("Resultados")
+
             Spacer(Modifier.height(8.dp))
+
             TextoLinea("Victoria:", "Ganas tu apuesta.")
             TextoLinea("Derrota:", "Pierdes tu apuesta.")
             TextoLinea("Empate:", "No ganas ni pierdes.")
 
             Spacer(Modifier.height(16.dp))
 
-            Text(
-                text = "Apuestas",
-                color = AmarilloNeon,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            )
+            // Apuestas
+            TituloSeccion("Apuestas")
+
             Spacer(Modifier.height(8.dp))
+
             Parrafo(
                 """
 • Apuesta mínima: 10 monedas
@@ -172,30 +168,24 @@ fun HomeScreen(
             Spacer(Modifier.height(16.dp))
 
             // Rescate
-            Text(
-                text = "Rescate",
-                color = AmarilloNeon,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            )
+           TituloSeccion("Rescate")
+
             Spacer(Modifier.height(8.dp))
+
             Parrafo(
                 """
 Sin saldo, pero no sin suerte.
 
-Pulsa Rescate y obtén 100 monedas extra para continuar.
+Ve a Ajustes, toca Rescate y compra 50 monedas extra para continuar.
 """.trimIndent()
             )
 
             Spacer(Modifier.height(16.dp))
 
-            Text(
-                text = "Cómo Jugar",
-                color = AmarilloNeon,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            )
+            TituloSeccion("Cómo Jugar")
+
             Spacer(Modifier.height(8.dp))
+            
             Parrafo(
                 """
 1) Elige tu apuesta: usa + y − para ajustar la cantidad.
@@ -290,22 +280,4 @@ private fun ReglaConIcono(
             Text(detalle, color = TextoBlanco, fontSize = 14.sp)
         }
     }
-}
-
-@Composable
-private fun TextoLinea(titulo: String, detalle: String) {
-    Row(Modifier.fillMaxWidth().padding(vertical = 2.dp)) {
-        Text("$titulo ", color = AmarilloNeon, fontWeight = FontWeight.Bold)
-        Text(detalle, color = TextoBlanco)
-    }
-}
-
-@Composable
-private fun Parrafo(texto: String, modifier: Modifier = Modifier) {
-    Text(
-        texto,
-        modifier = modifier.fillMaxWidth(),
-        color = TextoBlanco,
-        fontSize = 16.sp,
-        lineHeight = 20.sp)
 }

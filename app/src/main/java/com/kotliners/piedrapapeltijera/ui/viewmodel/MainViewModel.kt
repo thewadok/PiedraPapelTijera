@@ -90,10 +90,7 @@ class MainViewModel : ViewModel() {
             .also { disposables.add(it) }
     }
 
-    /* Restablecemos el juego al estado inicial
-    - Reiniciamos el saldo del jugador al estado inicial.
-    - Eliminamos el historial de partidas
-    */
+    // Restablecemos el juego al estado inicial.
     fun resetJuego() {
         setMonedas(100)
         historial.borrarHistorial()
@@ -103,6 +100,14 @@ class MainViewModel : ViewModel() {
                 onError = { e -> Log.e("MainViewModel", "Error borrando historial", e) }
             )
             .also { disposables.add(it) }
+    }
+
+    // Rescatamos al jugador si se queda sin monedas.
+    fun rescate() {
+        val saldoActual = monedas.value ?: 0
+        if (saldoActual <= 0) {
+            cambiarMonedas(100)
+        }
     }
 
     override fun onCleared() {

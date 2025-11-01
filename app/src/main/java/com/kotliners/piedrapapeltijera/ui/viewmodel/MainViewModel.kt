@@ -90,6 +90,21 @@ class MainViewModel : ViewModel() {
             .also { disposables.add(it) }
     }
 
+    /* Restablecemos el juego al estado inicial
+    - Reiniciamos el saldo del jugador al estado inicial.
+    - Eliminamos el historial de partidas
+    */
+    fun resetJuego() {
+        setMonedas(100)
+        historial.borrarHistorial()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onComplete = { /* Historial borrado */ },
+                onError = { e -> Log.e("MainViewModel", "Error borrando historial", e) }
+            )
+            .also { disposables.add(it) }
+    }
+
     override fun onCleared() {
         disposables.clear()
         super.onCleared()

@@ -5,4 +5,4 @@ import com.kotliners.piedrapapeltijera.ui.components.Center
 
 //Pantalla Historial
 @Composable
-fun HistoryScreen() = Center("Historial de Partidas")
+fun HistoryScreen() = Center("Historial (Producto 1)")

@@ -1,6 +1,6 @@
 package com.kotliners.piedrapapeltijera.navigation
 
-//Esta clase nos permite hacer referencia a las pantalla por tipo seguro
+//Rutas
 sealed class Screen(val route: String, val title: String){
     data object Splash : Screen("splash","Splash")
     data object Home : Screen( "home", "Home")

@@ -5,9 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-//import androidx.compose.material.icons.filled.HelpOutline
-import androidx.compose.material.icons.automirrored.filled.HelpOutline
-
+import androidx.compose.material.icons.filled.HelpOutline
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Leaderboard
@@ -100,10 +98,9 @@ fun AppScaffold(
                                 )
 
                                 Screen.Help -> Icon(
-                                    imageVector = Icons.AutoMirrored.Filled.HelpOutline,
+                                    Icons.Default.HelpOutline,
                                     contentDescription = null
                                 )
-
 
                                 else -> {}
                             }

@@ -5,4 +5,4 @@ import com.kotliners.piedrapapeltijera.ui.components.Center
 
 //Pantalla Ajustes
 @Composable
-fun SettingScreen() = Center ( "Ajustes")
+fun SettingScreen() = Center ( "Ajustes (Producto 2)")

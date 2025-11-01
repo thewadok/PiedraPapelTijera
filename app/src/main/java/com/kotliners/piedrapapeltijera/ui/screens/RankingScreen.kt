@@ -5,4 +5,4 @@ import com.kotliners.piedrapapeltijera.ui.components.Center
 
 //Pantalla Ranking
 @Composable
-fun RankingScreen() = Center ( "Ranking de Jugadores")
+fun RankingScreen() = Center ( "Ranking (Producto 3)")

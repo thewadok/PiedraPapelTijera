@@ -51,6 +51,8 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+
+    //Librerias de Compose
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.runtime.livedata)
     implementation(libs.androidx.compose.ui)
@@ -59,11 +61,17 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.compose.material.icons.extended)
+
+    //Librerias para lifecycle + coroutines
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.androidx.lifecycle.runtime.compose)
+
+    //Librerias de material y system bars
     implementation(libs.google.material)
     implementation(libs.google.accompanist.systemuicontroller)
+
+    //Librerias para Tests
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
@@ -72,6 +80,7 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+
     // --- Room + RxJava ---
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
@@ -80,5 +89,6 @@ dependencies {
 
     implementation(libs.rxjava3)
     implementation(libs.rxandroid)
+    implementation(libs.rxkotlin)
     
 }

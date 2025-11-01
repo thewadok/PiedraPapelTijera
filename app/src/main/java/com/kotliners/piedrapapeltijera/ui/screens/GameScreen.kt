@@ -8,7 +8,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,29 +25,33 @@ import com.kotliners.piedrapapeltijera.ui.theme.TextoBlanco
 import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
 
 @Composable
-fun GameScreen(viewModel: MainViewModel = viewModel()) {
-
+fun GameScreen(
+    viewModel: MainViewModel = viewModel()
+) {
     var userMove by remember { mutableStateOf<Move?>(null) }
     var computerMove by remember { mutableStateOf<Move?>(null) }
     var result by remember { mutableStateOf<GameResult?>(null) }
-    var betAmount by remember { mutableStateOf(10) } // apuesta inicial mínima
+    var betAmount by remember { mutableIntStateOf(10) } // apuesta inicial mínima
     var message by remember { mutableStateOf("") }
 
-    // Saldo desde Room a través del ViewModel
+    // Saldo vivo desde Room a través del ViewModel
     val saldo = viewModel.monedas.observeAsState(0).value
 
+    // Lógica central de la partida
     fun jugarCon(mov: Move) {
-        // Validar apuesta con saldo actual persistido
+        // 1. Validar apuesta
         if (betAmount <= 0 || betAmount > saldo) {
             message = "Apuesta inválida."
             return
         }
 
+        //  Ejecutar la ronda
         val (r, c) = GameLogic.play(mov)
         result = r
         computerMove = c
-        userMove = mov
+         userMove = mov
 
+        // Actualizar saldo en BD + registrar partida
         when (r) {
             GameResult.GANAS -> {
                 viewModel.cambiarMonedas(+betAmount)
@@ -61,18 +64,20 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                 message = "Perdiste $betAmount monedas."
             }
             GameResult.EMPATE -> {
+                // En empate no cambia saldo, pero SÍ guardamos la partida
+                viewModel.registrarPartida(mov, c, r, betAmount)
                 message = "Empate, sin cambios."
             }
         }
     }
 
-
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(FondoNegro)
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(FondoNegro)
     ) {
 
-        //Monedas totales y posición
+        // Monedas actuales arriba a la derecha
         Text(
             text = "$saldo monedas",
             modifier = Modifier
@@ -82,7 +87,7 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
             color = AmarilloNeon
         )
 
-        //Contenido principal
+        // Contenido principal
         Column(
             modifier = Modifier
                 .align(Alignment.Center)
@@ -96,12 +101,12 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                 color = TextoBlanco
             )
 
-            //Selector de apuesta con + y -
+            // Selector de apuesta (+ y -)
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                //Botón de restar apuesta
+                // Botón restar apuesta
                 Button(
                     onClick = {
                         if (betAmount > 10) betAmount -= 10
@@ -117,18 +122,19 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                     )
                 }
 
-                // Muestra la cantidad actual
+                // Cantidad actual apostada
                 Text(
                     text = "$betAmount monedas",
                     style = MaterialTheme.typography.titleLarge,
                     color = AmarilloNeon
                 )
 
-                // Botón de sumar apuesta
+                // Botón sumar apuesta
                 Button(
                     onClick = {
-                        if (betAmount + 10 <= saldo)
+                        if (betAmount + 10 <= saldo) {
                             betAmount += 10
+                        }
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Transparent,
@@ -151,7 +157,7 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                 color = TextoBlanco
             )
 
-            //Botones de jugada
+            // Botones de jugada
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -160,11 +166,9 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
-                //Piedra
+                // Piedra
                 Button(
-                    onClick = {
-                        jugarCon(Move.PIEDRA)
-                    },
+                    onClick = { jugarCon(Move.PIEDRA) },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                     contentPadding = PaddingValues(0.dp),
                     elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
@@ -176,11 +180,9 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                     )
                 }
 
-                //Papel
+                // Papel
                 Button(
-                    onClick = {
-                        jugarCon(Move.PAPEL)
-                    },
+                    onClick = { jugarCon(Move.PAPEL) },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                     contentPadding = PaddingValues(0.dp),
                     elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
@@ -192,11 +194,9 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                     )
                 }
 
-                //Tijera (tamaño ajustado)
+                // Tijera
                 Button(
-                    onClick = {
-                        jugarCon(Move.TIJERA)
-                    },
+                    onClick = { jugarCon(Move.TIJERA) },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                     contentPadding = PaddingValues(0.dp),
                     elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
@@ -206,23 +206,26 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                         contentDescription = "Tijera",
                         modifier = Modifier
                             .size(110.dp)
-                            .padding(end = 4.dp) // pequeño margen para centrar mejor
+                            .padding(end = 4.dp)
                     )
                 }
             }
 
-            // Resultado y saldo
+            // Bloque de resultado después de jugar
             if (result != null) {
                 Spacer(Modifier.height(16.dp))
+
                 Text(
                     "Jugador: ${userMove?.name} | Banca: ${computerMove?.name}",
                     color = TextoBlanco
                 )
+
                 Text(
                     message,
                     style = MaterialTheme.typography.titleMedium,
                     color = TextoBlanco
                 )
+
                 Text(
                     "Saldo actual: $saldo",
                     style = MaterialTheme.typography.titleLarge,

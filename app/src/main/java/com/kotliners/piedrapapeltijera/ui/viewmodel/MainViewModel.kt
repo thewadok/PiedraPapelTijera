@@ -7,6 +7,7 @@ import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import com.kotliners.piedrapapeltijera.MyApp
+import com.kotliners.piedrapapeltijera.data.local.entity.Partida
 import com.kotliners.piedrapapeltijera.data.repository.JugadorRepository
 import com.kotliners.piedrapapeltijera.data.repository.PartidaRepository
 import com.kotliners.piedrapapeltijera.game.Move
@@ -21,6 +22,7 @@ class MainViewModel : ViewModel() {
     // Expuesto para la UI
     val monedas = MutableLiveData<Int>()
     val partidas = MutableLiveData<Int>()
+    val historialPartidas = MutableLiveData<List<Partida>>()
 
     init {
         // Creamos el jugador si no existe
@@ -38,6 +40,15 @@ class MainViewModel : ViewModel() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(onNext = { partidas.value = it })
             .also { disposables.add(it) }
+
+        historial.observarHistorial()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = { historialPartidas.value = it },
+                onError = { e -> Log.e("MainViewModel", "Error cargando historial", e) }
+            )
+            .also { disposables.add(it) }
+
     }
 
     // +n o -n para ganar/perder monedas

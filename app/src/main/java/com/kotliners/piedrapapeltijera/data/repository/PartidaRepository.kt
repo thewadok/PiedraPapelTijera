@@ -27,7 +27,9 @@ class PartidaRepository(private val dao: PartidaDao) {
             apuesta = apuesta,
             cambioMonedas = cambio
         )
-        return dao.insertar(p).subscribeOn(Schedulers.io())
+        return Completable.fromAction {
+            dao.insertar(p)
+        }.subscribeOn(Schedulers.io())
     }
 
     fun observarTotalPartidas(): Flowable<Int> =

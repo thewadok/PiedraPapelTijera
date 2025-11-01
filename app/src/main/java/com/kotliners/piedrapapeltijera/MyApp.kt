@@ -19,7 +19,7 @@ class MyApp : Application() {
             AppDatabase::class.java,
             "piedra_papel_tijera.db"
         )
-            .fallbackToDestructiveMigration()
+            .fallbackToDestructiveMigration(dropAllTables = true)
             .build()
     }
 }

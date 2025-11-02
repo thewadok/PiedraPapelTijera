@@ -17,8 +17,8 @@ import com.kotliners.piedrapapeltijera.ui.theme.TextoBlanco
 
 @Composable
 fun NeonGloboInfo(
-    saldo: Int,
     partidas: Int,
+    saldo: Int,
     modifier: Modifier = Modifier
 ) {
     Box(

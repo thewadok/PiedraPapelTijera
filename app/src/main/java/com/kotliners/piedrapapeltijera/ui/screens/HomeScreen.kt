@@ -25,6 +25,7 @@ import com.kotliners.piedrapapeltijera.ui.components.TextoLinea
 import com.kotliners.piedrapapeltijera.ui.components.Parrafo
 import com.kotliners.piedrapapeltijera.ui.components.TituloSeccion
 import com.kotliners.piedrapapeltijera.ui.components.TituloPrincipal
+import com.kotliners.piedrapapeltijera.ui.components.NeonGloboInfo
 import com.kotliners.piedrapapeltijera.R
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -35,6 +36,7 @@ import androidx.compose.foundation.verticalScroll
 import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.livedata.observeAsState
+
 
 
 //Pantalla de Inicio
@@ -60,7 +62,7 @@ fun HomeScreen(
                 .padding(16.dp),
             horizontalAlignment = Alignment.Start
         ) {
-            // Globo info
+            // NeonGloboinfo
             NeonGloboInfo(
                 partidas = partidas,
                 saldo = saldo,
@@ -197,59 +199,6 @@ Ve a Ajustes, toca Rescate y compra 50 monedas extra para continuar.
             )
 
             Spacer(Modifier.height(24.dp))
-        }
-    }
-}
-
-// Globo info
-@Composable
-private fun NeonGloboInfo(
-    partidas: Int,
-    saldo: Int,
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier
-            .shadow(24.dp, RoundedCornerShape(22.dp), clip = false)
-            .clip(RoundedCornerShape(22.dp))
-            .background(RosaNeon) // define RosaNeon = Color(0xFFFF1493) en tu theme
-            .padding(horizontal = 18.dp, vertical = 16.dp)
-    ) {
-        Row(
-            Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // Izquierda: Número de partidas
-            Column {
-                Text(
-                    "Partidas",
-                    color = TextoBlanco.copy(alpha = 0.9f),
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    "$partidas",
-                    color = TextoBlanco,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-            // Derecha: Saldo actual
-            Column(horizontalAlignment = Alignment.End) {
-                Text(
-                    "Monedas",
-                    color = TextoBlanco.copy(alpha = 0.9f),
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    "$saldo",
-                    color = TextoBlanco,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
         }
     }
 }

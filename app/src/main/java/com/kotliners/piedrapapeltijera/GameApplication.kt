@@ -6,7 +6,7 @@ import com.kotliners.piedrapapeltijera.data.AppDatabase
 class GameApplication : Application() {
 
     val database: AppDatabase by lazy {        // 'lazy' crea la base de datos
-        // la primera vez que alguien intente acceder a ella.
+                                               // la primera vez que alguien intente acceder a ella.
         AppDatabase.getDatabase(this) // Llama al 'Singleton' creado en AppDatabase.
 
     }

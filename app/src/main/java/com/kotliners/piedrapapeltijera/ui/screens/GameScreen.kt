@@ -14,7 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.kotliners.piedrapapeltijera.GameViewModel
 import com.kotliners.piedrapapeltijera.R
+import com.kotliners.piedrapapeltijera.data.Jugada
 import com.kotliners.piedrapapeltijera.game.GameLogic
 import com.kotliners.piedrapapeltijera.game.GameResult
 import com.kotliners.piedrapapeltijera.game.Move
@@ -24,7 +27,7 @@ import com.kotliners.piedrapapeltijera.ui.theme.AmarilloNeon
 import com.kotliners.piedrapapeltijera.ui.theme.TextoBlanco
 
 @Composable
-fun GameScreen() {
+fun GameScreen(navController: NavController, gameViewModel: GameViewModel) {
 
     var userMove by remember { mutableStateOf<Move?>(null) }
     var computerMove by remember { mutableStateOf<Move?>(null) }
@@ -138,6 +141,16 @@ fun GameScreen() {
                                 GameResult.PIERDES -> "Perdiste ${playerState.lastBet} monedas."
                                 else -> "Empate, sin cambios."
                             }
+                            val resultadoString = when (r) {
+                                GameResult.GANAS -> "VICTORIA"
+                                GameResult.PIERDES -> "DERROTA"
+                                else -> "EMPATE"
+                            }
+                            gameViewModel.registrarPartida(
+                                jugada = Jugada.valueOf(Move.PIEDRA.name),
+                                cpu = Jugada.valueOf(c.name),
+                                resultado = resultadoString
+                            )
                         } else {
                             message = "Apuesta inválida."
                         }
@@ -165,6 +178,16 @@ fun GameScreen() {
                                 GameResult.PIERDES -> "Perdiste ${playerState.lastBet} monedas."
                                 else -> "Empate, sin cambios."
                             }
+                            val resultadoString = when (r) {
+                                GameResult.GANAS -> "VICTORIA"
+                                GameResult.PIERDES -> "DERROTA"
+                                else -> "EMPATE"
+                            }
+                            gameViewModel.registrarPartida(
+                                jugada = Jugada.valueOf(Move.PAPEL.name),
+                                cpu = Jugada.valueOf(c.name),
+                                resultado = resultadoString
+                            )
                         } else {
                             message = "Apuesta inválida."
                         }
@@ -192,6 +215,16 @@ fun GameScreen() {
                                 GameResult.PIERDES -> "Perdiste ${playerState.lastBet} monedas."
                                 else -> "Empate, sin cambios."
                             }
+                            val resultadoString = when (r) {
+                                GameResult.GANAS -> "VICTORIA"
+                                GameResult.PIERDES -> "DERROTA"
+                                else -> "EMPATE"
+                            }
+                            gameViewModel.registrarPartida(
+                                jugada = Jugada.valueOf(Move.TIJERA.name),
+                                cpu = Jugada.valueOf(c.name),
+                                resultado = resultadoString
+                            )
                         } else {
                             message = "Apuesta inválida."
                         }

@@ -96,7 +96,7 @@ class MainViewModel : ViewModel() {
         historial.borrarHistorial()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
-                onComplete = { /* Historial borrado */ },
+                onComplete = { historialPartidas.value = emptyList() },
                 onError = { e -> Log.e("MainViewModel", "Error borrando historial", e) }
             )
             .also { disposables.add(it) }
@@ -106,7 +106,7 @@ class MainViewModel : ViewModel() {
     fun rescate() {
         val saldoActual = monedas.value ?: 0
         if (saldoActual <= 0) {
-            cambiarMonedas(100)
+            cambiarMonedas(50)
         }
     }
 

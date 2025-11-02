@@ -58,7 +58,7 @@ fun SettingScreen(
         // Rescate
 
         NeonTextoBoton("Rescate") {
-            viewModel.cambiarMonedas(50)
+            viewModel.rescate()
             nav.safeNavigate(Screen.Game.route)
         }
 

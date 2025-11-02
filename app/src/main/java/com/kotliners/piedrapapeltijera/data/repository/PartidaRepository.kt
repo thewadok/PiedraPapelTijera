@@ -36,5 +36,5 @@ class PartidaRepository(private val dao: PartidaDao) {
     fun observarHistorial(): Flowable<List<Partida>> =
         dao.observarHistorial().subscribeOn(Schedulers.io())
 
-    fun borrarHistorial(): Completable = dao.borrarTodo()
+    fun borrarHistorial(): Completable = dao.borrarTodo().subscribeOn(Schedulers.io())
 }

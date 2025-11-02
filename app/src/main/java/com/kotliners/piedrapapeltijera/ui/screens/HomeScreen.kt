@@ -226,7 +226,8 @@ private fun NeonGloboInfo(
                 Text(
                     "Partidas",
                     color = TextoBlanco.copy(alpha = 0.9f),
-                    fontSize = 13.sp
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.Bold
                 )
                 Text(
                     "$partidas",
@@ -238,9 +239,10 @@ private fun NeonGloboInfo(
             // Derecha: Saldo actual
             Column(horizontalAlignment = Alignment.End) {
                 Text(
-                    "Saldo actual",
+                    "Monedas",
                     color = TextoBlanco.copy(alpha = 0.9f),
-                    fontSize = 13.sp
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.Bold
                 )
                 Text(
                     "$saldo",

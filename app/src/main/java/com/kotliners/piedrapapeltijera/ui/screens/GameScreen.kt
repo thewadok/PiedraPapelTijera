@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kotliners.piedrapapeltijera.R
 import com.kotliners.piedrapapeltijera.game.GameLogic
@@ -61,6 +62,7 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                 message = "Perdiste $betAmount monedas."
             }
             GameResult.EMPATE -> {
+                viewModel.registrarPartida(mov, c, r, betAmount)
                 message = "Empate, sin cambios."
             }
         }
@@ -111,7 +113,8 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                     elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
                 ) {
                     Text(
-                        text = "➖",
+                        text = "-",
+                        fontSize = 125.sp,
                         style = MaterialTheme.typography.headlineLarge,
                         color = TextoBlanco
                     )
@@ -138,7 +141,8 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                     elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
                 ) {
                     Text(
-                        text = "➕",
+                        text = "+",
+                        fontSize = 75.sp,
                         style = MaterialTheme.typography.headlineLarge,
                         color = TextoBlanco
                     )

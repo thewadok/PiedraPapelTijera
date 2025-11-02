@@ -93,7 +93,7 @@ private fun PartidaCard(p: Partida) {
             Spacer(Modifier.height(4.dp))
 
             Text(
-                text = "Tú: ${p.jugadaJugador}  |  CPU: ${p.jugadaCpu}",
+                text = "Tú: ${p.jugadaJugador}  |  Banca: ${p.jugadaCpu}",
                 color = TextoBlanco,
                 fontSize = 16.sp
             )

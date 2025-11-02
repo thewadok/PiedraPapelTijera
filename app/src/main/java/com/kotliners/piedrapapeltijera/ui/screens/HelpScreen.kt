@@ -5,4 +5,4 @@ import com.kotliners.piedrapapeltijera.ui.components.Center
 
 //Pantalla Ayuda
 @Composable
-fun HelpScreen() = Center ( "Ayuda y Reglas")
+fun HelpScreen() = Center ( "Ayuda (Producto 2)")

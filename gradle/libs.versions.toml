@@ -18,6 +18,7 @@ ksp = "2.0.21-1.0.25"
 rxjava3 = "3.1.8"
 rxandroid = "3.0.2"
 lifecycle = "2.8.6"
+rxkotlin = "3.0.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -46,8 +47,11 @@ google-accompanist-systemuicontroller = { module = "com.google.accompanist:accom
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 androidx-room-ktx     = { module = "androidx.room:room-ktx",     version.ref = "room" }
 androidx-room-compiler= { module = "androidx.room:room-compiler",version.ref = "room" }
+androidx-room-rxjava3 = { module = "androidx.room:room-rxjava3", version.ref = "room" }
 rxjava3 = { module = "io.reactivex.rxjava3:rxjava", version.ref = "rxjava3" }
 rxandroid = { module = "io.reactivex.rxjava3:rxandroid", version.ref = "rxandroid" }
+rxkotlin = { module = "io.reactivex.rxjava3:rxkotlin", version.ref = "rxkotlin" }
+androidx-compose-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

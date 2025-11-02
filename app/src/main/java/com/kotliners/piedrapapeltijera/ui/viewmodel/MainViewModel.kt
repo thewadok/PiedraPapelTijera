@@ -12,6 +12,7 @@ import com.kotliners.piedrapapeltijera.data.repository.PartidaRepository
 import com.kotliners.piedrapapeltijera.data.local.entity.Partida
 import com.kotliners.piedrapapeltijera.game.Move
 import com.kotliners.piedrapapeltijera.game.GameResult
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 class MainViewModel : ViewModel() {
 
@@ -29,6 +30,7 @@ class MainViewModel : ViewModel() {
         // Observamos el saldo en tiempo real y lo publicamos en LiveData
         repo.ensureJugador()
             .andThen(repo.observarMonedas())
+            .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onNext = { monedas.value = it },
@@ -55,6 +57,7 @@ class MainViewModel : ViewModel() {
     // +n o -n para ganar/perder monedas
     fun cambiarMonedas(cantidad: Int) {
         repo.cambiarMonedas(cantidad)
+            .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onComplete = { /* OK */ },
@@ -66,6 +69,7 @@ class MainViewModel : ViewModel() {
     // Fijamos un saldo exacto
     fun setMonedas(nuevoSaldo: Int) {
         repo.setMonedas(nuevoSaldo)
+            .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onComplete = { /* OK */ },

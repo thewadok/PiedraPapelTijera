@@ -92,7 +92,7 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                     .align(Alignment.CenterHorizontally)
             )
 
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(24.dp))
 
             //Contenido principal
             Column(

@@ -7,7 +7,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -19,7 +18,6 @@ import com.kotliners.piedrapapeltijera.navigation.safeNavigate
 import com.kotliners.piedrapapeltijera.ui.theme.FondoNegro
 import com.kotliners.piedrapapeltijera.ui.theme.TextoNegro
 import com.kotliners.piedrapapeltijera.ui.theme.TextoBlanco
-import com.kotliners.piedrapapeltijera.ui.theme.RosaNeon
 import com.kotliners.piedrapapeltijera.ui.theme.AzulNeon
 import com.kotliners.piedrapapeltijera.ui.components.TextoLinea
 import com.kotliners.piedrapapeltijera.ui.components.Parrafo

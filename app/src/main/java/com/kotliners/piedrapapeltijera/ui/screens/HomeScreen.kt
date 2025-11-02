@@ -25,6 +25,7 @@ import com.kotliners.piedrapapeltijera.ui.theme.AzulNeon
 import com.kotliners.piedrapapeltijera.ui.components.TextoLinea
 import com.kotliners.piedrapapeltijera.ui.components.Parrafo
 import com.kotliners.piedrapapeltijera.ui.components.TituloSeccion
+import com.kotliners.piedrapapeltijera.ui.components.TituloPrincipal
 import com.kotliners.piedrapapeltijera.R
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -103,14 +104,10 @@ fun HomeScreen(
             Spacer(Modifier.height(24.dp))
 
             // Reglas
-            Text(
-                text = "Reglas Básicas",
-                modifier = Modifier.fillMaxWidth(),
-                color = AmarilloNeon,
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold
-            )
+            TituloPrincipal("Reglas Básicas")
+
             Spacer(Modifier.height(8.dp))
+
             Text(
                 text = "Cómo funciona el juego",
                 color = TextoBlanco,
@@ -185,7 +182,7 @@ Ve a Ajustes, toca Rescate y compra 50 monedas extra para continuar.
             TituloSeccion("Cómo Jugar")
 
             Spacer(Modifier.height(8.dp))
-            
+
             Parrafo(
                 """
 1) Elige tu apuesta: usa + y − para ajustar la cantidad.

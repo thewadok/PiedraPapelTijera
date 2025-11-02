@@ -13,6 +13,18 @@ import com.kotliners.piedrapapeltijera.ui.theme.AmarilloNeon
 import com.kotliners.piedrapapeltijera.ui.theme.TextoBlanco
 
 @Composable
+fun TituloPrincipal(text: String, modifier: Modifier = Modifier) {
+    Text(
+        text = text,
+        color = AmarilloNeon,
+        fontSize = 26.sp,
+        fontWeight = FontWeight.ExtraBold,
+        modifier = modifier
+            .fillMaxWidth()
+    )
+}
+
+@Composable
 fun TituloSeccion(text: String, modifier: Modifier = Modifier) {
     Text(
         text = text,

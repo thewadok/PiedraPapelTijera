@@ -21,6 +21,7 @@ import com.kotliners.piedrapapeltijera.game.GameResult
 import com.kotliners.piedrapapeltijera.ui.theme.FondoNegro
 import com.kotliners.piedrapapeltijera.ui.theme.TextoBlanco
 import com.kotliners.piedrapapeltijera.ui.theme.AmarilloNeon
+import com.kotliners.piedrapapeltijera.ui.components.TituloPrincipal
 import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -39,13 +40,9 @@ fun HistoryScreen(
             .padding(16.dp)
     ) {
 
-        Text(
-            text = "Historial de partidas",
-            color = AmarilloNeon,
-            fontSize = 22.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
+       TituloPrincipal("Historial de partidas")
+
+        Spacer(Modifier.height(8.dp))
 
         if (partidas.isEmpty()) {
             Box(

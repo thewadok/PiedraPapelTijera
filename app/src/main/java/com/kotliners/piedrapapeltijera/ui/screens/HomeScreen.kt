@@ -19,7 +19,6 @@ import com.kotliners.piedrapapeltijera.navigation.safeNavigate
 import com.kotliners.piedrapapeltijera.ui.theme.FondoNegro
 import com.kotliners.piedrapapeltijera.ui.theme.TextoNegro
 import com.kotliners.piedrapapeltijera.ui.theme.TextoBlanco
-import com.kotliners.piedrapapeltijera.ui.theme.AmarilloNeon
 import com.kotliners.piedrapapeltijera.ui.theme.RosaNeon
 import com.kotliners.piedrapapeltijera.ui.theme.AzulNeon
 import com.kotliners.piedrapapeltijera.ui.components.TextoLinea

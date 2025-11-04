@@ -8,7 +8,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,6 +21,7 @@ import com.kotliners.piedrapapeltijera.game.GameResult
 import com.kotliners.piedrapapeltijera.ui.theme.FondoNegro
 import com.kotliners.piedrapapeltijera.ui.theme.TextoBlanco
 import com.kotliners.piedrapapeltijera.ui.theme.AmarilloNeon
+import com.kotliners.piedrapapeltijera.ui.components.TituloPrincipal
 import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -39,17 +40,17 @@ fun HistoryScreen(
             .padding(16.dp)
     ) {
 
-        Text(
-            text = "Historial de partidas",
-            color = AmarilloNeon,
-            fontSize = 22.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
+        TituloPrincipal("Historial de partidas")
+
+        Spacer(Modifier.height(8.dp))
 
         if (partidas.isEmpty()) {
+            // En vez de un Box(fillMaxSize()) dentro de la Column(fillMaxSize()),
+            // usamos un Box con weight() para que ocupe el resto del espacio.
             Box(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -60,6 +61,7 @@ fun HistoryScreen(
             }
         } else {
             LazyColumn(
+                modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 items(partidas) { partida ->
@@ -72,10 +74,11 @@ fun HistoryScreen(
 
 @Composable
 private fun PartidaCard(p: Partida) {
-    val fechaFormateada = SimpleDateFormat(
-        "dd/MM/yyyy HH:mm",
-        Locale.getDefault()
-    ).format(Date(p.fecha))
+    // remember -> no recrea el formatter en cada recomposición
+    val dateFormatter = remember {
+        SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+    }
+    val fechaFormateada = dateFormatter.format(Date(p.fecha))
 
     Card(
         colors = CardDefaults.cardColors(
@@ -96,7 +99,7 @@ private fun PartidaCard(p: Partida) {
             Spacer(Modifier.height(4.dp))
 
             Text(
-                text = "Tú: ${p.jugadaJugador}  |  CPU: ${p.jugadaCpu}",
+                text = "Tú: ${p.jugadaJugador}  |  Banca: ${p.jugadaCpu}",
                 color = TextoBlanco,
                 fontSize = 16.sp
             )

@@ -12,7 +12,7 @@ import io.reactivex.rxjava3.core.Single
 interface PartidaDao {
 
     @Insert
-    fun insertar(partida: Partida): Long
+    fun insertar(partida: Partida): Completable//Long
 
     @Query("SELECT * FROM partidas ORDER BY fecha DESC")
     fun observarHistorial(): Flowable<List<Partida>>

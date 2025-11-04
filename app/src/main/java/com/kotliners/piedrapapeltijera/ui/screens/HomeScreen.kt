@@ -7,7 +7,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -19,9 +18,12 @@ import com.kotliners.piedrapapeltijera.navigation.safeNavigate
 import com.kotliners.piedrapapeltijera.ui.theme.FondoNegro
 import com.kotliners.piedrapapeltijera.ui.theme.TextoNegro
 import com.kotliners.piedrapapeltijera.ui.theme.TextoBlanco
-import com.kotliners.piedrapapeltijera.ui.theme.AmarilloNeon
-import com.kotliners.piedrapapeltijera.ui.theme.RosaNeon
 import com.kotliners.piedrapapeltijera.ui.theme.AzulNeon
+import com.kotliners.piedrapapeltijera.ui.components.TextoLinea
+import com.kotliners.piedrapapeltijera.ui.components.Parrafo
+import com.kotliners.piedrapapeltijera.ui.components.TituloSeccion
+import com.kotliners.piedrapapeltijera.ui.components.TituloPrincipal
+import com.kotliners.piedrapapeltijera.ui.components.NeonGloboInfo
 import com.kotliners.piedrapapeltijera.R
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -33,11 +35,9 @@ import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.livedata.observeAsState
 
+
+
 //Pantalla de Inicio
-/**
-Pendiente de pasar saldo/partidas desde BBDD.
-Por defecto: saldo=1000, partidas=0 (solo para ver el diseño).
- */
 @Composable
 fun HomeScreen(
     nav: NavHostController,
@@ -60,7 +60,7 @@ fun HomeScreen(
                 .padding(16.dp),
             horizontalAlignment = Alignment.Start
         ) {
-            // Globo info
+            // NeonGloboinfo
             NeonGloboInfo(
                 partidas = partidas,
                 saldo = saldo,
@@ -103,14 +103,10 @@ fun HomeScreen(
             Spacer(Modifier.height(24.dp))
 
             // Reglas
-            Text(
-                text = "Reglas Básicas",
-                modifier = Modifier.fillMaxWidth(),
-                color = AmarilloNeon,
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold
-            )
+            TituloPrincipal("Reglas Básicas")
+
             Spacer(Modifier.height(8.dp))
+
             Text(
                 text = "Cómo funciona el juego",
                 color = TextoBlanco,
@@ -141,26 +137,22 @@ fun HomeScreen(
 
             Spacer(Modifier.height(16.dp))
 
-            Text(
-                text = "Resultados",
-                color = AmarilloNeon,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            )
+            // Resultados
+            TituloSeccion("Resultados")
+
             Spacer(Modifier.height(8.dp))
+
             TextoLinea("Victoria:", "Ganas tu apuesta.")
             TextoLinea("Derrota:", "Pierdes tu apuesta.")
             TextoLinea("Empate:", "No ganas ni pierdes.")
 
             Spacer(Modifier.height(16.dp))
 
-            Text(
-                text = "Apuestas",
-                color = AmarilloNeon,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            )
+            // Apuestas
+            TituloSeccion("Apuestas")
+
             Spacer(Modifier.height(8.dp))
+
             Parrafo(
                 """
 • Apuesta mínima: 10 monedas
@@ -172,30 +164,24 @@ fun HomeScreen(
             Spacer(Modifier.height(16.dp))
 
             // Rescate
-            Text(
-                text = "Rescate",
-                color = AmarilloNeon,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            )
+            TituloSeccion("Rescate")
+
             Spacer(Modifier.height(8.dp))
+
             Parrafo(
                 """
 Sin saldo, pero no sin suerte.
 
-Pulsa Rescate y obtén 100 monedas extra para continuar.
+Ve a Ajustes, toca Rescate y compra 50 monedas extra para continuar.
 """.trimIndent()
             )
 
             Spacer(Modifier.height(16.dp))
 
-            Text(
-                text = "Cómo Jugar",
-                color = AmarilloNeon,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            )
+            TituloSeccion("Cómo Jugar")
+
             Spacer(Modifier.height(8.dp))
+
             Parrafo(
                 """
 1) Elige tu apuesta: usa + y − para ajustar la cantidad.
@@ -211,57 +197,6 @@ Pulsa Rescate y obtén 100 monedas extra para continuar.
             )
 
             Spacer(Modifier.height(24.dp))
-        }
-    }
-}
-
-// Globo info
-@Composable
-private fun NeonGloboInfo(
-    partidas: Int,
-    saldo: Int,
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier
-            .shadow(24.dp, RoundedCornerShape(22.dp), clip = false)
-            .clip(RoundedCornerShape(22.dp))
-            .background(RosaNeon) // define RosaNeon = Color(0xFFFF1493) en tu theme
-            .padding(horizontal = 18.dp, vertical = 16.dp)
-    ) {
-        Row(
-            Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // Izquierda: Número de partidas
-            Column {
-                Text(
-                    "Partidas",
-                    color = TextoBlanco.copy(alpha = 0.9f),
-                    fontSize = 13.sp
-                )
-                Text(
-                    "$partidas",
-                    color = TextoBlanco,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-            // Derecha: Saldo actual
-            Column(horizontalAlignment = Alignment.End) {
-                Text(
-                    "Saldo actual",
-                    color = TextoBlanco.copy(alpha = 0.9f),
-                    fontSize = 13.sp
-                )
-                Text(
-                    "$saldo",
-                    color = TextoBlanco,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
         }
     }
 }
@@ -290,22 +225,4 @@ private fun ReglaConIcono(
             Text(detalle, color = TextoBlanco, fontSize = 14.sp)
         }
     }
-}
-
-@Composable
-private fun TextoLinea(titulo: String, detalle: String) {
-    Row(Modifier.fillMaxWidth().padding(vertical = 2.dp)) {
-        Text("$titulo ", color = AmarilloNeon, fontWeight = FontWeight.Bold)
-        Text(detalle, color = TextoBlanco)
-    }
-}
-
-@Composable
-private fun Parrafo(texto: String, modifier: Modifier = Modifier) {
-    Text(
-        texto,
-        modifier = modifier.fillMaxWidth(),
-        color = TextoBlanco,
-        fontSize = 16.sp,
-        lineHeight = 20.sp)
 }

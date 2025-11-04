@@ -27,9 +27,10 @@ class PartidaRepository(private val dao: PartidaDao) {
             apuesta = apuesta,
             cambioMonedas = cambio
         )
-        return Completable.fromAction {
+        return dao.insertar(p).subscribeOn(Schedulers.io())
+        /*return Completable.fromAction {
             dao.insertar(p)
-        }.subscribeOn(Schedulers.io())
+        }.subscribeOn(Schedulers.io())*/
     }
 
     fun observarTotalPartidas(): Flowable<Int> =
@@ -37,4 +38,7 @@ class PartidaRepository(private val dao: PartidaDao) {
 
     fun observarHistorial(): Flowable<List<Partida>> =
         dao.observarHistorial().subscribeOn(Schedulers.io())
+
+    //Añado borrarHistorial de Edu
+    fun borrarHistorial(): Completable = dao.borrarTodo().subscribeOn(Schedulers.io())
 }

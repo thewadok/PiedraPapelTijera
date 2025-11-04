@@ -31,8 +31,3 @@ google-services.json
 
 # Android Profiling
 *.hprof
-
-# Gradle configuration files
-gradle/
-!gradle/wrapper/gradle-wrapper.jar
-!gradle/wrapper/gradle-wrapper.properties

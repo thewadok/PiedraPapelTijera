@@ -36,3 +36,4 @@ google-services.json
 gradle/
 !gradle/wrapper/gradle-wrapper.jar
 !gradle/wrapper/gradle-wrapper.properties
+gradle/libs.versions.toml

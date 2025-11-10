@@ -1,3 +1,8 @@
 <resources>
+    <!-- Nombre de la aplicación -->
     <string name="app_name">PiedraPapelTijera</string>
+
+    <!-- Textos para la notificación de victoria -->
+    <string name="victory_title">¡Victoria!</string>
+    <string name="victory_text">Has ganado la partida, felicidades.</string>
 </resources>

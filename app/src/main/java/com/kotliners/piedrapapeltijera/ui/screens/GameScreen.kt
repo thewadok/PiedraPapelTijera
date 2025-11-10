@@ -13,6 +13,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -28,6 +29,7 @@ import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
 import com.kotliners.piedrapapeltijera.ui.components.NeonGloboInfo
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import com.kotliners.piedrapapeltijera.utils.VictoryManager
 
 @Composable
 fun GameScreen(viewModel: MainViewModel = viewModel()) {
@@ -37,6 +39,9 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
     var result by remember { mutableStateOf<GameResult?>(null) }
     var betAmount by remember { mutableStateOf(10) } // apuesta inicial mínima
     var message by remember { mutableStateOf("") }
+
+    // ✅ Contexto para pasar a GameLogic y a VictoryManager
+    val context = LocalContext.current
 
     // Saldo y partidas desde Room a través del ViewModel
     val saldo = viewModel.monedas.observeAsState(0).value
@@ -49,7 +54,8 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
             return
         }
 
-        val (r, c) = GameLogic.play(mov)
+        // ✅ GameLogic ahora recibe (context, mov)
+        val (r, c) = GameLogic.play(context, mov)
         result = r
         computerMove = c
         userMove = mov
@@ -59,6 +65,7 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                 viewModel.cambiarMonedas(+betAmount)
                 viewModel.registrarPartida(mov, c, r, betAmount)
                 message = "¡Ganaste $betAmount monedas!"
+                VictoryManager.handleResult(context, r) // notificación
             }
             GameResult.PIERDES -> {
                 viewModel.cambiarMonedas(-betAmount)
@@ -72,15 +79,18 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
         }
     }
 
-
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(FondoNegro)
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(FondoNegro)
     ) {
         val scroll = rememberScrollState()
 
         Column(
-            Modifier.fillMaxSize().verticalScroll(scroll).padding(16.dp),
+            Modifier
+                .fillMaxSize()
+                .verticalScroll(scroll)
+                .padding(16.dp),
             horizontalAlignment = Alignment.Start
         ) {
             NeonGloboInfo(
@@ -175,9 +185,7 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
 
                     //Piedra
                     Button(
-                        onClick = {
-                            jugarCon(Move.PIEDRA)
-                        },
+                        onClick = { jugarCon(Move.PIEDRA) },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                         contentPadding = PaddingValues(0.dp),
                         elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
@@ -191,9 +199,7 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
 
                     //Papel
                     Button(
-                        onClick = {
-                            jugarCon(Move.PAPEL)
-                        },
+                        onClick = { jugarCon(Move.PAPEL) },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                         contentPadding = PaddingValues(0.dp),
                         elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
@@ -205,11 +211,9 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                         )
                     }
 
-                    //Tijera (tamaño ajustado)
+                    //Tijera
                     Button(
-                        onClick = {
-                            jugarCon(Move.TIJERA)
-                        },
+                        onClick = { jugarCon(Move.TIJERA) },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                         contentPadding = PaddingValues(0.dp),
                         elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
@@ -219,7 +223,7 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                             contentDescription = "Tijera",
                             modifier = Modifier
                                 .size(110.dp)
-                                .padding(end = 4.dp) // pequeño margen para centrar mejor
+                                .padding(end = 4.dp)
                         )
                     }
                 }

@@ -66,7 +66,7 @@ dependencies {
     implementation(libs.androidx.room.rxjava3)
     implementation(libs.rxkotlin)
     implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.runtime.livedata)
+    implementation("androidx.compose.runtime:runtime-livedata:1.7.0")
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)

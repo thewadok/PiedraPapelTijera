@@ -13,6 +13,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.kotliners.piedrapapeltijera.MainActivity
 import com.kotliners.piedrapapeltijera.R
+import android.graphics.BitmapFactory
 
 object VictoryNotification {
 
@@ -50,11 +51,20 @@ object VictoryNotification {
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
+
+        // Cargar la imagen grande desde drawable
+        val logoBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.logo_prov_kotliners)
+
         // 🔹 Construcción de la notificación
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_launcher_foreground) // Cambiar al icono propio
+            .setSmallIcon(R.drawable.ic_launcher_foreground) // sigue usando el icono pequeño de siempre
             .setContentTitle(context.getString(R.string.victory_title))
             .setContentText(context.getString(R.string.victory_text))
+            .setStyle(
+                NotificationCompat.BigPictureStyle() // 👇 aquí añadimos el logo grande
+                    .bigPicture(logoBitmap)
+                    .bigLargeIcon(null as android.graphics.Bitmap?)
+            )
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)

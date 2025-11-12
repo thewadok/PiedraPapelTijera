@@ -1,8 +1,101 @@
 <resources>
-    <!-- Nombre de la aplicación -->
-    <string name="app_name">PiedraPapelTijera</string>
+    <!-- App -->
+    <string name="app_name">Piedra Papel Tijera</string>
 
-    <!-- Textos para la notificación de victoria -->
+    <!-- Navegación / Pantallas -->
+    <string name="help">Ayuda</string>
+    <string name="settings">Configuración</string>
+    <string name="settings_title">Ajustes de configuración</string>
+    <string name="reset_button">Reset</string>
+    <string name="reset_description">Toca Reset para restablecer tu estado al estado inicial.</string>
+    <string name="rescue_button">Rescate</string>
+    <string name="rescue_description">Toca Rescate y compra 50 monedas extra para continuar.</string>
+    <string name="language_section_title">Idioma / Language</string>
+    <string name="language_instruction">Selecciona el idioma de la aplicación:</string>
+    <string name="language_spanish">Español</string>
+    <string name="language_english">Inglés</string>
+    <string name="other_settings_placeholder">Resto de ajustes en Producto 2</string>
+    <string name="player_vs_bank">Jugador: %1$s | Banca: %2$s</string>
+    <string name="coins">monedas</string>
+    <string name="play_button">Jugar</string>
+    <string name="how_game_works">Cómo funciona el juego</string>
+    <string name="rock_rule">Vence a Tijera</string>
+    <string name="paper_rule">Vence a Piedra</string>
+    <string name="scissors_rule">Vence a Papel</string>
+
+    <string name="results_title">Resultados</string>
+    <string name="victory_label">Victoria:</string>
+    <string name="victory_desc">Ganas tu apuesta.</string>
+    <string name="defeat_label">Derrota:</string>
+    <string name="defeat_desc">Pierdes tu apuesta.</string>
+    <string name="tie_label">Empate:</string>
+    <string name="tie_desc">No ganas ni pierdes.</string>
+
+    <string name="bets_title">Apuestas</string>
+    <string name="bets_description">
+• Apuesta mínima: 10 monedas
+• Apuesta máxima: tu saldo disponible
+• No puedes apostar más de lo que tienes
+</string>
+
+    <string name="rescue_title">Rescate</string>
+    <string name="rescue_info">
+Sin saldo, pero no sin suerte.
+
+Ve a Ajustes, toca Rescate y compra 50 monedas extra para continuar.
+</string>
+
+    <string name="how_to_play_title">Cómo Jugar</string>
+    <string name="how_to_play_steps">
+1) Elige tu apuesta: usa + y − para ajustar la cantidad.
+
+2) Selecciona tu jugada: Piedra, Papel o Tijera.
+
+3) Pulsa el icono para jugar.
+
+4) La banca selecciona su jugada al azar.
+
+5) Comprueba el resultado y tu saldo acumulado al instante.
+</string>
+
+    <string name="history_title">Historial de partidas</string>
+    <string name="no_games_yet">Todavía no has jugado</string>
+    <string name="player_vs_bank_history">Tú: %1$s | Banca: %2$s</string>
+    <string name="result_label">Resultado: %1$s</string>
+    <string name="bet_amount">Apuesta: %1$d monedas</string>
+    <string name="balance_change">Cambio saldo: %1$s</string>
+
+    <string name="result_win">Ganaste</string>
+    <string name="result_lose">Perdiste</string>
+    <string name="result_draw">Empate</string>
+
+    <!-- Juego -->
+    <string name="bet_your_coins">¡Apuesta tus monedas!</string>
+    <string name="invalid_bet">Apuesta inválida.</string>
+    <string name="choose_move">Elige tu jugada:</string>
+    <string name="you_won">¡Ganaste %1$d monedas!</string>
+    <string name="you_lost">Perdiste %1$d monedas.</string>
+    <string name="tie">Empate, sin cambios.</string>
+    <string name="current_balance">Saldo actual: %1$d</string>
+
+    <!-- Movimientos -->
+    <string name="rock">Piedra</string>
+    <string name="paper">Papel</string>
+    <string name="scissors">Tijera</string>
+
+    <!-- Notificación -->
     <string name="victory_title">¡Victoria!</string>
-    <string name="victory_text">Has ganado la partida, felicidades.</string>
+    <string name="victory_text">Resolviste la partida en %1$s ⏱</string>
+
+    <!-- Idioma -->
+    <string name="change_language">Cambiar idioma</string>
+
+    <!-- Ayuda HTML -->
+    <string name="help_title">Ayuda del Juego</string>
+    <string name="help_rules_title">Reglas Básicas</string>
+    <string name="help_rules_text">Piedra gana a Tijera. Tijera gana a Papel. Papel gana a Piedra.</string>
+    <string name="help_howto_title">Cómo jugar</string>
+    <string name="help_howto_text">Selecciona tu jugada tocando uno de los tres iconos. El sistema elige su jugada y muestra el resultado.</string>
+    <string name="help_tips_title">Consejos</string>
+    <string name="help_tips_text">Administra bien tus monedas. ¡Cuantas más partidas ganes, más recompensas obtendrás!</string>
 </resources>

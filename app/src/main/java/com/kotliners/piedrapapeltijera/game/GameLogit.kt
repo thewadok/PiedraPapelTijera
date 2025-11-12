@@ -1,11 +1,13 @@
 package com.kotliners.piedrapapeltijera.game
 
-import android.content.Context
-import com.kotliners.piedrapapeltijera.utils.VictoryManager
-
+/**
+ * Lógica principal del juego.
+ * Decide el movimiento de la banca y el resultado.
+ */
 object GameLogic {
 
-    fun play(context: Context, userMove: Move): Pair<GameResult, Move> {
+    fun play(userMove: Move): Pair<GameResult, Move> {
+        // Elección aleatoria de la máquina
         val computerMove = Move.values().random()
 
         val result = when {
@@ -15,9 +17,6 @@ object GameLogic {
             userMove == Move.TIJERA && computerMove == Move.PAPEL -> GameResult.GANAS
             else -> GameResult.PIERDES
         }
-
-        // 🔗 Delegamos el evento al VictoryManager
-        VictoryManager.handleResult(context, result)
 
         return Pair(result, computerMove)
     }

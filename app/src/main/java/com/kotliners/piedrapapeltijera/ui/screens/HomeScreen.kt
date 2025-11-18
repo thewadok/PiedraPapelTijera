@@ -164,7 +164,7 @@ fun HomeScreen(
             Spacer(Modifier.height(16.dp))
 
             // Rescate
-            TituloSeccion("Rescate")
+           TituloSeccion("Rescate")
 
             Spacer(Modifier.height(8.dp))
 

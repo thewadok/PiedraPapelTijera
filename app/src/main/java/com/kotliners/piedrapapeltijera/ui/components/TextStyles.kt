@@ -53,3 +53,4 @@ fun TextoLinea(titulo: String, detalle: String) {
         Text(detalle, color = TextoBlanco)
     }
 }
+

@@ -17,7 +17,7 @@ import com.kotliners.piedrapapeltijera.ui.theme.*
 import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
 import com.kotliners.piedrapapeltijera.ui.components.Parrafo
 import com.kotliners.piedrapapeltijera.ui.components.TituloPrincipal
-//import com.kotliners.piedrapapeltijera.ui.components.Center
+import com.kotliners.piedrapapeltijera.ui.components.Center
 
 
 // Pantalla de Ajustes
@@ -70,6 +70,6 @@ fun SettingScreen(
 
         Spacer(Modifier.height(24.dp))
 
-        //Center("Resto de ajustes en Producto 2")
+        Center("Resto de ajustes en Producto 2")
     }
 }

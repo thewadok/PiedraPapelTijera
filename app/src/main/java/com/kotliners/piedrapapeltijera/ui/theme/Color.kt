@@ -1,6 +1,5 @@
 package com.kotliners.piedrapapeltijera.ui.theme
 
-
 import androidx.compose.ui.graphics.Color
 
 val Purple80 = Color(0xFFD0BCFF)
@@ -29,3 +28,4 @@ val AzulNeon = Color(0xFF00E5FF)
 
 //Color GrisClaro para elementos no activos
 val GrisClaro = Color(0xFFB0B0B0)
+

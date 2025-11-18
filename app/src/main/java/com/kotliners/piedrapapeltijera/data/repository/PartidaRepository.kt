@@ -9,6 +9,8 @@ import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.schedulers.Schedulers
 
 class PartidaRepository(private val dao: PartidaDao) {
+
+    private val jugadorLocalId = 1
     fun registrarPartida(
         jugadaJugador: Move,
         jugadaCpu: Move,
@@ -21,6 +23,7 @@ class PartidaRepository(private val dao: PartidaDao) {
             GameResult.EMPATE -> 0
         }
         val p = Partida(
+            jugadorId = jugadorLocalId,
             jugadaJugador = jugadaJugador,
             jugadaCpu = jugadaCpu,
             resultado = resultado,
@@ -28,17 +31,13 @@ class PartidaRepository(private val dao: PartidaDao) {
             cambioMonedas = cambio
         )
         return dao.insertar(p).subscribeOn(Schedulers.io())
-        /*return Completable.fromAction {
-            dao.insertar(p)
-        }.subscribeOn(Schedulers.io())*/
     }
 
     fun observarTotalPartidas(): Flowable<Int> =
-        dao.observarTotalPartidas().subscribeOn(Schedulers.io())
+        dao.observarTotalPartidas(jugadorLocalId).subscribeOn(Schedulers.io())
 
     fun observarHistorial(): Flowable<List<Partida>> =
-        dao.observarHistorial().subscribeOn(Schedulers.io())
+        dao.observarHistorial(jugadorLocalId).subscribeOn(Schedulers.io())
 
-    //Añado borrarHistorial de Edu
-    fun borrarHistorial(): Completable = dao.borrarTodo().subscribeOn(Schedulers.io())
+    fun borrarHistorial(): Completable = dao.borrarTodo(jugadorLocalId).subscribeOn(Schedulers.io())
 }

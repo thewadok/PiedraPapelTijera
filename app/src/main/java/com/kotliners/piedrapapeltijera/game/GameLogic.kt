@@ -5,9 +5,7 @@ object GameLogic {
 
     fun play(userMove: Move): Pair<GameResult, Move> {
         // Elección aleatoria de la máquina
-        //val computerMove = Move.entries.toTypedArray().random()
         val computerMove = Move.values().random()
-
 
         val result = when {
             userMove == computerMove -> GameResult.EMPATE

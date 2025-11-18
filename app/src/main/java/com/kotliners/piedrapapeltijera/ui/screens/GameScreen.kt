@@ -18,7 +18,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kotliners.piedrapapeltijera.R
-import com.kotliners.piedrapapeltijera.game.GameLogic
 import com.kotliners.piedrapapeltijera.game.GameResult
 import com.kotliners.piedrapapeltijera.game.Move
 import com.kotliners.piedrapapeltijera.ui.theme.FondoNegro
@@ -30,6 +29,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import com.kotliners.piedrapapeltijera.utils.media.rememberCaptureCurrentView
 import androidx.compose.ui.platform.LocalContext
+import com.kotliners.piedrapapeltijera.game.GameLogic
 
 @Composable
 fun GameScreen(viewModel: MainViewModel = viewModel()) {
@@ -37,7 +37,7 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
     var userMove by remember { mutableStateOf<Move?>(null) }
     var computerMove by remember { mutableStateOf<Move?>(null) }
     var result by remember { mutableStateOf<GameResult?>(null) }
-    var betAmount by remember { mutableStateOf(10) } // apuesta inicial mínima
+    var betAmount by remember { mutableIntStateOf(10) } // apuesta inicial mínima
     var message by remember { mutableStateOf("") }
 
     // Saldo y partidas desde Room a través del ViewModel
@@ -54,7 +54,7 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
 
     fun jugarCon(mov: Move) {
         // Validar apuesta con saldo actual persistido
-        if (betAmount <= 0 || betAmount > saldo) {
+        if (betAmount !in 1..saldo) {
             message = "Apuesta inválida."
             return
         }

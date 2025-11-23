@@ -27,7 +27,10 @@ abstract class AppDatabase() : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "piedra_papel_tijera.db"
-                ).build()
+                )
+                .allowMainThreadQueries() // Permite consultas en el hilo principal
+                .fallbackToDestructiveMigrationOnDowngrade() // Permite la destrucción de la BD si se baja de versión
+                .build()
 
                 INSTANCE = instance
                 instance

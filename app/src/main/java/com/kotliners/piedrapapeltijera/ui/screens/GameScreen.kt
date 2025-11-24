@@ -28,6 +28,8 @@ import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
 import com.kotliners.piedrapapeltijera.ui.components.NeonGloboInfo
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import com.kotliners.piedrapapeltijera.utils.media.rememberCaptureCurrentView
+import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun GameScreen(viewModel: MainViewModel = viewModel()) {
@@ -41,6 +43,14 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
     // Saldo y partidas desde Room a través del ViewModel
     val saldo = viewModel.monedas.observeAsState(0).value
     val partidas = viewModel.partidas.observeAsState(0).value
+
+    // Utilidades media
+    // Función para capturar la pantalla
+    val captureView = rememberCaptureCurrentView()
+
+    // Contexto actual de Android
+    val context = LocalContext.current
+
 
     fun jugarCon(mov: Move) {
         // Validar apuesta con saldo actual persistido
@@ -59,6 +69,14 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                 viewModel.cambiarMonedas(+betAmount)
                 viewModel.registrarPartida(mov, c, r, betAmount)
                 message = "¡Ganaste $betAmount monedas!"
+
+                // Capturamos la pantalla actual
+                val screenshot = captureView()
+
+                // Avisamos al ViewModel para que gestione la victoria del jugador
+                viewModel.onPlayerWin(context, screenshot)
+
+
             }
             GameResult.PIERDES -> {
                 viewModel.cambiarMonedas(-betAmount)

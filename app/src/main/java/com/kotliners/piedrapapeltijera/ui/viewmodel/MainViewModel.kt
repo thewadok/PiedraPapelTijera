@@ -3,6 +3,10 @@ package com.kotliners.piedrapapeltijera.ui.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import android.content.Context
+import android.graphics.Bitmap
+import kotlinx.coroutines.launch
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -12,6 +16,7 @@ import com.kotliners.piedrapapeltijera.data.repository.PartidaRepository
 import com.kotliners.piedrapapeltijera.data.local.entity.Partida
 import com.kotliners.piedrapapeltijera.game.Move
 import com.kotliners.piedrapapeltijera.game.GameResult
+import com.kotliners.piedrapapeltijera.utils.victory.VictoryManager
 import io.reactivex.rxjava3.schedulers.Schedulers
 
 class MainViewModel : ViewModel() {
@@ -19,6 +24,8 @@ class MainViewModel : ViewModel() {
     private val repo = JugadorRepository(MyApp.db.jugadorDao())
     private val historial = PartidaRepository(MyApp.db.partidaDao())
     private val disposables = CompositeDisposable()
+
+    private val victoryManager: VictoryManager = VictoryManager()
 
     // Expuesto para la UI
     val monedas = MutableLiveData<Int>()
@@ -111,6 +118,16 @@ class MainViewModel : ViewModel() {
         val saldoActual = monedas.value ?: 0
         if (saldoActual <= 0) {
             cambiarMonedas(50)
+        }
+    }
+
+    /*
+    Creamos la función onPlayerWin para gestionar lo que ocurre cuando el jugador gana una partida.
+    Desde aquí llamamos a VictoryManager.
+     */
+    fun onPlayerWin(context: Context, screenshot: Bitmap) {
+        viewModelScope.launch {
+            victoryManager.handleVictory(context, screenshot)
         }
     }
 

@@ -6,8 +6,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material.icons.filled.HelpOutline
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
+import androidx.compose.material.icons.automirrored.filled.HelpOutline
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Leaderboard
@@ -109,7 +109,7 @@ fun ExitGameButton() {
 
     IconButton(onClick = { showDialog = true }) {
         Icon(
-            imageVector = Icons.Default.ExitToApp,
+            imageVector = Icons.AutoMirrored.Filled.ExitToApp,
             contentDescription = "Salir del juego",
             tint = TextoBlanco
         )
@@ -187,7 +187,7 @@ fun AppScaffold(
                                 )
 
                                 Screen.Help -> Icon(
-                                    Icons.Default.HelpOutline,
+                                    Icons.AutoMirrored.Filled.HelpOutline,
                                     contentDescription = null
                                 )
 

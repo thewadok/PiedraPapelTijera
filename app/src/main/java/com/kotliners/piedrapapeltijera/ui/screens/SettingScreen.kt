@@ -20,6 +20,7 @@ import com.kotliners.piedrapapeltijera.ui.components.TituloPrincipal
 import com.kotliners.piedrapapeltijera.ui.components.Center
 
 
+
 // Pantalla de Ajustes
 @Composable
 fun SettingScreen(

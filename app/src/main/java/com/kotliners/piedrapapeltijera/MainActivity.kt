@@ -10,8 +10,11 @@ import com.kotliners.piedrapapeltijera.ui.theme.*
 import com.kotliners.piedrapapeltijera.ui.AppRoot
 import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
 import androidx.activity.result.contract.ActivityResultContracts
+import android.content.Intent
+import com.kotliners.piedrapapeltijera.utils.media.MusicService
 
-//Activity principal
+
+//Activity principal desde donde arrancamos
 class MainActivity : ComponentActivity() {
 
     private val viewModel: MainViewModel by viewModels()
@@ -34,6 +37,8 @@ class MainActivity : ComponentActivity() {
                 android.Manifest.permission.WRITE_CALENDAR
             )
         )
+        //Iniciamos la musica de fondo (Luego le pondre boton para poder apagarla durante la partida)
+        startService(Intent(this, MusicService::class.java))
 
 
         enableEdgeToEdge(

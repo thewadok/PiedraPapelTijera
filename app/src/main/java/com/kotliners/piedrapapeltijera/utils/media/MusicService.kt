@@ -69,12 +69,31 @@ class MusicService : Service() {
         serviceScope.cancel()
     }
 
-    //Inicializo el MediaPlayer con la música de fondo que tengo en raw
+    // Leemos de preferencias qué pista quiere el usuario
+    private fun getSelectedTrackResId(): Int? {
+        val prefs = getSharedPreferences("settings", MODE_PRIVATE)
+        val trackKey = prefs.getString("music_track", "fondo")
+
+        return when (trackKey) {
+            "fondo"  -> R.raw.fondo
+            "fondo2" -> R.raw.fondo2
+            "fondo3" -> R.raw.fondo3
+            "mute"   -> null            // Silenciado: sin música
+            else     -> R.raw.fondo     // Por si acaso
+        }
+    }
+
+    // Inicializo el MediaPlayer con la música de fondo que tengo en raw
     private fun initPlayer() {
         // Por si acaso ya existía un MediaPlayer, lo liberamos
         mediaPlayer?.release()
+        mediaPlayer = null
 
-        mediaPlayer = MediaPlayer.create(this, R.raw.fondo).apply {
+        val resId = getSelectedTrackResId() ?: return
+
+        // Si el usuario ha elegido "silenciar", no creamos MediaPlayer
+
+        mediaPlayer = MediaPlayer.create(this, resId).apply {
             isLooping = true   // que suene en bucle
             setVolume(1f, 1f)
         }
@@ -83,10 +102,21 @@ class MusicService : Service() {
     // Empiezo a reproducir la musica (si el MediaPlayer está listo)
     fun playMusic() {
         serviceScope.launch {
+            val resId = getSelectedTrackResId()
+
+            // Si está en modo silencio, no hacemos nada
+            if (resId == null) {
+                mediaPlayer?.pause()
+                mediaPlayer?.seekTo(0)
+                mediaPlayer = null
+                abandonAudioFocus()
+                return@launch
+            }
+
             if (mediaPlayer == null) {
                 initPlayer()
             }
-            //Pido el foco de audio al sistema para llamadas, apps..
+            // Pido el foco de audio al sistema para llamadas, apps..
             if (requestAudioFocus()) {
                 if (mediaPlayer?.isPlaying == false) {
                     mediaPlayer?.start()
@@ -94,6 +124,7 @@ class MusicService : Service() {
             }
         }
     }
+
 
     //Paro la musica si esta sonando
     fun pauseMusic() {

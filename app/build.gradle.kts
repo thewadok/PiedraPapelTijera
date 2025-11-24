@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -32,6 +34,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     kotlinOptions {
         jvmTarget = "11"
     }
@@ -42,31 +45,45 @@ android {
 
 dependencies {
 
+    //Librerias Core Android
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+
+    //Librerias de Compose
     implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.runtime.livedata)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.compose.material.icons.extended)
+
+    //Librerias para lifecycle + coroutines
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+
+    //Librerias de material y system bars
     implementation(libs.google.material)
     implementation(libs.google.accompanist.systemuicontroller)
+
+    //Librerias Room y RxJava
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.rxjava3)
+    ksp(libs.androidx.room.compiler)
+
     implementation(libs.rxjava3)
     implementation(libs.rxandroid)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.rxkotlin)
-    implementation(libs.androidx.room.rxjava3)
-    implementation(libs.androidx.compose.runtime.livedata)
+
+    // Librerias DocumentFile
     implementation(libs.androidx.documentfile)
 
+    //Librerias para Tests
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
 
@@ -77,6 +94,4 @@ dependencies {
 
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
-
-    ksp(libs.androidx.room.compiler)
 }

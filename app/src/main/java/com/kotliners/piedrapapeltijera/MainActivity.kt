@@ -9,14 +9,57 @@ import androidx.activity.viewModels
 import com.kotliners.piedrapapeltijera.ui.theme.*
 import com.kotliners.piedrapapeltijera.ui.AppRoot
 import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
+import androidx.activity.result.contract.ActivityResultContracts
+import android.content.Intent
+import com.kotliners.piedrapapeltijera.utils.media.MusicService
+import com.kotliners.piedrapapeltijera.utils.media.SoundEffects
 
-//Activity principal
+//Activity principal desde donde arrancamos
 class MainActivity : ComponentActivity() {
 
     private val viewModel: MainViewModel by viewModels()
 
+    // Pedimos permisos de calendario
+    private val requestCalendarPerms = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { perms ->
+        val granted = perms[android.Manifest.permission.WRITE_CALENDAR] == true &&
+                perms[android.Manifest.permission.READ_CALENDAR] == true
+    }
+
+    //Cambiamos el estado de la musica on/off usando service
+    fun toggleMusic() {
+        if (MusicService.isRunning) {
+            // Parar el servicio: se detiene la música
+            stopService(Intent(this, MusicService::class.java))
+        } else {
+            // Arrancar el servicio: empieza la música
+            startService(Intent(this, MusicService::class.java))
+        }
+    }
+
+    //Nos va ha indicar si tenemos activada la musica
+    fun isMusicRunning(): Boolean {
+        return MusicService.isRunning
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Solicitamos permisos al iniciar
+        requestCalendarPerms.launch(
+            arrayOf(
+                android.Manifest.permission.READ_CALENDAR,
+                android.Manifest.permission.WRITE_CALENDAR
+            )
+        )
+        //Iniciamos la musica de fondo (Luego le pondre boton para poder apagarla durante la partida)
+        startService(Intent(this, MusicService::class.java))
+        //Tambien iniciamos el resto de sonidos
+        SoundEffects.init(applicationContext)
+
+        //Configuramos la barra de estado
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.dark(FondoNegro.value.toInt()),
             navigationBarStyle = SystemBarStyle.dark(FondoNegro.value.toInt())

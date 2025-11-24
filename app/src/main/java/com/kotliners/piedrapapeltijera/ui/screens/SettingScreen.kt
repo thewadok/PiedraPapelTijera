@@ -7,6 +7,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,8 +32,6 @@ import com.kotliners.piedrapapeltijera.ui.components.TituloPrincipal
 import com.kotliners.piedrapapeltijera.ui.theme.FondoNegro
 import com.kotliners.piedrapapeltijera.ui.theme.TextoBlanco
 import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
-import androidx.compose.material3.RadioButton
-import androidx.compose.material3.Text
 import com.kotliners.piedrapapeltijera.utils.media.MusicService
 
 // Pantalla de Ajustes
@@ -40,13 +42,17 @@ fun SettingScreen(
 ) {
     val scroll = rememberScrollState()
     val context = LocalContext.current
+    val activity = context as? MainActivity
+
+    // para el diálogo de salir del juego
+    var showExitDialog by remember { mutableStateOf(false) }
 
     // Preferencias donde guardamos que musica va a usar el juego
     val prefs = remember {
         context.getSharedPreferences("settings", Context.MODE_PRIVATE)
     }
 
-    // Leemos la música guardada, por defectoque es fondo
+    // Leemos la música guardada, por defecto es "fondo"
     var selectedTrack by remember {
         mutableStateOf(prefs.getString("music_track", "fondo") ?: "fondo")
     }
@@ -57,7 +63,6 @@ fun SettingScreen(
         prefs.edit().putString("music_track", trackKey).apply()
 
         // Reiniciamos el MusicService para que cargue la nueva melodía
-        val activity = context as? MainActivity
         activity?.let {
             it.stopService(Intent(it, MusicService::class.java))
             it.startService(Intent(it, MusicService::class.java))
@@ -73,7 +78,6 @@ fun SettingScreen(
         horizontalAlignment = Alignment.Start
     ) {
 
-        // Título de la pantalla
         TituloPrincipal("Ajustes de configuración")
 
         Spacer(Modifier.height(8.dp))
@@ -106,15 +110,13 @@ fun SettingScreen(
 
         Spacer(Modifier.height(24.dp))
 
-
-        //  Ajustes de musica
-
+        // AJUSTES DE MÚSICA
         TituloPrincipal("Música de fondo")
 
         Spacer(Modifier.height(8.dp))
 
         Parrafo(
-            "Selecciona la melodía de fondo o silencia la musica del juego  durante partida."
+            "Selecciona la melodía de fondo o silencia la música del juego durante la partida."
         )
 
         Spacer(Modifier.height(12.dp))
@@ -154,6 +156,35 @@ fun SettingScreen(
 
         Spacer(Modifier.height(24.dp))
 
+        // Botón para salir del juego desde ajustes
+        NeonTextoBoton("Salir del juego") {
+            showExitDialog = true
+        }
+
+        Spacer(Modifier.height(24.dp))
+
         Center("Resto de ajustes en Producto 2")
+    }
+
+    // Diálogo de confirmación para salir del juego
+    if (showExitDialog) {
+        AlertDialog(
+            onDismissRequest = { showExitDialog = false },
+            title = { Text("Salir del juego") },
+            text = { Text("¿Seguro que quieres cerrar la aplicación?") },
+            confirmButton = {
+                TextButton(onClick = {
+                    showExitDialog = false
+                    activity?.finish()
+                }) {
+                    Text("Salir")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showExitDialog = false }) {
+                    Text("Cancelar")
+                }
+            }
+        )
     }
 }

@@ -12,7 +12,7 @@ import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
 import androidx.activity.result.contract.ActivityResultContracts
 import android.content.Intent
 import com.kotliners.piedrapapeltijera.utils.media.MusicService
-
+import com.kotliners.piedrapapeltijera.utils.media.SoundEffects
 
 //Activity principal desde donde arrancamos
 class MainActivity : ComponentActivity() {
@@ -27,16 +27,18 @@ class MainActivity : ComponentActivity() {
                 perms[android.Manifest.permission.READ_CALENDAR] == true
     }
 
+    //Cambiamos el estado de la musica on/off usando service
     fun toggleMusic() {
         if (MusicService.isRunning) {
-            // Parar el servicio → se detiene la música
+            // Parar el servicio: se detiene la música
             stopService(Intent(this, MusicService::class.java))
         } else {
-            // Arrancar el servicio → empieza la música
+            // Arrancar el servicio: empieza la música
             startService(Intent(this, MusicService::class.java))
         }
     }
 
+    //Nos va ha indicar si tenemos activada la musica
     fun isMusicRunning(): Boolean {
         return MusicService.isRunning
     }
@@ -54,8 +56,10 @@ class MainActivity : ComponentActivity() {
         )
         //Iniciamos la musica de fondo (Luego le pondre boton para poder apagarla durante la partida)
         startService(Intent(this, MusicService::class.java))
+        //Tambien iniciamos el resto de sonidos
+        SoundEffects.init(applicationContext)
 
-
+        //Configuramos la barra de estado
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.dark(FondoNegro.value.toInt()),
             navigationBarStyle = SystemBarStyle.dark(FondoNegro.value.toInt())

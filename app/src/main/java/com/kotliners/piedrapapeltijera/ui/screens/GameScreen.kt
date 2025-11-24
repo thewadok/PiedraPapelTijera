@@ -30,6 +30,8 @@ import androidx.compose.foundation.verticalScroll
 import com.kotliners.piedrapapeltijera.utils.media.rememberCaptureCurrentView
 import androidx.compose.ui.platform.LocalContext
 import com.kotliners.piedrapapeltijera.game.GameLogic
+import com.kotliners.piedrapapeltijera.utils.media.SoundEffects
+
 
 @Composable
 fun GameScreen(viewModel: MainViewModel = viewModel()) {
@@ -70,18 +72,21 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                 viewModel.registrarPartida(mov, c, r, betAmount)
                 message = "¡Ganaste $betAmount monedas!"
 
+                //Aqui agrego el efecto de sonido al ganar
+                SoundEffects.playWin()
+
                 // Capturamos la pantalla actual
                 val screenshot = captureView()
 
                 // Avisamos al ViewModel para que gestione la victoria del jugador
                 viewModel.onPlayerWin(context, screenshot)
-
-
             }
             GameResult.PIERDES -> {
                 viewModel.cambiarMonedas(-betAmount)
                 viewModel.registrarPartida(mov, c, r, betAmount)
                 message = "Perdiste $betAmount monedas."
+                //Sgrego sonido al perder
+                SoundEffects.playLose()
             }
             GameResult.EMPATE -> {
                 viewModel.registrarPartida(mov, c, r, betAmount)
@@ -133,6 +138,7 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                     //Botón de restar apuesta
                     Button(
                         onClick = {
+                            SoundEffects.playClick()//Sonido al pulsarlo
                             if (betAmount > 10) betAmount -= 10
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
@@ -157,6 +163,7 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                     // Botón de sumar apuesta
                     Button(
                         onClick = {
+                            SoundEffects.playClick()//Efecto de sonido al hacer click
                             if (betAmount + 10 <= saldo)
                                 betAmount += 10
                         },
@@ -194,6 +201,7 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                     //Piedra
                     Button(
                         onClick = {
+                            SoundEffects.playClick()
                             jugarCon(Move.PIEDRA)
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
@@ -210,6 +218,7 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                     //Papel
                     Button(
                         onClick = {
+                            SoundEffects.playClick()
                             jugarCon(Move.PAPEL)
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
@@ -226,6 +235,7 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                     //Tijera (tamaño ajustado)
                     Button(
                         onClick = {
+                            SoundEffects.playClick()
                             jugarCon(Move.TIJERA)
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),

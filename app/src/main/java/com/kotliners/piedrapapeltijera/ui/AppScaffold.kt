@@ -31,6 +31,48 @@ import com.kotliners.piedrapapeltijera.ui.theme.AmarilloNeon
 import com.kotliners.piedrapapeltijera.ui.theme.FondoNegro
 import com.kotliners.piedrapapeltijera.ui.theme.TextoBlanco
 import com.kotliners.piedrapapeltijera.ui.theme.TextoNegro
+import androidx.compose.material3.IconButton
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import com.kotliners.piedrapapeltijera.MainActivity
+import com.kotliners.piedrapapeltijera.R
+
+@Composable
+fun MusicToggleButton() {
+    // Sacamos la Activity actual (MainActivity) desde el contexto
+    val context = LocalContext.current
+    val activity = context as? MainActivity
+
+    // Estado para saber si la musica está encendida o apagada
+    var isOn by remember {
+        mutableStateOf(activity?.isMusicRunning() ?: false)
+    }
+
+    IconButton(
+        onClick = {
+            // Al pulsar cambiamos el estado de la musica
+            activity?.toggleMusic()
+            // Actualizamos el estado local para cambiar el icono
+            isOn = activity?.isMusicRunning() ?: false
+        }
+    ) {
+        // Elegimos qué imagen mostrar según si está encendido o apagado
+        val iconRes = if (isOn) {
+            R.drawable.altavoz_on    // musica sonando
+        } else {
+            R.drawable.altavoz_off   // musica parada
+        }
+
+        Icon(
+            painter = painterResource(id = iconRes),
+            contentDescription = if (isOn) "Desactivar música" else "Activar música",
+            tint = TextoBlanco // para que se vea bien en la barra
+        )
+    }
+}
 
 //Scaffold comun para todas las pantallas menos la de Bienvenida
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,6 +106,7 @@ fun AppScaffold(
         topBar = {
             TopAppBar(
                 title = { BrandBar(title)},
+                actions = { MusicToggleButton() },// Meto el altavoz en la parte derecha de la barra de arriba
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = FondoNegro,
                     titleContentColor = TextoBlanco,

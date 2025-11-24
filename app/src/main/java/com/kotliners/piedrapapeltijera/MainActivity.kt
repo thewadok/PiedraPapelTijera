@@ -27,6 +27,21 @@ class MainActivity : ComponentActivity() {
                 perms[android.Manifest.permission.READ_CALENDAR] == true
     }
 
+    fun toggleMusic() {
+        if (MusicService.isRunning) {
+            // Parar el servicio → se detiene la música
+            stopService(Intent(this, MusicService::class.java))
+        } else {
+            // Arrancar el servicio → empieza la música
+            startService(Intent(this, MusicService::class.java))
+        }
+    }
+
+    fun isMusicRunning(): Boolean {
+        return MusicService.isRunning
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

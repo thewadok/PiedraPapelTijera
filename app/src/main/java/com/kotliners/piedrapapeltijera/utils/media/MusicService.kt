@@ -14,6 +14,11 @@ import kotlinx.coroutines.cancel
 
 class MusicService : Service() {
 
+    companion object {
+        @Volatile
+        var isRunning: Boolean = false
+    }
+
     // Con esta funcion podremos acceder al servicio desde la Activity
     inner class LocalBinder : Binder() {
         fun getService(): MusicService = this@MusicService
@@ -33,6 +38,7 @@ class MusicService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        isRunning = true
         // Inicializamos el MediaPlayer en segundo plano
         serviceScope.launch {
             initPlayer()
@@ -49,6 +55,7 @@ class MusicService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
+        isRunning = false
         // Liberamos recursos al destruir el servicio
         mediaPlayer?.release()
         mediaPlayer = null

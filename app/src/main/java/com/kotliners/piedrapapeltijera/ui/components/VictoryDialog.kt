@@ -11,10 +11,11 @@ import com.kotliners.piedrapapeltijera.ui.theme.RosaNeon
 // Dialogo que aparece en el momento de la victoria
 @Composable
 fun VictoryDialog(
-    onConfirm: (saveScreenshot: Boolean) -> Unit,
+    onConfirm: (saveScreenshot: Boolean, addCalendar: Boolean) -> Unit,
     onDismiss: () -> Unit
 ) {
     var save by remember { mutableStateOf(true) }
+    var addCalendar by remember { mutableStateOf(true) }
 
     // Dialogo de victoria.
     AlertDialog(
@@ -36,11 +37,14 @@ fun VictoryDialog(
         text = {
             Column {
                 Parrafo(
-                    texto = "¿Quieres guardar la captura de esta victoria?",
+                    texto = "¿Quieres guardar los datos de esta victoria?",
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
+
+                // Guardar captura
                 Row(
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(bottom = 8.dp)
                     ) {
 
                     // Checkbox para activar o desactivar
@@ -54,13 +58,28 @@ fun VictoryDialog(
                         texto = "Guardar captura",
                         modifier = Modifier.weight(1f))
                 }
+
+                // Añadir al calendario
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Checkbox(
+                        checked = addCalendar,
+                        onCheckedChange = { addCalendar = it }
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Parrafo(
+                        texto = "Añadir al calendario",
+                        modifier = Modifier.weight(1f)
+                    )
+                }
             }
         },
 
         // Boton aceptar
         confirmButton = {
             NeonTextoBoton(titulo = "Aceptar") {
-                onConfirm(save)
+                onConfirm(save, addCalendar)
             }
         },
 

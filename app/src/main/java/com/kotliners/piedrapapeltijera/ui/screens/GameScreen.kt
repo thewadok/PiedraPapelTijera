@@ -32,10 +32,14 @@ import androidx.compose.ui.platform.LocalContext
 import com.kotliners.piedrapapeltijera.game.GameLogic
 import com.kotliners.piedrapapeltijera.utils.media.SoundEffects
 import com.kotliners.piedrapapeltijera.ui.components.VictoryDialog
+import com.kotliners.piedrapapeltijera.utils.calendar.rememberCalendarPermissionState
+import com.kotliners.piedrapapeltijera.utils.calendar.CalendarHelper
+import kotlinx.coroutines.*
 
 @Composable
 fun GameScreen(viewModel: MainViewModel = viewModel()) {
 
+    // Estado del juego
     var userMove by remember { mutableStateOf<Move?>(null) }
     var computerMove by remember { mutableStateOf<Move?>(null) }
     var result by remember { mutableStateOf<GameResult?>(null) }
@@ -51,8 +55,12 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
     // Función para capturar la pantalla
     val captureView = rememberCaptureCurrentView()
 
-    // Contexto actual de Android
+    // Permisos de calendario
+    val (requestCalendarPermissions, calendarGranted) = rememberCalendarPermissionState()
+
+    // Contexto y scope para coroutinas
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
 
     fun jugarCon(mov: Move) {
@@ -277,18 +285,36 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                 // Mostramos el dialogo de victoria
                 if (showVictoryDialog) {
                     VictoryDialog(
-                        onConfirm = { saveScreenshot ->
-                            if (saveScreenshot) {
-                                // Capturamos la pantalla solo si el usuario quiere guardarla
-                                val screenshot = captureView()
-
-                                // Llamamos a la corrutina onPlayerWin cuando hay victoria
-                                viewModel.onPlayerWin(context, screenshot)
-                            }
-
-                            // Cerramos el diálogo después de procesar la opción
+                        onConfirm = { saveScreenshot, addCalendar ->
                             showVictoryDialog = false
+
+                            scope.launch {
+
+                                // Guardar captura
+                                if (saveScreenshot) {
+                                    // Capturamos la pantalla solo si el usuario quiere guardarla
+                                    val screenshot = captureView()
+
+                                    // Llamamos a la corrutina onPlayerWin cuando hay victoria
+                                    viewModel.onPlayerWin(context, screenshot)
+                                }
+
+                                // Añadir al calendario
+                                if (addCalendar) {
+                                    if (!calendarGranted.value) {
+                                        requestCalendarPermissions()
+                                    } else {
+                                        CalendarHelper.insertVictoryEvent(
+                                            context = context,
+                                            title = "Victoria en Piedra, Papel o Tijera",
+                                            description = "Has ganado apostando $betAmount monedas.\nMonedas acumuladas: $saldo."
+
+                                        )
+                                    }
+                                }
+                            }
                         },
+
                         onDismiss = {
                             // Cerramos el diálogo sin hacer nada
                             showVictoryDialog = false

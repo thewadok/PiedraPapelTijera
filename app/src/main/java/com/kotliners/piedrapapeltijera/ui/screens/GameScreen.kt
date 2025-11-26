@@ -31,6 +31,7 @@ import com.kotliners.piedrapapeltijera.utils.media.rememberCaptureCurrentView
 import androidx.compose.ui.platform.LocalContext
 import com.kotliners.piedrapapeltijera.game.GameLogic
 import com.kotliners.piedrapapeltijera.utils.media.SoundEffects
+import com.kotliners.piedrapapeltijera.ui.components.VictoryDialog
 
 @Composable
 fun GameScreen(viewModel: MainViewModel = viewModel()) {
@@ -40,6 +41,7 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
     var result by remember { mutableStateOf<GameResult?>(null) }
     var betAmount by remember { mutableIntStateOf(10) } // apuesta inicial mínima
     var message by remember { mutableStateOf("") }
+    var showVictoryDialog by remember { mutableStateOf(false) }
 
     // Saldo y partidas desde Room a través del ViewModel
     val saldo = viewModel.monedas.observeAsState(0).value
@@ -74,11 +76,8 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                 //Aqui agrego el efecto de sonido al ganar
                 SoundEffects.playWin()
 
-                // Capturamos la pantalla actual
-                val screenshot = captureView()
-
-                // Avisamos al ViewModel para que gestione la victoria del jugador
-                viewModel.onPlayerWin(context, screenshot)
+                // Mostramos dialogo con opcion de guardar la captura de pantalla
+                showVictoryDialog = true
             }
 
             GameResult.PIERDES -> {
@@ -272,6 +271,28 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                         "Saldo actual: $saldo",
                         style = MaterialTheme.typography.titleLarge,
                         color = TextoBlanco
+                    )
+                }
+
+                // Mostramos el dialogo de victoria
+                if (showVictoryDialog) {
+                    VictoryDialog(
+                        onConfirm = { saveScreenshot ->
+                            if (saveScreenshot) {
+                                // Capturamos la pantalla solo si el usuario quiere guardarla
+                                val screenshot = captureView()
+
+                                // Llamamos a la corrutina onPlayerWin cuando hay victoria
+                                viewModel.onPlayerWin(context, screenshot)
+                            }
+
+                            // Cerramos el diálogo después de procesar la opción
+                            showVictoryDialog = false
+                        },
+                        onDismiss = {
+                            // Cerramos el diálogo sin hacer nada
+                            showVictoryDialog = false
+                        }
                     )
                 }
             }

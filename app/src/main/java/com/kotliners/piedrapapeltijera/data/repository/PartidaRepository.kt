@@ -15,7 +15,9 @@ class PartidaRepository(private val dao: PartidaDao) {
         jugadaJugador: Move,
         jugadaCpu: Move,
         resultado: GameResult,
-        apuesta: Int
+        apuesta: Int,
+        latitud: Double?,
+        longitud: Double?
     ): Completable {
         val cambio = when (resultado) {
             GameResult.GANAS -> +apuesta

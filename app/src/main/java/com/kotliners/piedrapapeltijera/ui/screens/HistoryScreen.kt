@@ -10,6 +10,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -17,20 +19,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kotliners.piedrapapeltijera.data.local.entity.Partida
+import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
+import com.kotliners.piedrapapeltijera.data.repository.PartidaRepository
 import com.kotliners.piedrapapeltijera.game.GameResult
+import com.kotliners.piedrapapeltijera.ui.components.TituloPrincipal
+import com.kotliners.piedrapapeltijera.ui.theme.AmarilloNeon
 import com.kotliners.piedrapapeltijera.ui.theme.FondoNegro
 import com.kotliners.piedrapapeltijera.ui.theme.TextoBlanco
 import com.kotliners.piedrapapeltijera.ui.theme.AmarilloNeon
 import com.kotliners.piedrapapeltijera.ui.components.TituloPrincipal
-import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
 @Composable
-fun HistoryScreen(
-    viewModel: MainViewModel = viewModel()
-) {
+fun HistoryScreen(viewModel: MainViewModel = viewModel()) {
     val partidas = viewModel.historialPartidas.observeAsState(emptyList()).value
 
     Column(
@@ -40,7 +42,7 @@ fun HistoryScreen(
             .padding(16.dp)
     ) {
 
-       TituloPrincipal("Historial de partidas")
+        TituloPrincipal("Historial de partidas")
 
         Spacer(Modifier.height(8.dp))
 
@@ -116,12 +118,26 @@ private fun PartidaCard(p: Partida) {
                 color = TextoBlanco,
                 fontSize = 15.sp
             )
+
+            if (p.latitud != null && p.longitud != null) {
+                Text(
+                    text = "Localización: Lat ${p.latitud}, Lon ${p.longitud}",
+                    color = TextoBlanco,
+                    fontSize = 14.sp
+                )
+            } else {
+                Text(
+                    text = "No se han obtenido parámetros de longitud ni latutud",
+                    color = TextoBlanco,
+                    fontSize = 14.sp
+                )
+            }
         }
     }
 }
 
-private fun resultadoTexto(r: GameResult): String = when (r) {
-    GameResult.GANAS -> "GANASTE "
-    GameResult.PIERDES -> "PERDISTE "
-    GameResult.EMPATE -> "EMPATE "
-}
+    private fun resultadoTexto(r: GameResult): String = when (r) {
+        GameResult.GANAS -> "GANASTE "
+        GameResult.PIERDES -> "PERDISTE "
+        GameResult.EMPATE -> "EMPATE "
+    }

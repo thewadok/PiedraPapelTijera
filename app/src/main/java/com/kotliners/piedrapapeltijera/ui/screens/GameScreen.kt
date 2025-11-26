@@ -1,33 +1,43 @@
 package com.kotliners.piedrapapeltijera.ui.screens
 
-import androidx.compose.runtime.*
+import android.Manifest
+import android.location.Location
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
+import com.kotliners.piedrapapeltijera.location.LocationManager
 import com.kotliners.piedrapapeltijera.R
 import com.kotliners.piedrapapeltijera.game.GameLogic
 import com.kotliners.piedrapapeltijera.game.GameResult
 import com.kotliners.piedrapapeltijera.game.Move
 import com.kotliners.piedrapapeltijera.ui.theme.FondoNegro
+import com.kotliners.piedrapapeltijera.ui.components.NeonGloboInfo
 import com.kotliners.piedrapapeltijera.ui.theme.AmarilloNeon
+import com.kotliners.piedrapapeltijera.ui.theme.FondoNegro
 import com.kotliners.piedrapapeltijera.ui.theme.TextoBlanco
-import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
 import com.kotliners.piedrapapeltijera.ui.components.NeonGloboInfo
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import kotlinx.coroutines.launch
 
 @Composable
 fun GameScreen(viewModel: MainViewModel = viewModel()) {
@@ -42,7 +52,13 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
     val saldo = viewModel.monedas.observeAsState(0).value
     val partidas = viewModel.partidas.observeAsState(0).value
 
-    fun jugarCon(mov: Move) {
+
+    // --- GESTIÓN DE UBICACIÓN ---
+    val context = LocalContext.current
+    val locationManager = remember { LocationManager(context) }
+    val coroutineScope = rememberCoroutineScope()
+
+    fun jugarCon(mov: Move, location: Location?) {
         // Validar apuesta con saldo actual persistido
         if (betAmount <= 0 || betAmount > saldo) {
             message = "Apuesta inválida."
@@ -53,25 +69,36 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
         result = r
         computerMove = c
         userMove = mov
-
-        when (r) {
-            GameResult.GANAS -> {
-                viewModel.cambiarMonedas(+betAmount)
-                viewModel.registrarPartida(mov, c, r, betAmount)
-                message = "¡Ganaste $betAmount monedas!"
-            }
-            GameResult.PIERDES -> {
-                viewModel.cambiarMonedas(-betAmount)
-                viewModel.registrarPartida(mov, c, r, betAmount)
-                message = "Perdiste $betAmount monedas."
-            }
-            GameResult.EMPATE -> {
-                viewModel.registrarPartida(mov, c, r, betAmount)
-                message = "Empate, sin cambios."
-            }
+        viewModel.registrarPartida(mov, c, r, betAmount, location?.latitude, location?.longitude)
+        message = when (r) {
+            GameResult.GANAS -> "¡Ganaste $betAmount monedas!"
+            GameResult.PIERDES -> "Perdiste $betAmount monedas."
+            else -> "Empate, sin cambios."
         }
     }
 
+    // Esta es la función que se ejecutará después de que el usuario responda a la solicitud de permiso.
+    val requestPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            // Si el usuario concede el permiso, obtenemos la ubicación y jugamos.
+            coroutineScope.launch {
+                val location = locationManager.getCurrentLocation()
+                jugarCon(userMove!!, location) // Volvemos a llamar a jugarCon con la ubicación.
+            }
+        } else {
+            // Si el usuario deniega el permiso, jugamos sin ubicación.
+            jugarCon(userMove!!, null)
+        }
+    }
+
+
+
+    fun iniciarJuego(mov: Move) {
+        userMove = mov // Guardamos la jugada del usuario.
+        requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+    }
 
     Box(modifier = Modifier
         .fillMaxSize()
@@ -176,7 +203,7 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                     //Piedra
                     Button(
                         onClick = {
-                            jugarCon(Move.PIEDRA)
+                            iniciarJuego(Move.PIEDRA)
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                         contentPadding = PaddingValues(0.dp),
@@ -192,7 +219,7 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                     //Papel
                     Button(
                         onClick = {
-                            jugarCon(Move.PAPEL)
+                            iniciarJuego(Move.PAPEL)
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                         contentPadding = PaddingValues(0.dp),
@@ -208,7 +235,7 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                     //Tijera (tamaño ajustado)
                     Button(
                         onClick = {
-                            jugarCon(Move.TIJERA)
+                            iniciarJuego(Move.TIJERA)
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                         contentPadding = PaddingValues(0.dp),

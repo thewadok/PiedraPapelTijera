@@ -40,12 +40,14 @@ class MainViewModel : ViewModel() {
 
         //Observamos en tiempo real el total de partidas jugadas
         historial.observarTotalPartidas()
+            .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(onNext = { partidas.value = it })
             .also { disposables.add(it) }
 
         //Observamos historial completo de partidas
         historial.observarHistorial()
+            .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onNext = { historialPartidas.value = it },
@@ -83,9 +85,11 @@ class MainViewModel : ViewModel() {
         movJugador: Move,
         movCpu: Move,
         resultado: GameResult,
-        apuesta: Int
+        apuesta: Int,
+        latitud: Double?,
+        longitud: Double?
     ) {
-        historial.registrarPartida(movJugador, movCpu, resultado, apuesta)
+        historial.registrarPartida(movJugador, movCpu, resultado, apuesta, latitud, longitud)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onComplete = { /* OK */ },

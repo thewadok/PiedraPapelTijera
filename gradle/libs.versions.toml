@@ -19,6 +19,7 @@ rxjava3 = "3.1.8"
 rxandroid = "3.0.2"
 lifecycle = "2.8.6"
 rxkotlin = "3.0.1"
+playServicesLocation = "21.3.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -52,6 +53,7 @@ rxjava3 = { module = "io.reactivex.rxjava3:rxjava", version.ref = "rxjava3" }
 rxandroid = { module = "io.reactivex.rxjava3:rxandroid", version.ref = "rxandroid" }
 rxkotlin = { module = "io.reactivex.rxjava3:rxkotlin", version.ref = "rxkotlin" }
 androidx-compose-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata" }
+google-play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -1,13 +1,17 @@
+val room_version = "2.6.1"
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    //id("com.google.devtools.ksp") version "2.0.21-1.0.20" apply false
+    //alias(libs.plugins.google.devtools.ksp)
     alias(libs.plugins.ksp)
 }
 
 android {
     namespace = "com.kotliners.piedrapapeltijera"
-    compileSdk = 36
+    compileSdkVersion(36)
 
     defaultConfig {
         applicationId = "com.kotliners.piedrapapeltijera"
@@ -38,6 +42,7 @@ android {
     buildFeatures {
         compose = true
     }
+    buildToolsVersion = "36.1.0"
 }
 
 dependencies {
@@ -67,6 +72,7 @@ dependencies {
     implementation(libs.rxkotlin)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.runtime.livedata)
+    implementation(libs.google.play.services.location)
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
@@ -80,6 +86,5 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
     ksp(libs.androidx.room.compiler)
-
 
 }

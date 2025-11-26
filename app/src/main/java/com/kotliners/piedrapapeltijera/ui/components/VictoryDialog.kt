@@ -5,6 +5,8 @@ import androidx.compose.runtime.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.Alignment
+import com.kotliners.piedrapapeltijera.ui.theme.RosaNeon
 
 // Dialogo que aparece en el momento de la victoria
 @Composable
@@ -20,13 +22,26 @@ fun VictoryDialog(
         // Si el usuario toca fuera del dialogo lo cerramos igual.
         onDismissRequest = onDismiss,
 
+        containerColor = RosaNeon,
+
         // Titulo.
-        title = { Text("¡Victoria!") },
+        title = {
+            TituloSeccion(
+            "¡Victoria!",
+                modifier = Modifier.padding(bottom = 4.dp)
+                )
+                },
 
         // Cuerpo.
         text = {
             Column {
-                Row(Modifier.padding(vertical = 4.dp)) {
+                Parrafo(
+                    texto = "¿Quieres guardar la captura de esta victoria?",
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                    ) {
 
                     // Checkbox para activar o desactivar
                     Checkbox(
@@ -35,22 +50,24 @@ fun VictoryDialog(
                     )
                     Spacer(Modifier.width(8.dp))
 
-                    Text("Guardar captura")
+                    Parrafo(
+                        texto = "Guardar captura",
+                        modifier = Modifier.weight(1f))
                 }
             }
         },
 
         // Boton aceptar
         confirmButton = {
-            TextButton(onClick = { onConfirm(save) }) {
-                Text("Aceptar")
+            NeonTextoBoton(titulo = "Aceptar") {
+                onConfirm(save)
             }
         },
 
         // Boton cancelar
         dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text("Cancelar")
+            NeonTextoBoton(titulo = "Cancelar") {
+                onDismiss()
             }
         }
     )

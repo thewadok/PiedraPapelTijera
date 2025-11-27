@@ -122,6 +122,13 @@ private fun PartidaCard(p: Partida) {
                 Text(
                     text = "Ubicación: Lat %.4f, Lon %.4f".format(p.latitud, p.longitud),
                     color = TextoBlanco,
+                    fontSize = 15.sp
+                )
+            } else {
+                Text(
+                    text = "No se han obtenido parámetros de longitud ni latutud",
+                    color = TextoBlanco,
+                    fontSize = 14.sp
                 )
             }
         }

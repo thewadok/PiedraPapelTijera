@@ -30,5 +30,7 @@ data class Partida (
     val jugadaCpu: Move,
     val resultado: GameResult,
     val apuesta: Int,
-    val cambioMonedas: Int
+    val cambioMonedas: Int,
+    val latitud: Double? = null,
+    val longitud: Double? = null
 )

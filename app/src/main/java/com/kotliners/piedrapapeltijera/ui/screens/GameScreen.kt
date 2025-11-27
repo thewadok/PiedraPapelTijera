@@ -17,6 +17,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import com.kotliners.piedrapapeltijera.R
 import com.kotliners.piedrapapeltijera.game.GameResult
 import com.kotliners.piedrapapeltijera.game.Move
@@ -28,9 +30,14 @@ import com.kotliners.piedrapapeltijera.ui.components.NeonGloboInfo
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import com.kotliners.piedrapapeltijera.utils.media.rememberCaptureCurrentView
+import com.kotliners.piedrapapeltijera.utils.location.LocationManager
+import kotlinx.coroutines.launch
 import androidx.compose.ui.platform.LocalContext
 import com.kotliners.piedrapapeltijera.game.GameLogic
 import com.kotliners.piedrapapeltijera.utils.media.SoundEffects
+import android.Manifest
+import android.location.Location
+import androidx.compose.runtime.getValue
 
 @Composable
 fun GameScreen(viewModel: MainViewModel = viewModel()) {
@@ -52,8 +59,12 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
     // Contexto actual de Android
     val context = LocalContext.current
 
+    // --- GESTIÓN DE UBICACIÓN ---
+    val locationManager = remember { LocationManager(context) }
+    val coroutineScope = rememberCoroutineScope()
+    var moveParaJugar by remember { mutableStateOf<Move?>(null) } // Variable temporal para guardar la jugada
 
-    fun jugarCon(mov: Move) {
+    fun jugarCon(mov: Move, location: Location? = null) {
         // Validar apuesta con saldo actual persistido
         if (betAmount !in 1..saldo) {
             message = "Apuesta inválida."
@@ -68,7 +79,7 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
         when (r) {
             GameResult.GANAS -> {
                 viewModel.cambiarMonedas(+betAmount)
-                viewModel.registrarPartida(mov, c, r, betAmount)
+                viewModel.registrarPartida(mov, c, r, betAmount, location?.latitude, location?.longitude)
                 message = "¡Ganaste $betAmount monedas!"
 
                 //Aqui agrego el efecto de sonido al ganar
@@ -83,7 +94,7 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
 
             GameResult.PIERDES -> {
                 viewModel.cambiarMonedas(-betAmount)
-                viewModel.registrarPartida(mov, c, r, betAmount)
+                viewModel.registrarPartida(mov, c, r, betAmount, location?.latitude, location?.longitude)
                 message = "Perdiste $betAmount monedas."
 
                 //Sgrego sonido al perder
@@ -91,12 +102,33 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
             }
 
             GameResult.EMPATE -> {
-                viewModel.registrarPartida(mov, c, r, betAmount)
+                viewModel.registrarPartida(mov, c, r, betAmount, location?.latitude, location?.longitude)
                 message = "Empate, sin cambios."
             }
         }
     }
 
+    // Launcher para solicitar el permiso de ubicación.
+    val requestPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        coroutineScope.launch {
+            val location: Location? = if (isGranted) {
+                // Si el permiso se concede, obtenemos la ubicación.
+                locationManager.getCurrentLocation()
+            } else {
+                // Si se deniega, la ubicación es nula.
+                null
+            }
+            // Llamamos a jugar con la jugada que habíamos guardado.
+            moveParaJugar?.let { jugarCon(it, location) }
+        }
+    }
+
+    fun iniciarJuego(mov: Move) {
+        moveParaJugar = mov // Guardamos la jugada del usuario.
+        requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+    }
 
     Box(modifier = Modifier
         .fillMaxSize()
@@ -206,7 +238,7 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                     Button(
                         onClick = {
                             SoundEffects.playClick()
-                            jugarCon(Move.PIEDRA)
+                            iniciarJuego(Move.PIEDRA)
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                         contentPadding = PaddingValues(0.dp),
@@ -223,7 +255,7 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                     Button(
                         onClick = {
                             SoundEffects.playClick()
-                            jugarCon(Move.PAPEL)
+                            iniciarJuego(Move.PAPEL)
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                         contentPadding = PaddingValues(0.dp),
@@ -240,7 +272,7 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                     Button(
                         onClick = {
                             SoundEffects.playClick()
-                            jugarCon(Move.TIJERA)
+                            iniciarJuego(Move.TIJERA)
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                         contentPadding = PaddingValues(0.dp),

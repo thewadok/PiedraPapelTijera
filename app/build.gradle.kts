@@ -83,6 +83,9 @@ dependencies {
     // Librerias DocumentFile
     implementation(libs.androidx.documentfile)
 
+    // Librería de geolocalización
+    implementation(libs.google.play.services.location)
+
     //Librerias para Tests
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)

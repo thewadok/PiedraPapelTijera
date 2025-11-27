@@ -39,13 +39,11 @@ fun SettingScreen(
     // Idioma guardado
     var selectedLang by remember { mutableStateOf(LocaleManager.getSavedLanguage(context)) }
 
-    // Para salir del juego
+    // Diálogo salir del juego
     var showExitDialog by remember { mutableStateOf(false) }
 
-    // Preferencias para música
-    val prefs = remember {
-        context.getSharedPreferences("settings", Context.MODE_PRIVATE)
-    }
+    // Música (shared preferences)
+    val prefs = remember { context.getSharedPreferences("settings", Context.MODE_PRIVATE) }
 
     var selectedTrack by remember {
         mutableStateOf(prefs.getString("music_track", "fondo") ?: "fondo")
@@ -55,7 +53,6 @@ fun SettingScreen(
         selectedTrack = trackKey
         prefs.edit().putString("music_track", trackKey).apply()
 
-        // Reiniciar MusicService
         (activity as? MainActivity)?.let {
             it.stopService(Intent(it, MusicService::class.java))
             it.startService(Intent(it, MusicService::class.java))
@@ -72,47 +69,44 @@ fun SettingScreen(
     ) {
 
         // ⭐ Título principal
-        TituloPrincipal(text = stringResource(R.string.settings_title))
+        TituloPrincipal(stringResource(R.string.settings_title))
 
         Spacer(Modifier.height(8.dp))
 
-
         // 🔥 RESET
-        NeonTextoBoton(text = stringResource(R.string.reset_button)) {
+        NeonTextoBoton(stringResource(R.string.reset_button)) {
             viewModel.resetJuego()
             nav.safeNavigate(Screen.Game.route)
         }
 
         Spacer(Modifier.height(8.dp))
 
-        Parrafo(text = stringResource(R.string.reset_description))
+        Parrafo(stringResource(R.string.reset_description))
 
         Spacer(Modifier.height(24.dp))
 
-
         // 🟢 RESCATE
-        NeonTextoBoton(text = stringResource(R.string.rescue_button)) {
+        NeonTextoBoton(stringResource(R.string.rescue_button)) {
             viewModel.rescate()
             nav.safeNavigate(Screen.Game.route)
         }
 
         Spacer(Modifier.height(8.dp))
 
-        Parrafo(text = stringResource(R.string.rescue_description))
+        Parrafo(stringResource(R.string.rescue_description))
 
         Spacer(Modifier.height(32.dp))
 
-
-        // 🌍 Selector de idioma
-        TituloPrincipal(text = stringResource(R.string.language_section_title))
-
-        Spacer(Modifier.height(12.dp))
-
-        Parrafo(text = stringResource(R.string.language_instruction))
+        // 🌍 Selección de idioma
+        TituloPrincipal(stringResource(R.string.language_section_title))
 
         Spacer(Modifier.height(12.dp))
 
-        // Botón Español
+        Parrafo(stringResource(R.string.language_instruction))
+
+        Spacer(Modifier.height(12.dp))
+
+        // Español
         Button(
             onClick = {
                 if (selectedLang != "es") {
@@ -122,12 +116,12 @@ fun SettingScreen(
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = stringResource(R.string.language_spanish))
+            Text(stringResource(R.string.language_spanish))
         }
 
         Spacer(Modifier.height(8.dp))
 
-        // Botón Inglés
+        // Inglés
         Button(
             onClick = {
                 if (selectedLang != "en") {
@@ -137,26 +131,25 @@ fun SettingScreen(
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = stringResource(R.string.language_english))
+            Text(stringResource(R.string.language_english))
         }
 
         Spacer(Modifier.height(32.dp))
 
-
-        // 🎵 Selector de música (develop)
-        TituloPrincipal(text = stringResource(R.string.music_settings_title))
+        // 🎵 Música (ADD → develop)
+        TituloPrincipal("Música de fondo")
 
         Spacer(Modifier.height(8.dp))
 
-        Parrafo(text = stringResource(R.string.music_settings_desc))
+        Parrafo("Selecciona la melodía de fondo o silencia la música.")
 
         Spacer(Modifier.height(12.dp))
 
         val opcionesMusica = listOf(
-            "fondo" to stringResource(R.string.music_original),
-            "fondo2" to stringResource(R.string.music_alt1),
-            "fondo3" to stringResource(R.string.music_alt2),
-            "mute" to stringResource(R.string.music_mute)
+            "fondo" to "Música original",
+            "fondo2" to "Música alternativa 1",
+            "fondo3" to "Música alternativa 2",
+            "mute" to "Silenciar música"
         )
 
         opcionesMusica.forEach { (key, label) ->
@@ -176,33 +169,31 @@ fun SettingScreen(
             }
         }
 
-        Spacer(Modifier.height(32.dp))
+        Spacer(Modifier.height(40.dp))
 
         // 🔴 Salir del juego
-        NeonTextoBoton(text = stringResource(R.string.exit_game)) {
+        NeonTextoBoton("Salir del juego") {
             showExitDialog = true
         }
 
         Spacer(Modifier.height(24.dp))
     }
 
-    // ❗ Diálogo para cerrar la app
     if (showExitDialog) {
         AlertDialog(
             onDismissRequest = { showExitDialog = false },
-            title = { Text(stringResource(R.string.exit_game)) },
-            text = { Text(stringResource(R.string.exit_confirm)) },
+            title = { Text("Salir del juego") },
+            text = { Text("¿Seguro que quieres cerrar la aplicación?") },
             confirmButton = {
                 TextButton(onClick = {
-                    showExitDialog = false
                     activity?.finish()
                 }) {
-                    Text(stringResource(R.string.exit_game))
+                    Text("Salir")
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showExitDialog = false }) {
-                    Text(stringResource(R.string.cancel))
+                    Text("Cancelar")
                 }
             }
         )

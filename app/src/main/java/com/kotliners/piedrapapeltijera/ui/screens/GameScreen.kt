@@ -249,7 +249,7 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                         Image(
                             painter = painterResource(R.drawable.icono_tijera_neon),
                             contentDescription = stringResource(R.string.scissors),
-                            modifier = Modifier.size(110.dp)
+                            modifier = Modifier.size(95.dp)
                         )
                     }
                 }

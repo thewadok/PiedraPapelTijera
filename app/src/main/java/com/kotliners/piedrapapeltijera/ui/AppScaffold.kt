@@ -12,7 +12,6 @@ import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Leaderboard
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -21,7 +20,6 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -78,6 +76,7 @@ fun MusicToggleButton() {
     }
 }
 
+
 @Composable
 fun ExitGameButton() {
     val context = LocalContext.current
@@ -85,24 +84,13 @@ fun ExitGameButton() {
     var showDialog by remember { mutableStateOf(false) }
 
     if (showDialog) {
-        AlertDialog(
-            onDismissRequest = { showDialog = false },
-            title = { Text("Salir del juego") },
-            text = { Text("¿Seguro que quieres salir de la aplicación?") },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        showDialog = false
-                        activity?.finish()  // Cerramos la Activity
-                    }
-                ) {
-                    Text("Salir")
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { showDialog = false }) {
-                    Text("Cancelar")
-                }
+        com.kotliners.piedrapapeltijera.ui.components.ExitGameDialog(
+            onConfirmExit = {
+                showDialog = false
+                activity?.finish()
+                            },
+            onDismiss = {
+                showDialog = false
             }
         )
     }

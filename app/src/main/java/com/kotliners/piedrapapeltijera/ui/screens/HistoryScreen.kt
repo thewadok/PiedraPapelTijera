@@ -131,6 +131,21 @@ private fun PartidaCard(p: Partida) {
                 color = TextoBlanco,
                 fontSize = 15.sp
             )
+
+            if (p.latitud != null && p.longitud != null) {
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    text = "Geolocalización: Lat %.4f, Lon %.4f".format(p.latitud, p.longitud),
+                    color = TextoBlanco,
+                    fontSize = 15.sp
+                )
+            } else {
+                Text(
+                    text = "No se han obtenido parámetros de longitud ni latutud",
+                    color = TextoBlanco,
+                    fontSize = 14.sp
+                )
+            }
         }
     }
 }

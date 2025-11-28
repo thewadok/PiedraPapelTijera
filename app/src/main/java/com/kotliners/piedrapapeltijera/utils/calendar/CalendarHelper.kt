@@ -19,8 +19,8 @@ object CalendarHelper {
     // Función para insertar un evento en el calendario.
     suspend fun insertVictoryEvent(
         context: Context,
-        title: String = "Victoria en el juego",
-        description: String = "¡He ganado una partida!",
+        title: String,
+        description: String,
         startMillis: Long = System.currentTimeMillis(),
         durationMinutes: Int = 15
     ): Long? = withContext(Dispatchers.IO) {

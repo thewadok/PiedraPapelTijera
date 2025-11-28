@@ -37,10 +37,12 @@ import com.kotliners.piedrapapeltijera.notifications.VictoryNotification
 import com.kotliners.piedrapapeltijera.ui.components.VictoryDialog
 import com.kotliners.piedrapapeltijera.utils.calendar.rememberCalendarPermissionState
 import com.kotliners.piedrapapeltijera.utils.calendar.CalendarHelper
+import com.kotliners.piedrapapeltijera.utils.locale.moveLabel
 import com.kotliners.piedrapapeltijera.utils.media.rememberCaptureCurrentView
 import kotlinx.coroutines.launch
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
+
 
 @Composable
 fun GameScreen(viewModel: MainViewModel = viewModel()) {
@@ -310,18 +312,21 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                 if (result != null) {
                     Spacer(Modifier.height(16.dp))
 
+                    val userMoveText = moveLabel(userMove)
+                    val computerMoveText = moveLabel(computerMove)
+
                     Text(
-                        stringResource(
+                        text = stringResource(
                             R.string.player_vs_bank,
-                            userMove?.name ?: "—",
-                            computerMove?.name ?: "—"
+                            userMoveText,
+                            computerMoveText
                         ),
                         color = TextoBlanco
                     )
 
                     Text(message, color = TextoBlanco)
                     Text(
-                        stringResource(R.string.current_balance, saldo),
+                        text = stringResource(R.string.current_balance, saldo),
                         style = MaterialTheme.typography.titleLarge,
                         color = TextoBlanco
                     )
@@ -332,6 +337,14 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                     VictoryDialog(
                         onConfirm = { saveScreenshot, addCalendar ->
                             showVictoryDialog = false
+
+
+                            val eventTitle = context.getString(R.string.calendar_event_title)
+                            val eventDescription = context.getString(
+                                R.string.calendar_event_description,
+                                betAmount,
+                                saldo
+                            )
 
                             coroutineScope.launch {
 
@@ -354,9 +367,8 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                                     } else {
                                         CalendarHelper.insertVictoryEvent(
                                             context = context,
-                                            title = "Victoria en Piedra, Papel o Tijera",
-                                            description = "Has ganado apostando $betAmount monedas.\nMonedas acumuladas: $saldo."
-
+                                            title = eventTitle,
+                                            description = eventDescription
                                         )
                                     }
                                 }

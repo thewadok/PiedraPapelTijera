@@ -117,6 +117,13 @@ Ve a Ajustes, toca Rescate y compra 50 monedas extra para continuar.
     <string name="geo_location">Geolocalización: Lat %1$.4f, Lon %2$.4f</string>
     <string name="geo_not_available">No se han obtenido parámetros de longitud ni latitud</string>
 
+    <!-- Calendario -->
+    <string name="calendar_event_title">Victoria en Piedra, Papel o Tijera</string>
+    <string name="calendar_event_description">
+    Has ganado apostando %1$d monedas.
+    Monedas acumuladas: %2$d.
+    </string>
+
     <!-- Salir del juego -->
     <string name="exit_game">Salir del juego</string>
     <string name="exit_game_title">Salir del juego</string>

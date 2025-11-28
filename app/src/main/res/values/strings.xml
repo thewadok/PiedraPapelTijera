@@ -81,6 +81,10 @@ Ve a Ajustes, toca Rescate y compra 50 monedas extra para continuar.
     <string name="tie">Empate, sin cambios.</string>
     <string name="current_balance">Saldo actual: %1$d</string>
 
+    <string name="move_rock">PIEDRA</string>
+    <string name="move_paper">PAPEL</string>
+    <string name="move_scissors">TIJERA</string>
+
     <!-- Movimientos -->
     <string name="rock">Piedra</string>
     <string name="paper">Papel</string>
@@ -108,6 +112,10 @@ Ve a Ajustes, toca Rescate y compra 50 monedas extra para continuar.
     <string name="music_option_alt1">Música alternativa 1</string>
     <string name="music_option_alt2">Música alternativa 2</string>
     <string name="music_option_mute">Silenciar música</string>
+
+    <!-- Geolocalización -->
+    <string name="geo_location">Geolocalización: Lat %1$.4f, Lon %2$.4f</string>
+    <string name="geo_not_available">No se han obtenido parámetros de longitud ni latitud</string>
 
     <!-- Salir del juego -->
     <string name="exit_game">Salir del juego</string>

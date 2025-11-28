@@ -20,6 +20,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kotliners.piedrapapeltijera.R
 import com.kotliners.piedrapapeltijera.data.local.entity.Partida
 import com.kotliners.piedrapapeltijera.game.GameResult
+import com.kotliners.piedrapapeltijera.utils.locale.moveLabel
 import com.kotliners.piedrapapeltijera.ui.theme.FondoNegro
 import com.kotliners.piedrapapeltijera.ui.theme.TextoBlanco
 import com.kotliners.piedrapapeltijera.ui.theme.AmarilloNeon
@@ -41,8 +42,8 @@ fun HistoryScreen(
             .background(FondoNegro)
             .padding(16.dp)
     ) {
-        // 🔹 Título
-        TituloPrincipal(text = stringResource(R.string.history_title))
+        // Título
+        TituloPrincipal(stringResource(R.string.history_title))
 
         Spacer(Modifier.height(8.dp))
 
@@ -71,6 +72,9 @@ fun HistoryScreen(
 
 @Composable
 private fun PartidaCard(p: Partida) {
+
+    val jugadaJugadorTxt = moveLabel(p.jugadaJugador)
+    val jugadaCpuTxt = moveLabel(p.jugadaCpu)
     val fechaFormateada = SimpleDateFormat(
         "dd/MM/yyyy HH:mm",
         Locale.getDefault()
@@ -97,8 +101,8 @@ private fun PartidaCard(p: Partida) {
             Text(
                 text = stringResource(
                     R.string.player_vs_bank_history,
-                    p.jugadaJugador,
-                    p.jugadaCpu
+                    jugadaJugadorTxt,
+                    jugadaCpuTxt
                 ),
                 color = TextoBlanco,
                 fontSize = 16.sp
@@ -135,13 +139,17 @@ private fun PartidaCard(p: Partida) {
             if (p.latitud != null && p.longitud != null) {
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    text = "Geolocalización: Lat %.4f, Lon %.4f".format(p.latitud, p.longitud),
+                    text = stringResource(
+                        R.string.geo_location,
+                        p.latitud,
+                        p.longitud
+                    ),
                     color = TextoBlanco,
                     fontSize = 15.sp
                 )
             } else {
                 Text(
-                    text = "No se han obtenido parámetros de longitud ni latutud",
+                    text = stringResource(R.string.geo_not_available),
                     color = TextoBlanco,
                     fontSize = 14.sp
                 )
@@ -149,6 +157,7 @@ private fun PartidaCard(p: Partida) {
         }
     }
 }
+
 
 @Composable
 private fun resultadoTexto(r: GameResult): String {

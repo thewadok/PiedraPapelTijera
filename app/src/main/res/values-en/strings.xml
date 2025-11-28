@@ -81,6 +81,10 @@ Go to Settings, tap Rescue and buy 50 extra coins to continue playing.
     <string name="tie">Tie, no changes.</string>
     <string name="current_balance">Current balance: %1$d</string>
 
+    <string name="move_rock">ROCK</string>
+    <string name="move_paper">PAPER</string>
+    <string name="move_scissors">SCISSORS</string>
+
     <!-- Moves -->
     <string name="rock">Rock</string>
     <string name="paper">Paper</string>
@@ -108,6 +112,10 @@ Go to Settings, tap Rescue and buy 50 extra coins to continue playing.
     <string name="music_option_alt1">Alternative music 1</string>
     <string name="music_option_alt2">Alternative music 2</string>
     <string name="music_option_mute">Mute music</string>
+
+    <!-- Geolocation -->
+    <string name="geo_location">Geolocation: Lat %1$.4f, Lon %2$.4f</string>
+    <string name="geo_not_available">No latitude or longitude parameters available</string>
 
     <!-- Exit game -->
     <string name="exit_game">Exit game</string>

@@ -4,7 +4,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.kotliners.piedrapapeltijera.R
 import com.kotliners.piedrapapeltijera.ui.theme.RosaNeon
 
 @Composable
@@ -21,26 +23,28 @@ fun ExitGameDialog(
         // Título
         title = {
             TituloSeccion(
-                text = "Salir del juego",
+                text = stringResource(R.string.exit_game_title),
                 modifier = Modifier.padding(bottom = 4.dp)
             )
         },
 
         text = {
             Parrafo(
-                texto = "¿Seguro que quieres salir de la aplicación?",
+                texto = stringResource(R.string.exit_game_message),
                 modifier = Modifier.padding(bottom = 4.dp)
             )
         },
 
         // Botón Salir
         confirmButton = {
-            NeonTextoBoton("Salir") { onConfirmExit() }
+            NeonTextoBoton(stringResource(R.string.exit_game_confirm)) {
+                onConfirmExit() }
         },
 
         // Botón Cancelar
         dismissButton = {
-            NeonTextoBoton("Cancelar") { onDismiss() }
+            NeonTextoBoton(stringResource(R.string.exit_game_cancel)) {
+                onDismiss() }
         }
     )
 }

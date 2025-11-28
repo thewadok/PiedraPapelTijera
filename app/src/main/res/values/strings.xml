@@ -93,6 +93,14 @@ Ve a Ajustes, toca Rescate y compra 50 monedas extra para continuar.
     <!-- Idioma -->
     <string name="change_language">Cambiar idioma</string>
 
+    <!-- Salir del juego -->
+    <string name="exit_game">Salir del juego</string>
+    <string name="exit_game_title">Salir del juego</string>
+    <string name="exit_game_message">¿Seguro que quieres salir de la aplicación?</string>
+    <string name="exit_game_confirm">Salir</string>
+    <string name="exit_game_cancel">Cancelar</string>
+
+
     <!-- Ayuda HTML -->
     <string name="help_title">Ayuda del Juego</string>
     <string name="help_rules_title">Reglas Básicas</string>

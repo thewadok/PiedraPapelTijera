@@ -115,16 +115,6 @@ fun AppScaffold(
     val backStack by nav.currentBackStackEntryAsState()
     val current = backStack?.destination?.route ?: Screen.Home.route
 
-    val titleResId = when (current) {
-        Screen.Home.route -> Screen.Home.titleResId
-        Screen.History.route -> Screen.History.titleResId
-        Screen.Ranking.route -> Screen.Ranking.titleResId
-        Screen.Setting.route -> Screen.Setting.titleResId
-        Screen.Help.route -> Screen.Help.titleResId
-        Screen.Game.route -> Screen.Game.titleResId
-        else -> R.string.app_name
-    }
-
     val items = listOf(
         Screen.Home,
         Screen.History,

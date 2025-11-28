@@ -93,6 +93,13 @@ Go to Settings, tap Rescue and buy 50 extra coins to continue playing.
     <!-- Language -->
     <string name="change_language">Change language</string>
 
+    <!-- Exit game -->
+    <string name="exit_game">Exit game</string>
+    <string name="exit_game_title">Exit game</string>
+    <string name="exit_game_message">Are you sure you want to close the app?</string>
+    <string name="exit_game_confirm">Exit</string>
+    <string name="exit_game_cancel">Cancel</string>
+
     <!-- Help HTML -->
     <string name="help_title">Game Help</string>
     <string name="help_rules_title">Basic Rules</string>

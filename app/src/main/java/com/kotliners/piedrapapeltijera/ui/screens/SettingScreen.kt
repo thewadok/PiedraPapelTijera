@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.content.edit
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.kotliners.piedrapapeltijera.R
@@ -26,6 +27,7 @@ import com.kotliners.piedrapapeltijera.ui.theme.*
 import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
 import com.kotliners.piedrapapeltijera.utils.locale.LocaleManager
 import com.kotliners.piedrapapeltijera.utils.media.MusicService
+
 
 @Composable
 fun SettingScreen(
@@ -51,7 +53,10 @@ fun SettingScreen(
 
     fun seleccionarMusica(trackKey: String) {
         selectedTrack = trackKey
-        prefs.edit().putString("music_track", trackKey).apply()
+
+        prefs.edit {
+            putString("music_track", trackKey)
+        }
 
         (activity as? MainActivity)?.let {
             it.stopService(Intent(it, MusicService::class.java))
@@ -172,7 +177,7 @@ fun SettingScreen(
         Spacer(Modifier.height(40.dp))
 
         // Salir del juego
-        NeonTextoBoton("Salir del juego") {
+        NeonTextoBoton(stringResource(R.string.exit_game)) {
             showExitDialog = true
         }
 
@@ -180,21 +185,12 @@ fun SettingScreen(
     }
 
     if (showExitDialog) {
-        AlertDialog(
-            onDismissRequest = { showExitDialog = false },
-            title = { Text("Salir del juego") },
-            text = { Text("¿Seguro que quieres cerrar la aplicación?") },
-            confirmButton = {
-                TextButton(onClick = {
-                    activity?.finish()
-                }) {
-                    Text("Salir")
-                }
+        ExitGameDialog(
+            onConfirmExit = {
+                activity?.finish()
             },
-            dismissButton = {
-                TextButton(onClick = { showExitDialog = false }) {
-                    Text("Cancelar")
-                }
+            onDismiss = {
+                showExitDialog = false
             }
         )
     }

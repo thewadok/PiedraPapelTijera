@@ -220,48 +220,62 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
 
                 // Botones: Piedra, Papel, Tijera
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
-                    horizontalArrangement = Arrangement.SpaceEvenly
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
+                    // PIEDRA
                     Button(
                         onClick = {
                             SoundEffects.playClick()
                             iniciarJuego(Move.PIEDRA)
                         },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                        contentPadding = PaddingValues(0.dp),
+                        elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
                     ) {
                         Image(
-                            painter = painterResource(R.drawable.icono_piedra_neon),
+                            painter = painterResource(id = R.drawable.icono_piedra_neon),
                             contentDescription = stringResource(R.string.rock),
                             modifier = Modifier.size(95.dp)
                         )
                     }
 
+                    // PAPEL
                     Button(
                         onClick = {
                             SoundEffects.playClick()
                             iniciarJuego(Move.PAPEL)
                         },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                        contentPadding = PaddingValues(0.dp),
+                        elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
                     ) {
                         Image(
-                            painter = painterResource(R.drawable.icono_papel_neon),
+                            painter = painterResource(id = R.drawable.icono_papel_neon),
                             contentDescription = stringResource(R.string.paper),
                             modifier = Modifier.size(95.dp)
                         )
                     }
 
+                    // TIJERA
                     Button(
                         onClick = {
                             SoundEffects.playClick()
                             iniciarJuego(Move.TIJERA)
                         },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                        contentPadding = PaddingValues(0.dp),
+                        elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
                     ) {
                         Image(
-                            painter = painterResource(R.drawable.icono_tijera_neon),
+                            painter = painterResource(id = R.drawable.icono_tijera_neon),
                             contentDescription = stringResource(R.string.scissors),
-                            modifier = Modifier.size(95.dp)
+                            modifier = Modifier
+                                .size(110.dp)
+                                .padding(end = 4.dp)
                         )
                     }
                 }

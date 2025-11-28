@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.res.stringResource
+import com.kotliners.piedrapapeltijera.R
 import com.kotliners.piedrapapeltijera.ui.theme.RosaNeon
 
 // Dialogo que aparece en el momento de la victoria
@@ -28,7 +30,7 @@ fun VictoryDialog(
         // Titulo.
         title = {
             TituloSeccion(
-            "¡Victoria!",
+                stringResource(R.string.victory_dialog_title),
                 modifier = Modifier.padding(bottom = 4.dp)
                 )
                 },
@@ -37,7 +39,7 @@ fun VictoryDialog(
         text = {
             Column {
                 Parrafo(
-                    texto = "¿Quieres guardar los datos de esta victoria?",
+                    stringResource(R.string.victory_dialog_message),
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
 
@@ -55,7 +57,7 @@ fun VictoryDialog(
                     Spacer(Modifier.width(8.dp))
 
                     Parrafo(
-                        texto = "Guardar captura",
+                        stringResource(R.string.victory_dialog_save_screenshot),
                         modifier = Modifier.weight(1f))
                 }
 
@@ -69,7 +71,7 @@ fun VictoryDialog(
                     )
                     Spacer(Modifier.width(8.dp))
                     Parrafo(
-                        texto = "Añadir al calendario",
+                        stringResource(R.string.victory_dialog_add_calendar),
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -78,14 +80,14 @@ fun VictoryDialog(
 
         // Boton aceptar
         confirmButton = {
-            NeonTextoBoton(titulo = "Aceptar") {
+            NeonTextoBoton(stringResource(R.string.victory_dialog_confirm)) {
                 onConfirm(save, addCalendar)
             }
         },
 
         // Boton cancelar
         dismissButton = {
-            NeonTextoBoton(titulo = "Cancelar") {
+            NeonTextoBoton(stringResource(R.string.victory_dialog_cancel)) {
                 onDismiss()
             }
         }

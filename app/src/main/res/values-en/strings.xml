@@ -90,6 +90,14 @@ Go to Settings, tap Rescue and buy 50 extra coins to continue playing.
     <string name="victory_title">Victory!</string>
     <string name="victory_text">You solved the game in %1$s ⏱</string>
 
+    <!-- Victory dialog -->
+    <string name="victory_dialog_title">Victory!</string>
+    <string name="victory_dialog_message">Do you want to save this victory?</string>
+    <string name="victory_dialog_save_screenshot">Save screenshot</string>
+    <string name="victory_dialog_add_calendar">Add to calendar</string>
+    <string name="victory_dialog_confirm">OK</string>
+    <string name="victory_dialog_cancel">Cancel</string>
+
     <!-- Language -->
     <string name="change_language">Change language</string>
 

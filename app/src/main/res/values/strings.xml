@@ -90,6 +90,14 @@ Ve a Ajustes, toca Rescate y compra 50 monedas extra para continuar.
     <string name="victory_title">¡Victoria!</string>
     <string name="victory_text">Resolviste la partida en %1$s ⏱</string>
 
+    <!-- Diálogo de victoria -->
+    <string name="victory_dialog_title">¡Victoria!</string>
+    <string name="victory_dialog_message">¿Quieres guardar los datos de esta victoria?</string>
+    <string name="victory_dialog_save_screenshot">Guardar captura</string>
+    <string name="victory_dialog_add_calendar">Añadir al calendario</string>
+    <string name="victory_dialog_confirm">Aceptar</string>
+    <string name="victory_dialog_cancel">Cancelar</string>
+
     <!-- Idioma -->
     <string name="change_language">Cambiar idioma</string>
 

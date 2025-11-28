@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -20,7 +21,7 @@ import com.kotliners.piedrapapeltijera.ui.theme.AmarilloNeon
 
 //Encabezado de marca
 @Composable
-fun BrandBar(title: String) {
+fun BrandBar() {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -33,7 +34,7 @@ fun BrandBar(title: String) {
             contentScale = ContentScale.Fit
         )
         Text(
-            text = title,
+            text = stringResource(R.string.app_name),
             color = AmarilloNeon,
             style = MaterialTheme.typography.titleLarge.copy(
                 fontWeight = FontWeight.Bold,

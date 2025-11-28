@@ -5,7 +5,8 @@
     <!-- Navegación / Pantallas -->
     <string name="help">Ayuda</string>
     <string name="settings">Configuración</string>
-    <string name="settings_title">Ajustes de configuración</string>
+    <string name="title_home">Inicio</string>
+    <string name="settings_title">Ajustes</string>
     <string name="reset_button">Reset</string>
     <string name="reset_description">Toca Reset para restablecer tu estado al estado inicial.</string>
     <string name="rescue_button">Rescate</string>
@@ -60,7 +61,7 @@ Ve a Ajustes, toca Rescate y compra 50 monedas extra para continuar.
 5) Comprueba el resultado y tu saldo acumulado al instante.
 </string>
 
-    <string name="history_title">Historial de partidas</string>
+    <string name="history_title">Historial</string>
     <string name="no_games_yet">Todavía no has jugado</string>
     <string name="player_vs_bank_history">Tú: %1$s | Banca: %2$s</string>
     <string name="result_label">Resultado: %1$s</string>

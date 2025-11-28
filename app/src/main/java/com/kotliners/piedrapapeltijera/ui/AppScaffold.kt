@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.kotliners.piedrapapeltijera.MainActivity
@@ -114,14 +115,14 @@ fun AppScaffold(
     val backStack by nav.currentBackStackEntryAsState()
     val current = backStack?.destination?.route ?: Screen.Home.route
 
-    val title = when (current) {
-        Screen.Home.route -> Screen.Home.title
-        Screen.History.route -> Screen.History.title
-        Screen.Ranking.route -> Screen.Ranking.title
-        Screen.Setting.route -> Screen.Setting.title
-        Screen.Help.route -> Screen.Help.title
-        Screen.Game.route -> Screen.Game.title
-        else -> "Inicio"
+    val titleResId = when (current) {
+        Screen.Home.route -> Screen.Home.titleResId
+        Screen.History.route -> Screen.History.titleResId
+        Screen.Ranking.route -> Screen.Ranking.titleResId
+        Screen.Setting.route -> Screen.Setting.titleResId
+        Screen.Help.route -> Screen.Help.titleResId
+        Screen.Game.route -> Screen.Game.titleResId
+        else -> R.string.app_name
     }
 
     val items = listOf(
@@ -135,7 +136,7 @@ fun AppScaffold(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { BrandBar(title) },
+                title = { BrandBar() },
                 actions = {
                     // Altavoz + botón salir
                     MusicToggleButton()
@@ -182,7 +183,7 @@ fun AppScaffold(
                                 else -> {}
                             }
                         },
-                        label = { Text(screen.title) },
+                        label = { Text(stringResource(screen.titleResId)) },
                         colors = NavigationBarItemDefaults.colors(
                             selectedIconColor = TextoNegro,
                             selectedTextColor   = TextoBlanco,

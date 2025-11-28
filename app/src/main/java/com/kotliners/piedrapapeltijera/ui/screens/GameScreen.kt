@@ -39,6 +39,8 @@ import com.kotliners.piedrapapeltijera.utils.calendar.rememberCalendarPermission
 import com.kotliners.piedrapapeltijera.utils.calendar.CalendarHelper
 import com.kotliners.piedrapapeltijera.utils.media.rememberCaptureCurrentView
 import kotlinx.coroutines.launch
+import android.content.pm.PackageManager
+import androidx.core.content.ContextCompat
 
 @Composable
 fun GameScreen(viewModel: MainViewModel = viewModel()) {
@@ -131,16 +133,40 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
     // Solicitud de permisos de ubicación.
     val requestPermissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
-    ) { granted ->
+    ) { isGranted: Boolean ->
         coroutineScope.launch {
-            val loc = if (granted) locationManager.getCurrentLocation() else null
+            val loc: Location? = if (isGranted) {
+                // Si da permiso, intentamos obtener la ubicación
+                locationManager.getCurrentLocation()
+            } else {
+                // Si no da permiso, seguimos sin ubicación
+                null
+            }
+
+            // Siempre jugamos, con o sin ubicación
             pendingMove?.let { jugarCon(it, loc) }
         }
     }
 
     fun iniciarJuego(mov: Move) {
         pendingMove = mov
-        requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+
+        val hasPermission = ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+        if (hasPermission) {
+            // Si tenemos permiso, jugamos y sacamos la ubicación en segundo plano
+            coroutineScope.launch {
+                val location = locationManager.getCurrentLocation()
+                jugarCon(mov, location)
+            }
+        } else {
+
+            // Solo si nO hay permiso, mostramos el diálogo del sistema
+            requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        }
     }
 
     // UI de la pantalla

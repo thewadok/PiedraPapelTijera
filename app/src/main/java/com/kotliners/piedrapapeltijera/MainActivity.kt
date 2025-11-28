@@ -84,6 +84,11 @@ class MainActivity : ComponentActivity() {
         handleNotificationIntent()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        SoundEffects.release()
+    }
+
     private fun handleNotificationIntent() {
         val time = intent.getStringExtra("EXTRA_TIME")
         if (!time.isNullOrEmpty()) {

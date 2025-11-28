@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -30,6 +28,7 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -38,6 +37,7 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
     buildFeatures {
         compose = true
     }
@@ -45,32 +45,32 @@ android {
 
 dependencies {
 
-    //Librerias Core Android
+    // --- CORE ---
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
 
-    //Librerias de Compose
+    // --- COMPOSE ---
     implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.runtime.livedata)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.compose.material.icons.extended)
+    implementation(libs.androidx.compose.runtime.livedata)
 
-    //Librerias para lifecycle + coroutines
+    // --- LIFECYCLE & COROUTINES ---
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
-    //Librerias de material y system bars
+    // --- MATERIAL & SYSTEM BARS ---
     implementation(libs.google.material)
     implementation(libs.google.accompanist.systemuicontroller)
 
-    //Librerias Room y RxJava
+    // --- ROOM + RXJAVA ---
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.rxjava3)
@@ -80,21 +80,21 @@ dependencies {
     implementation(libs.rxandroid)
     implementation(libs.rxkotlin)
 
-    // Librerias DocumentFile
+    // --- DocumentFile (DEVELOP) ---
     implementation(libs.androidx.documentfile)
 
-    // Librería de geolocalización
+    // --- Geolocalización (DEVELOP) ---
     implementation(libs.google.play.services.location)
 
-    //Librerias para Tests
+    // --- TESTING ---
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
-
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
 
+    // --- DEBUG ---
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 }

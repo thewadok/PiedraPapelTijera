@@ -1,6 +1,9 @@
 package com.kotliners.piedrapapeltijera.game
 
-// Lógica del juego
+/**
+ * Lógica principal del juego.
+ * Decide el movimiento de la banca y el resultado.
+ */
 object GameLogic {
 
     fun play(userMove: Move): Pair<GameResult, Move> {

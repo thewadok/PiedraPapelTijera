@@ -101,6 +101,14 @@ Ve a Ajustes, toca Rescate y compra 50 monedas extra para continuar.
     <!-- Idioma -->
     <string name="change_language">Cambiar idioma</string>
 
+    <!-- Ajustes: Música -->
+    <string name="music_section_title">Música</string>
+    <string name="music_section_description">Selecciona la melodía de fondo o silencia la música.</string>
+    <string name="music_option_original">Música original</string>
+    <string name="music_option_alt1">Música alternativa 1</string>
+    <string name="music_option_alt2">Música alternativa 2</string>
+    <string name="music_option_mute">Silenciar música</string>
+
     <!-- Salir del juego -->
     <string name="exit_game">Salir del juego</string>
     <string name="exit_game_title">Salir del juego</string>

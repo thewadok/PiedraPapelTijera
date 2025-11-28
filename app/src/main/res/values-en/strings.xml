@@ -101,6 +101,14 @@ Go to Settings, tap Rescue and buy 50 extra coins to continue playing.
     <!-- Language -->
     <string name="change_language">Change language</string>
 
+    <!-- Settings: Music -->
+    <string name="music_section_title">Music</string>
+    <string name="music_section_description">Select the background track or mute the music.</string>
+    <string name="music_option_original">Original music</string>
+    <string name="music_option_alt1">Alternative music 1</string>
+    <string name="music_option_alt2">Alternative music 2</string>
+    <string name="music_option_mute">Mute music</string>
+
     <!-- Exit game -->
     <string name="exit_game">Exit game</string>
     <string name="exit_game_title">Exit game</string>

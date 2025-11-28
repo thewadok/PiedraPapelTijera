@@ -142,22 +142,22 @@ fun SettingScreen(
         Spacer(Modifier.height(32.dp))
 
         // Música
-        TituloPrincipal("Música de fondo")
+        TituloPrincipal(stringResource(R.string.music_section_title))
 
         Spacer(Modifier.height(8.dp))
 
-        Parrafo("Selecciona la melodía de fondo o silencia la música.")
+        Parrafo(stringResource(R.string.music_section_description))
 
         Spacer(Modifier.height(12.dp))
 
         val opcionesMusica = listOf(
-            "fondo" to "Música original",
-            "fondo2" to "Música alternativa 1",
-            "fondo3" to "Música alternativa 2",
-            "mute" to "Silenciar música"
+            "fondo" to R.string.music_option_original,
+            "fondo2" to R.string.music_option_alt1,
+            "fondo3" to R.string.music_option_alt2,
+            "mute" to R.string.music_option_mute
         )
 
-        opcionesMusica.forEach { (key, label) ->
+        opcionesMusica.forEach { (key, labelRes) ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -170,7 +170,7 @@ fun SettingScreen(
                     onClick = { seleccionarMusica(key) }
                 )
                 Spacer(Modifier.width(8.dp))
-                Text(text = label, color = TextoBlanco)
+                Text(stringResource(labelRes), color = TextoBlanco)
             }
         }
 

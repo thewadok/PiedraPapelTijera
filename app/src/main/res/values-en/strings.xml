@@ -17,6 +17,8 @@
     <string name="other_settings_placeholder">Other settings in Product 2</string>
     <string name="player_vs_bank">Player: %1$s | Bank: %2$s</string>
     <string name="coins">coins</string>
+    <string name="games_label">Games</string>
+    <string name="coins_label">Coins</string>
     <string name="play_button">Play</string>
     <string name="how_game_works">How the game works</string>
     <string name="rock_rule">Beats Scissors</string>

@@ -18,6 +18,8 @@
     <string name="player_vs_bank">Jugador: %1$s | Banca: %2$s</string>
     <string name="coins">monedas</string>
     <string name="play_button">Jugar</string>
+    <string name="games_label">Partidas</string>
+    <string name="coins_label">Monedas</string>
     <string name="how_game_works">Cómo funciona el juego</string>
     <string name="rock_rule">Vence a Tijera</string>
     <string name="paper_rule">Vence a Piedra</string>

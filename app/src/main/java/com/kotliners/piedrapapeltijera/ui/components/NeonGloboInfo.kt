@@ -14,6 +14,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kotliners.piedrapapeltijera.ui.theme.RosaNeon
 import com.kotliners.piedrapapeltijera.ui.theme.TextoBlanco
+import androidx.compose.ui.res.stringResource
+import com.kotliners.piedrapapeltijera.R
 
 @Composable
 fun NeonGloboInfo(
@@ -35,7 +37,7 @@ fun NeonGloboInfo(
         ) {
             Column {
                 Text(
-                    text = "Partidas",
+                    text = stringResource(R.string.games_label),
                     color = TextoBlanco.copy(alpha = 0.9f),
                     fontSize = 17.sp,
                     fontWeight = FontWeight.Bold
@@ -50,7 +52,7 @@ fun NeonGloboInfo(
 
             Column(horizontalAlignment = Alignment.End) {
                 Text(
-                    text = "Monedas",
+                    text = stringResource(R.string.coins_label),
                     color = TextoBlanco.copy(alpha = 0.9f),
                     fontSize = 17.sp,
                     fontWeight = FontWeight.Bold

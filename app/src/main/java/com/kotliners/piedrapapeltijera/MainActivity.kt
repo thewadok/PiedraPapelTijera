@@ -9,43 +9,36 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
 import com.kotliners.piedrapapeltijera.ui.AppRoot
 import com.kotliners.piedrapapeltijera.ui.theme.FondoNegro
-import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
 import com.kotliners.piedrapapeltijera.utils.locale.LocaleManager
-import com.kotliners.piedrapapeltijera.utils.NotificationsPermission
+import com.kotliners.piedrapapeltijera.utils.notifications.NotificationsPermission
 import com.kotliners.piedrapapeltijera.utils.media.MusicService
 import com.kotliners.piedrapapeltijera.utils.media.SoundEffects
 
 /**
- * Activity principal combinada (Jose + develop)
- * - Localización aplicada al contexto base
- * - Música y efectos del equipo
- * - Permisos de calendario
- * - Permiso de notificaciones
- * - Toast con la duración de la victoria
+ * Activity principal combinada:
+ Localización aplicada al contexto base
+ Música y efectos del equipo
+ Permisos de calendario
+ Permiso de notificaciones
+ Duración de la victoria
  */
 class MainActivity : ComponentActivity() {
 
-    // ---------------------------------------------------------
-    // 🔵 LOCALIZACIÓN ANTES DE CREAR LA ACTIVITY
-    // ---------------------------------------------------------
+
+    // Localización antes de crear la actividad
     override fun attachBaseContext(newBase: Context) {
         val context = LocaleManager.applySavedLocale(newBase)
         super.attachBaseContext(context)
     }
 
-    // ---------------------------------------------------------
-    // 🔵 PERMISOS DEL CALENDARIO (DEVELOP)
-    // ---------------------------------------------------------
+    // Permisos de calendario
     private val requestCalendarPerms = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { /* No necesitamos manejar nada aquí */ }
 
-    // ---------------------------------------------------------
-    // 🔵 CONTROL DE MÚSICA (DEVELOP)
-    // ---------------------------------------------------------
+    // Control de música
     fun toggleMusic() {
         if (MusicService.isRunning) {
             stopService(Intent(this, MusicService::class.java))
@@ -56,13 +49,12 @@ class MainActivity : ComponentActivity() {
 
     fun isMusicRunning() = MusicService.isRunning
 
-    // ---------------------------------------------------------
-    // 🔵 onCreate FINAL — FUSION COMPLETA
-    // ---------------------------------------------------------
+
+    // onCreate
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // → Pedir permisos del calendario
+        // Pedir permisos del calendario
         requestCalendarPerms.launch(
             arrayOf(
                 android.Manifest.permission.READ_CALENDAR,
@@ -70,32 +62,32 @@ class MainActivity : ComponentActivity() {
             )
         )
 
-        // → Iniciar música y efectos
+        // Iniciar música y efectos
         startService(Intent(this, MusicService::class.java))
         SoundEffects.init(applicationContext)
 
-        // → Configuración visual
+        // onfiguración visual
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.dark(FondoNegro.value.toInt()),
             navigationBarStyle = SystemBarStyle.dark(FondoNegro.value.toInt())
         )
 
-        // → Cargar Compose
+        // Cargar Compose
         setContent {
             AppRoot()
         }
 
-        // → Permiso de notificaciones (Android 13+)
+        // Permiso de notificaciones
         NotificationsPermission.requestIfNeeded(this)
 
-        // → Procesar posible tiempo recibido desde una notificación
+        // Procesar posible tiempo recibido desde una notificación
         handleNotificationIntent()
     }
 
     private fun handleNotificationIntent() {
         val time = intent.getStringExtra("EXTRA_TIME")
         if (!time.isNullOrEmpty()) {
-            Toast.makeText(this, "⏱ Tiempo de resolución: $time", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Tiempo de resolución: $time", Toast.LENGTH_LONG).show()
         }
     }
 }

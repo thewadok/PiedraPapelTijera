@@ -1,5 +1,4 @@
-package com.kotliners.piedrapapeltijera.utils
-
+package com.kotliners.piedrapapeltijera.utils.notifications
 import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager

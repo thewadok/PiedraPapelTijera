@@ -13,7 +13,7 @@ import androidx.activity.viewModels
 import com.kotliners.piedrapapeltijera.ui.AppRoot
 import com.kotliners.piedrapapeltijera.ui.theme.FondoNegro
 import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
-import com.kotliners.piedrapapeltijera.utils.LocaleManager
+import com.kotliners.piedrapapeltijera.utils.locale.LocaleManager
 import com.kotliners.piedrapapeltijera.utils.NotificationsPermission
 import com.kotliners.piedrapapeltijera.utils.media.MusicService
 import com.kotliners.piedrapapeltijera.utils.media.SoundEffects
@@ -28,10 +28,8 @@ import com.kotliners.piedrapapeltijera.utils.media.SoundEffects
  */
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: MainViewModel by viewModels()
-
     // ---------------------------------------------------------
-    // 🔵 LOCALIZACIÓN ANTES DE CREAR LA ACTIVITY (TU PARTE)
+    // 🔵 LOCALIZACIÓN ANTES DE CREAR LA ACTIVITY
     // ---------------------------------------------------------
     override fun attachBaseContext(newBase: Context) {
         val context = LocaleManager.applySavedLocale(newBase)

@@ -11,8 +11,10 @@ y centralizar la lógica en una función.
 class VictoryManager {
 
     // Función suspend para gestionar la victoria sin bloquear la interfaz
-    suspend fun handleVictory(context: Context, bitmap: Bitmap) {
-
+    suspend fun handleVictory(
+        context: Context,
+        bitmap: Bitmap,
+    ) {
         // Guardamos la captura de pantalla
         ScreenshotSaver.saveToMediaStore(context, bitmap)
 

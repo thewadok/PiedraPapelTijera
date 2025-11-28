@@ -10,16 +10,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import com.kotliners.piedrapapeltijera.ui.theme.FondoNegro
-import com.kotliners.piedrapapeltijera.utils.LocaleManager
+import com.kotliners.piedrapapeltijera.utils.locale.LocaleManager
 
-// 🌐 Pantalla de Ayuda que carga el HTML correcto según el idioma seleccionado
+// Pantalla de Ayuda que carga el HTML correcto según el idioma seleccionado
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
 fun HelpScreen() {
     val context = LocalContext.current
-    val currentLang = LocaleManager.getSavedLanguage(context) ?: "es"
+    val currentLang = LocaleManager.getSavedLanguage(context)
 
-    // Determina qué archivo HTML cargar según el idioma
+    // Determinamos qué archivo HTML cargar según el idioma
     val htmlFile = when (currentLang) {
         "en" -> "help_en.html"
         else -> "help_es.html"
@@ -28,7 +28,8 @@ fun HelpScreen() {
     AndroidView(
         factory = { ctx ->
             WebView(ctx).apply {
-                webViewClient = WebViewClient() // Abre dentro de la app
+                // Abre dentro de la app
+                webViewClient = WebViewClient()
                 settings.javaScriptEnabled = true
                 setBackgroundColor(android.graphics.Color.parseColor("#1F1F1F"))
                 loadUrl("file:///android_asset/$htmlFile")

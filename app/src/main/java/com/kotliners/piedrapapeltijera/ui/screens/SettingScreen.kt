@@ -24,7 +24,7 @@ import com.kotliners.piedrapapeltijera.navigation.safeNavigate
 import com.kotliners.piedrapapeltijera.ui.components.*
 import com.kotliners.piedrapapeltijera.ui.theme.*
 import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
-import com.kotliners.piedrapapeltijera.utils.LocaleManager
+import com.kotliners.piedrapapeltijera.utils.locale.LocaleManager
 import com.kotliners.piedrapapeltijera.utils.media.MusicService
 
 @Composable
@@ -42,7 +42,7 @@ fun SettingScreen(
     // Diálogo salir del juego
     var showExitDialog by remember { mutableStateOf(false) }
 
-    // Música (shared preferences)
+    // Música
     val prefs = remember { context.getSharedPreferences("settings", Context.MODE_PRIVATE) }
 
     var selectedTrack by remember {
@@ -68,12 +68,12 @@ fun SettingScreen(
         horizontalAlignment = Alignment.Start
     ) {
 
-        // ⭐ Título principal
+        // Título principal
         TituloPrincipal(stringResource(R.string.settings_title))
 
         Spacer(Modifier.height(8.dp))
 
-        // 🔥 RESET
+        // Reset
         NeonTextoBoton(stringResource(R.string.reset_button)) {
             viewModel.resetJuego()
             nav.safeNavigate(Screen.Game.route)
@@ -85,7 +85,7 @@ fun SettingScreen(
 
         Spacer(Modifier.height(24.dp))
 
-        // 🟢 RESCATE
+        // Rescate
         NeonTextoBoton(stringResource(R.string.rescue_button)) {
             viewModel.rescate()
             nav.safeNavigate(Screen.Game.route)
@@ -97,7 +97,7 @@ fun SettingScreen(
 
         Spacer(Modifier.height(32.dp))
 
-        // 🌍 Selección de idioma
+        // Selección de idioma
         TituloPrincipal(stringResource(R.string.language_section_title))
 
         Spacer(Modifier.height(12.dp))
@@ -136,7 +136,7 @@ fun SettingScreen(
 
         Spacer(Modifier.height(32.dp))
 
-        // 🎵 Música (ADD → develop)
+        // Música
         TituloPrincipal("Música de fondo")
 
         Spacer(Modifier.height(8.dp))
@@ -171,7 +171,7 @@ fun SettingScreen(
 
         Spacer(Modifier.height(40.dp))
 
-        // 🔴 Salir del juego
+        // Salir del juego
         NeonTextoBoton("Salir del juego") {
             showExitDialog = true
         }

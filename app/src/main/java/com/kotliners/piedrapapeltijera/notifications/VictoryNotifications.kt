@@ -22,11 +22,10 @@ object VictoryNotification {
     private const val CHANNEL_DESC = "Notificaciones al ganar partidas"
     private const val NOTIFICATION_ID = 1001
 
-    /**
-     * Muestra una notificación de victoria con logo grande (BigPicture).
-     */
+    // Muestramos una notificación de victoria con logo grande.
+
     fun show(context: Context, durationMs: Long) {
-        // En Android 13+ comprobar permiso
+        // Comprobamos permisos
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             val granted = ContextCompat.checkSelfPermission(
                 context, Manifest.permission.POST_NOTIFICATIONS
@@ -36,11 +35,11 @@ object VictoryNotification {
 
         createChannel(context)
 
-        // 🕒 Formatear tiempo mínimo de 0.1 segundos
+        // Formateamos tiempo mínimo de 0.1 segundos
         val seconds = if (durationMs < 100) 0.1 else durationMs / 1000.0
         val formattedTime = String.format("%.1f segundos", seconds)
 
-        // Intent al tocar la notificación
+        // Comportamiento al tocar la notificación
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             putExtra("EXTRA_TIME", formattedTime)
@@ -75,7 +74,7 @@ object VictoryNotification {
         try {
             NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notification)
         } catch (_: SecurityException) {
-            // Evita crash si no hay permiso
+            // Evitamos crash si no hay permiso
         }
     }
 

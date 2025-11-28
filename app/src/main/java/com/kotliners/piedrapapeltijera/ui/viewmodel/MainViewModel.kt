@@ -129,7 +129,10 @@ class MainViewModel : ViewModel() {
     Creamos la función onPlayerWin para gestionar lo que ocurre cuando el jugador gana una partida.
     Desde aquí llamamos a VictoryManager.
      */
-    fun onPlayerWin(context: Context, screenshot: Bitmap) {
+    fun onPlayerWin(
+        context: Context,
+                    screenshot: Bitmap
+    ) {
         viewModelScope.launch {
             victoryManager.handleVictory(context, screenshot)
         }

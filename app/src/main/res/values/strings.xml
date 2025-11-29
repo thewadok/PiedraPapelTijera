@@ -124,6 +124,12 @@ Ve a Ajustes, toca Rescate y compra 50 monedas extra para continuar.
     Monedas acumuladas: %2$d.
     </string>
 
+    <!-- Notificaciones -->
+    <string name="notif_victory_channel_name">Victorias</string>
+    <string name="notif_victory_channel_desc">Notificaciones al ganar partidas</string>
+    <string name="notif_victory_title">¡Victoria!</string>
+    <string name="notif_victory_text">Resolviste la partida en %1$.1f segundos ⏱</string>
+
     <!-- Salir del juego -->
     <string name="exit_game">Salir del juego</string>
     <string name="exit_game_title">Salir del juego</string>

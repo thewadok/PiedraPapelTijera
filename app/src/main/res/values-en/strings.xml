@@ -124,6 +124,11 @@ Go to Settings, tap Rescue and buy 50 extra coins to continue playing.
     Total coins: %2$d.
     </string>
 
+    <string name="notif_victory_channel_name">Victories</string>
+    <string name="notif_victory_channel_desc">Notifications when you win a game</string>
+    <string name="notif_victory_title">Victory!</string>
+    <string name="notif_victory_text">You finished the game in %1$.1f seconds</string>
+
     <!-- Exit game -->
     <string name="exit_game">Exit game</string>
     <string name="exit_game_title">Exit game</string>

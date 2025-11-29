@@ -7,7 +7,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.BitmapFactory
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -58,20 +57,11 @@ object VictoryNotification {
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-        // Logo grande del proyecto
-        val logoBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.logo_prov_kotliners)
-
         // Construcción de la notificación
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.mipmap.ic_launcher)
-            .setLargeIcon(logoBitmap)
+            .setSmallIcon(R.mipmap.ic_launcher_kotliners)
             .setContentTitle(context.getString(R.string.notif_victory_title))
             .setContentText(notificationText)
-            .setStyle(
-                NotificationCompat.BigPictureStyle()
-                    .bigPicture(logoBitmap)
-                    .bigLargeIcon(null as android.graphics.Bitmap?)
-            )
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)

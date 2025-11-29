@@ -37,28 +37,28 @@
     <string name="bets_title">Apuestas</string>
     <string name="bets_description">
 • Apuesta mínima: 10 monedas
-• Apuesta máxima: tu saldo disponible
-• No puedes apostar más de lo que tienes
+\n• Apuesta máxima: tu saldo disponible
+\n• No puedes apostar más de lo que tienes
 </string>
 
     <string name="rescue_title">Rescate</string>
     <string name="rescue_info">
 Sin saldo, pero no sin suerte.
 
-Ve a Ajustes, toca Rescate y compra 50 monedas extra para continuar.
+\nVe a Ajustes, toca Rescate y compra 50 monedas extra para continuar.
 </string>
 
     <string name="how_to_play_title">Cómo Jugar</string>
     <string name="how_to_play_steps">
 1) Elige tu apuesta: usa + y − para ajustar la cantidad.
 
-2) Selecciona tu jugada: Piedra, Papel o Tijera.
+\n2) Selecciona tu jugada: Piedra, Papel o Tijera.
 
-3) Pulsa el icono para jugar.
+\n3) Pulsa el icono para jugar.
 
-4) La banca selecciona su jugada al azar.
+\n4) La banca selecciona su jugada al azar.
 
-5) Comprueba el resultado y tu saldo acumulado al instante.
+\n5) Comprueba el resultado y tu saldo acumulado al instante.
 </string>
 
     <string name="history_title">Historial</string>
@@ -129,6 +129,16 @@ Ve a Ajustes, toca Rescate y compra 50 monedas extra para continuar.
     <string name="notif_victory_channel_desc">Notificaciones al ganar partidas</string>
     <string name="notif_victory_title">¡Victoria!</string>
     <string name="notif_victory_text">Resolviste la partida en %1$.1f segundos ⏱</string>
+
+    <!-- Permisos -->
+    <string name="permissions_section_title">Permisos</string>
+    <string name="permissions_section_description">
+    Gestiona los permisos que usa la aplicación.
+    </string>
+    <string name="permission_images">Capturas e imágenes</string>
+    <string name="permission_calendar">Calendario</string>
+    <string name="permission_location">Geolocalización</string>
+    <string name="permission_notifications">Notificaciones</string>
 
     <!-- Salir del juego -->
     <string name="exit_game">Salir del juego</string>

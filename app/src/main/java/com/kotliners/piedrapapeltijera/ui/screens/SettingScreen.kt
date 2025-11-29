@@ -27,6 +27,7 @@ import com.kotliners.piedrapapeltijera.ui.theme.*
 import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
 import com.kotliners.piedrapapeltijera.utils.locale.LocaleManager
 import com.kotliners.piedrapapeltijera.utils.media.MusicService
+import com.kotliners.piedrapapeltijera.utils.system.exitGame
 
 
 @Composable
@@ -76,7 +77,7 @@ fun SettingScreen(
         // Título principal
         TituloPrincipal(stringResource(R.string.settings_title))
 
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(12.dp))
 
         // Reset
         NeonTextoBoton(stringResource(R.string.reset_button)) {
@@ -100,12 +101,12 @@ fun SettingScreen(
 
         Parrafo(stringResource(R.string.rescue_description))
 
-        Spacer(Modifier.height(32.dp))
+        Spacer(Modifier.height(24.dp))
 
         // Selección de idioma
-        TituloPrincipal(stringResource(R.string.language_section_title))
+        TituloSeccion(stringResource(R.string.language_section_title))
 
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(8.dp))
 
         Parrafo(stringResource(R.string.language_instruction))
 
@@ -139,16 +140,16 @@ fun SettingScreen(
             Text(stringResource(R.string.language_english))
         }
 
-        Spacer(Modifier.height(32.dp))
+        Spacer(Modifier.height(24.dp))
 
         // Música
-        TituloPrincipal(stringResource(R.string.music_section_title))
+        TituloSeccion(stringResource(R.string.music_section_title))
 
         Spacer(Modifier.height(8.dp))
 
         Parrafo(stringResource(R.string.music_section_description))
 
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(8.dp))
 
         val opcionesMusica = listOf(
             "fondo" to R.string.music_option_original,
@@ -162,19 +163,19 @@ fun SettingScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable { seleccionarMusica(key) }
-                    .padding(vertical = 4.dp),
+                    .padding(vertical = 1.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 RadioButton(
                     selected = selectedTrack == key,
                     onClick = { seleccionarMusica(key) }
                 )
-                Spacer(Modifier.width(8.dp))
+                Spacer(Modifier.width(4.dp))
                 Text(stringResource(labelRes), color = TextoBlanco)
             }
         }
 
-        Spacer(Modifier.height(40.dp))
+        Spacer(Modifier.height(12.dp))
 
         // Salir del juego
         NeonTextoBoton(stringResource(R.string.exit_game)) {
@@ -187,7 +188,7 @@ fun SettingScreen(
     if (showExitDialog) {
         ExitGameDialog(
             onConfirmExit = {
-                activity?.finish()
+                activity?.exitGame()
             },
             onDismiss = {
                 showExitDialog = false

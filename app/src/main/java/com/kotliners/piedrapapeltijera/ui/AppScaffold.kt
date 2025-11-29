@@ -42,6 +42,8 @@ import com.kotliners.piedrapapeltijera.ui.theme.AmarilloNeon
 import com.kotliners.piedrapapeltijera.ui.theme.FondoNegro
 import com.kotliners.piedrapapeltijera.ui.theme.TextoBlanco
 import com.kotliners.piedrapapeltijera.ui.theme.TextoNegro
+import com.kotliners.piedrapapeltijera.utils.system.exitGame
+
 
 @Composable
 fun MusicToggleButton() {
@@ -88,7 +90,7 @@ fun ExitGameButton() {
         com.kotliners.piedrapapeltijera.ui.components.ExitGameDialog(
             onConfirmExit = {
                 showDialog = false
-                activity?.finish()
+                activity?.exitGame()
                             },
             onDismiss = {
                 showDialog = false

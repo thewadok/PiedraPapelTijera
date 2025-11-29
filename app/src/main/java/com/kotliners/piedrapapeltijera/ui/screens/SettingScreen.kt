@@ -27,6 +27,7 @@ import com.kotliners.piedrapapeltijera.ui.theme.*
 import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
 import com.kotliners.piedrapapeltijera.utils.locale.LocaleManager
 import com.kotliners.piedrapapeltijera.utils.media.MusicService
+import com.kotliners.piedrapapeltijera.utils.system.exitGame
 
 
 @Composable
@@ -187,7 +188,7 @@ fun SettingScreen(
     if (showExitDialog) {
         ExitGameDialog(
             onConfirmExit = {
-                activity?.finish()
+                activity?.exitGame()
             },
             onDismiss = {
                 showExitDialog = false

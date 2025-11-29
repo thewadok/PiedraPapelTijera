@@ -77,9 +77,11 @@ Sin saldo, pero no sin suerte.
     <string name="invalid_bet">Apuesta inválida.</string>
     <string name="choose_move">Elige tu jugada:</string>
     <string name="you_won">¡Ganaste %1$d monedas!</string>
-    <string name="you_lost">Perdiste %1$d monedas.</string>
-    <string name="tie">Empate, sin cambios.</string>
+    <string name="you_lost">¡Perdiste %1$d monedas!</string>
+    <string name="tie">¡Empate, sin cambios!</string>
     <string name="current_balance">Saldo actual: %1$d</string>
+    <string name="wait_for_result">Esperando resultado&#8230;</string>
+    Y en strings.xml de inglés:
 
     <string name="move_rock">PIEDRA</string>
     <string name="move_paper">PAPEL</string>

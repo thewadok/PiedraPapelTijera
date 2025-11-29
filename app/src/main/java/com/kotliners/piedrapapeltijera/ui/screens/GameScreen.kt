@@ -42,7 +42,11 @@ import com.kotliners.piedrapapeltijera.utils.media.rememberCaptureCurrentView
 import kotlinx.coroutines.launch
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
-
+import androidx.compose.animation.Crossfade
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.text.font.FontWeight
+import com.kotliners.piedrapapeltijera.ui.theme.AzulNeon
+import com.kotliners.piedrapapeltijera.ui.theme.RosaNeon
 
 @Composable
 fun GameScreen(viewModel: MainViewModel = viewModel()) {
@@ -54,6 +58,9 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
     var betAmount by remember { mutableIntStateOf(10) }
     var message by remember { mutableStateOf("") }
     var showVictoryDialog by remember { mutableStateOf(false) }
+
+    // Estado para bloquear nuevos turnos
+    var isRoundInProgress by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
     val saldo = viewModel.monedas.observeAsState(0).value
@@ -78,6 +85,10 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
     fun jugarCon(mov: Move, location: Location?) {
         if (betAmount !in 1..saldo) {
             message = context.getString(R.string.invalid_bet)
+
+            // Desbloqueamos porque no se ha jugado realmente
+            isRoundInProgress = false
+            pendingMove = null
             return
         }
 
@@ -85,72 +96,86 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
         val (r, c) = GameLogic.play(mov)
         val durationMs = (System.currentTimeMillis() - startTime).coerceAtLeast(100)
 
-        result = r
-        computerMove = c
-        userMove = mov
+        // Lanzamos corrutina para aplicar el resultado y desbloquear después de 3s
+        coroutineScope.launch {
+            kotlinx.coroutines.delay(2000)
 
-        when (r) {
-            GameResult.GANAS -> {
-                viewModel.cambiarMonedas(+betAmount)
-                viewModel.registrarPartida(
-                    mov, c, r, betAmount,
-                    location?.latitude,
-                    location?.longitude
-                )
-                message = context.getString(R.string.you_won, betAmount)
+            result = r
+            computerMove = c
+            userMove = mov
 
-                SoundEffects.playWin()
+            when (r) {
+                GameResult.GANAS -> {
+                    viewModel.cambiarMonedas(+betAmount)
+                    viewModel.registrarPartida(
+                        mov, c, r, betAmount,
+                        location?.latitude,
+                        location?.longitude
+                    )
+                    message = context.getString(R.string.you_won, betAmount)
 
-                // Mostramos notificación de victoria con tiempo real
-                VictoryNotification.show(context, durationMs)
+                    SoundEffects.playWin()
 
-                // Mostramos dialogo con opcion de guardar la captura de pantalla
-                showVictoryDialog = true
+                    // Mostramos notificación de victoria con tiempo real
+                    VictoryNotification.show(context, durationMs)
 
+                    // Mostramos dialogo con opcion de guardar la captura de pantalla
+                    showVictoryDialog = true
+
+                }
+
+                GameResult.PIERDES -> {
+                    viewModel.cambiarMonedas(-betAmount)
+                    viewModel.registrarPartida(
+                        mov, c, r, betAmount,
+                        location?.latitude,
+                        location?.longitude
+                    )
+                    message = context.getString(R.string.you_lost, betAmount)
+
+                    SoundEffects.playLose()
+                }
+
+                GameResult.EMPATE -> {
+                    viewModel.registrarPartida(
+                        mov, c, r, betAmount,
+                        location?.latitude,
+                        location?.longitude
+                    )
+                    message = context.getString(R.string.tie)
+                }
             }
-
-            GameResult.PIERDES -> {
-                viewModel.cambiarMonedas(-betAmount)
-                viewModel.registrarPartida(
-                    mov, c, r, betAmount,
-                    location?.latitude,
-                    location?.longitude
-                )
-                message = context.getString(R.string.you_lost, betAmount)
-
-                SoundEffects.playLose()
-            }
-
-            GameResult.EMPATE -> {
-                viewModel.registrarPartida(
-                    mov, c, r, betAmount,
-                    location?.latitude,
-                    location?.longitude
-                )
-                message = context.getString(R.string.tie)
-            }
+            isRoundInProgress = false
+            pendingMove = null
         }
     }
 
     // Solicitud de permisos de ubicación.
     val requestPermissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
+
     ) { isGranted: Boolean ->
         coroutineScope.launch {
             val loc: Location? = if (isGranted) {
                 // Si da permiso, intentamos obtener la ubicación
                 locationManager.getCurrentLocation()
             } else {
+
                 // Si no da permiso, seguimos sin ubicación
                 null
             }
-
             // Siempre jugamos, con o sin ubicación
             pendingMove?.let { jugarCon(it, loc) }
         }
     }
 
     fun iniciarJuego(mov: Move) {
+
+        // Si ya hay una jugada en progreso, no permitimos más
+        if (isRoundInProgress) return
+
+        // Marcamos que empieza una jugada
+        isRoundInProgress = true
         pendingMove = mov
 
         val hasPermission = ContextCompat.checkSelfPermission(
@@ -196,13 +221,14 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
             Spacer(Modifier.height(24.dp))
 
             Column(
-                modifier = Modifier.padding(horizontal = 24.dp),
+                modifier = Modifier.padding(horizontal = 8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(20.dp)
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Text(
                     text = stringResource(R.string.bet_your_coins),
                     style = MaterialTheme.typography.headlineSmall,
+                    fontSize = 26.sp,
                     color = TextoBlanco
                 )
 
@@ -225,6 +251,7 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                     Text(
                         "$betAmount ${stringResource(R.string.coins)}",
                         style = MaterialTheme.typography.titleLarge,
+                        fontSize = 26.sp,
                         color = AmarilloNeon
                     )
 
@@ -240,17 +267,36 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                     }
                 }
 
-                Text(
-                    stringResource(R.string.choose_move),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = TextoBlanco
-                )
+                // Texto con animación fade: elegir jugada / esperando resultado
+                Crossfade(targetState = isRoundInProgress, label = "move_text_fade") { blocked ->
+                    if (blocked) {
+                        Text(
+                            text = stringResource(R.string.wait_for_result),
+                            style = MaterialTheme.typography.headlineSmall,
+                            fontSize = 26.sp,
+                            color = Color.Gray
+                        )
+                    } else {
+                        Text(
+                            stringResource(R.string.choose_move),
+                            style = MaterialTheme.typography.headlineSmall,
+                            fontSize = 26.sp,
+                            color = TextoBlanco
+                        )
+                    }
+                }
+
+                Spacer(Modifier.height(12.dp))
+
+                val buttonsAlpha = if (isRoundInProgress) 0.4f else 1f
 
                 // Botones: Piedra, Papel, Tijera
+
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 20.dp),
+                        .padding(horizontal = 20.dp)
+                        .alpha(buttonsAlpha),
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -260,6 +306,7 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                             SoundEffects.playClick()
                             iniciarJuego(Move.PIEDRA)
                         },
+                        enabled = !isRoundInProgress,
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                         contentPadding = PaddingValues(0.dp),
                         elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
@@ -277,6 +324,7 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                             SoundEffects.playClick()
                             iniciarJuego(Move.PAPEL)
                         },
+                        enabled = !isRoundInProgress,
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                         contentPadding = PaddingValues(0.dp),
                         elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
@@ -294,6 +342,7 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                             SoundEffects.playClick()
                             iniciarJuego(Move.TIJERA)
                         },
+                        enabled = !isRoundInProgress,
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                         contentPadding = PaddingValues(0.dp),
                         elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
@@ -310,7 +359,7 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
 
                 // Resultado
                 if (result != null) {
-                    Spacer(Modifier.height(16.dp))
+                    Spacer(Modifier.height(10.dp))
 
                     val userMoveText = moveLabel(userMove)
                     val computerMoveText = moveLabel(computerMove)
@@ -321,14 +370,27 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                             userMoveText,
                             computerMoveText
                         ),
-                        color = TextoBlanco
+                        color = AzulNeon,
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(bottom = 4.dp)
                     )
 
-                    Text(message, color = TextoBlanco)
+                    Text(
+                        message,
+                        color = AmarilloNeon,
+                        fontSize = 22.sp,
+                        modifier = Modifier.padding(bottom = 6.dp)
+                        )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
                     Text(
                         text = stringResource(R.string.current_balance, saldo),
-                        style = MaterialTheme.typography.titleLarge,
-                        color = TextoBlanco
+                        fontSize = 30.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = RosaNeon
                     )
                 }
 

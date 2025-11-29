@@ -77,9 +77,10 @@ No balance, but not out of luck.
     <string name="invalid_bet">Invalid bet.</string>
     <string name="choose_move">Choose your move:</string>
     <string name="you_won">You won %1$d coins!</string>
-    <string name="you_lost">You lost %1$d coins.</string>
-    <string name="tie">Tie, no changes.</string>
+    <string name="you_lost">You lost %1$d coins!</string>
+    <string name="tie">Tie, no changes!</string>
     <string name="current_balance">Current balance: %1$d</string>
+    <string name="wait_for_result">Waiting for result&#8230;</string>
 
     <string name="move_rock">ROCK</string>
     <string name="move_paper">PAPER</string>

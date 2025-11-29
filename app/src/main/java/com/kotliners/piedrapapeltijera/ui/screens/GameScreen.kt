@@ -371,7 +371,7 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                             computerMoveText
                         ),
                         color = AzulNeon,
-                        fontSize = 22.sp,
+                        fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(bottom = 4.dp)
                     )

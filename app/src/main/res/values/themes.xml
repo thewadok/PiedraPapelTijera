@@ -1,0 +1,11 @@
+<resources>
+
+    <!-- Tema de tu aplicación -->
+    <style name="Theme.PiedraPapelTijera" parent="Theme.Material3.Dark.NoActionBar">
+
+        <!-- Fondo de la ventana (Android < 12) -->
+        <item name="android:windowBackground">@color/black</item>
+
+    </style>
+
+</resources>

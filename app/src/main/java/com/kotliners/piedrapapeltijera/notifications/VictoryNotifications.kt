@@ -14,16 +14,14 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.kotliners.piedrapapeltijera.MainActivity
 import com.kotliners.piedrapapeltijera.R
+import java.util.Locale
 
 object VictoryNotification {
 
     private const val CHANNEL_ID = "victory_channel"
-    private const val CHANNEL_NAME = "Victorias"
-    private const val CHANNEL_DESC = "Notificaciones al ganar partidas"
     private const val NOTIFICATION_ID = 1001
 
     // Muestramos una notificación de victoria con logo grande.
-
     fun show(context: Context, durationMs: Long) {
         // Comprobamos permisos
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -33,11 +31,19 @@ object VictoryNotification {
             if (!granted) return
         }
 
+        // Creamos el canal si hace falta
         createChannel(context)
 
         // Formateamos tiempo mínimo de 0.1 segundos
         val seconds = if (durationMs < 100) 0.1 else durationMs / 1000.0
-        val formattedTime = String.format("%.1f segundos", seconds)
+
+        // Texto de la notificación según idioma
+        val notificationText = context.getString(
+            R.string.notif_victory_text,
+            seconds
+        )
+
+        val formattedTime = String.format(Locale.getDefault(), "%.1f", seconds)
 
         // Comportamiento al tocar la notificación
         val intent = Intent(context, MainActivity::class.java).apply {
@@ -57,10 +63,10 @@ object VictoryNotification {
 
         // Construcción de la notificación
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.mipmap.ic_launcher) // 👈 usa el icono de app por defecto
+            .setSmallIcon(R.mipmap.ic_launcher)
             .setLargeIcon(logoBitmap)
-            .setContentTitle("🏆 ¡Victoria!")
-            .setContentText("Resolviste la partida en $formattedTime ⏱")
+            .setContentTitle(context.getString(R.string.notif_victory_title))
+            .setContentText(notificationText)
             .setStyle(
                 NotificationCompat.BigPictureStyle()
                     .bigPicture(logoBitmap)
@@ -74,7 +80,7 @@ object VictoryNotification {
         try {
             NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notification)
         } catch (_: SecurityException) {
-            // Evitamos crash si no hay permiso
+            // Ignoramos si no hay permiso
         }
     }
 
@@ -82,10 +88,10 @@ object VictoryNotification {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 CHANNEL_ID,
-                CHANNEL_NAME,
+                context.getString(R.string.notif_victory_channel_name),
                 NotificationManager.IMPORTANCE_HIGH
             ).apply {
-                description = CHANNEL_DESC
+                description = context.getString(R.string.notif_victory_channel_desc)
             }
 
             val manager = context.getSystemService(NotificationManager::class.java)

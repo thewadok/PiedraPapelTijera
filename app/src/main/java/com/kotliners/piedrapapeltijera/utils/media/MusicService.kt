@@ -31,6 +31,9 @@ class MusicService : Service() {
     // MediaPlayer va ha  reproducir la música de fondo
     private var mediaPlayer: MediaPlayer? = null
 
+    // Guardamos qué pista está cargada ahora mismo
+    private var currentTrackResId: Int? = null
+
     // Scope para poder ejecutar las cosas en segundo plano (cumpliendo con la concurrencia)
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
@@ -44,15 +47,13 @@ class MusicService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        isRunning = true
+
         //Inicializo el AudioManager para el sistema de audio
         audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
-        // Inicializamos el MediaPlayer en segundo plano
-        serviceScope.launch {
-            initPlayer()
-        }
+
     }
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        isRunning = true
         // Cuando se arranca el servicio, empezamos la música
         playMusic()
         // Indicamos al sistema que intente mantener el servicio funcionando
@@ -62,14 +63,17 @@ class MusicService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         isRunning = false
-        // Liberamos recursos al destruir el servicio
+        // Nos aseguramos de liberar bien el servicio para corregir el error de que siga sonando
+        mediaPlayer?.stop()
         mediaPlayer?.release()
         mediaPlayer = null
+        currentTrackResId = null
+
         abandonAudioFocus()
         serviceScope.cancel()
     }
 
-    // Leemos de preferencias qué pista quiere el usuario
+    // Leemos de settings qué pista quiere el usuario
     private fun getSelectedTrackResId(): Int? {
         val prefs = getSharedPreferences("settings", MODE_PRIVATE)
         val trackKey = prefs.getString("music_track", "fondo")
@@ -84,19 +88,18 @@ class MusicService : Service() {
     }
 
     // Inicializo el MediaPlayer con la música de fondo que tengo en raw
-    private fun initPlayer() {
+    private fun initPlayer(resId: Int) {
         // Por si acaso ya existía un MediaPlayer, lo liberamos
+        mediaPlayer?.stop()
         mediaPlayer?.release()
         mediaPlayer = null
 
-        val resId = getSelectedTrackResId() ?: return
-
         // Si el usuario ha elegido "silenciar", no creamos MediaPlayer
-
         mediaPlayer = MediaPlayer.create(this, resId).apply {
             isLooping = true   // que suene en bucle
             setVolume(1f, 1f)
         }
+        currentTrackResId = resId
     }
 
     // Empiezo a reproducir la musica (si el MediaPlayer está listo)
@@ -104,24 +107,29 @@ class MusicService : Service() {
         serviceScope.launch {
             val resId = getSelectedTrackResId()
 
-            // Si está en modo silencio, no hacemos nada
+            // Caso "mute": paramos y destruimos el servicio
             if (resId == null) {
-                mediaPlayer?.pause()
-                mediaPlayer?.seekTo(0)
+                mediaPlayer?.stop()
+                mediaPlayer?.release()
                 mediaPlayer = null
+                currentTrackResId = null
                 abandonAudioFocus()
+                isRunning =false
+                stopSelf()
                 return@launch
             }
-
-            if (mediaPlayer == null) {
-                initPlayer()
-            }
-            // Pido el foco de audio al sistema para llamadas, apps..
-            if (requestAudioFocus()) {
-                if (mediaPlayer?.isPlaying == false) {
-                    mediaPlayer?.start()
+            // Si la pista ha cambiado o no hay player, recreamos el MediaPlayer
+            if (mediaPlayer == null || currentTrackResId != resId) {
+                if (!requestAudioFocus()) {
+                    return@launch
                 }
+                initPlayer(resId)
             }
+
+            if (mediaPlayer?.isPlaying != true) {
+                mediaPlayer?.start()
+            }
+
         }
     }
 
@@ -142,12 +150,11 @@ class MusicService : Service() {
         return mediaPlayer?.isPlaying == true
     }
 
-    // Uso de las funciones que piden de focus
-    // Listener para poder reaccionar a las apps que necesitan usar audio como alarmas, llamadas... de audio
+    // Listener para los cambios de foco de audio (llamadas, alarmas, YouTube, etc.)
     private val audioFocusChangeListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
         when (focusChange) {
             AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
-                // Perdemos el foco un momento (por ejemplo, notificación)
+                // Pérdida temporal (llamada, notificación, etc.)
                 if (mediaPlayer?.isPlaying == true) {
                     shouldResumeAfterFocusGain = true
                     mediaPlayer?.pause()
@@ -155,8 +162,8 @@ class MusicService : Service() {
             }
 
             AudioManager.AUDIOFOCUS_LOSS -> {
-                // Otra app se queda con el audio.
-                // Nosotros paramos, pero queremos reanudar si luego recuperamos el foco.
+                // Otra app se queda con el audio (YouTube, Spotify, etc.)
+                // Pausamos y dejamos marcado que, si recuperamos el foco, reanudemos
                 if (mediaPlayer?.isPlaying == true) {
                     shouldResumeAfterFocusGain = true
                     mediaPlayer?.pause()

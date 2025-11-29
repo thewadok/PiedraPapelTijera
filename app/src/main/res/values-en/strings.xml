@@ -37,28 +37,28 @@
     <string name="bets_title">Bets</string>
     <string name="bets_description">
 • Minimum bet: 10 coins
-• Maximum bet: your available balance
-• You cannot bet more than you have
+\n• Maximum bet: your available balance
+\n• You cannot bet more than you have
 </string>
 
     <string name="rescue_title">Rescue</string>
     <string name="rescue_info">
 No balance, but not out of luck.
 
-Go to Settings, tap Rescue and buy 50 extra coins to continue playing.
+\nGo to Settings, tap Rescue and buy 50 extra coins to continue playing.
 </string>
 
     <string name="how_to_play_title">How to Play</string>
     <string name="how_to_play_steps">
 1) Choose your bet: use + and − to adjust the amount.
 
-2) Select your move: Rock, Paper, or Scissors.
+\n2) Select your move: Rock, Paper, or Scissors.
 
-3) Tap the icon to play.
+\n3) Tap the icon to play.
 
-4) The bank randomly selects its move.
+\n4) The bank randomly selects its move.
 
-5) Check the result and your updated balance instantly.
+\n5) Check the result and your updated balance instantly.
 </string>
 
     <string name="history_title">History</string>
@@ -128,6 +128,16 @@ Go to Settings, tap Rescue and buy 50 extra coins to continue playing.
     <string name="notif_victory_channel_desc">Notifications when you win a game</string>
     <string name="notif_victory_title">Victory!</string>
     <string name="notif_victory_text">You finished the game in %1$.1f seconds</string>
+
+    <!--Permissions-->
+    <string name="permissions_section_title">Permissions</string>
+    <string name="permissions_section_description">
+    Manage the permissions used by the app.
+    </string>
+    <string name="permission_images">Screenshots &amp; images</string>
+    <string name="permission_calendar">Calendar</string>
+    <string name="permission_location">Location</string>
+    <string name="permission_notifications">Notifications</string>
 
     <!-- Exit game -->
     <string name="exit_game">Exit game</string>

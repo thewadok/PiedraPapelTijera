@@ -81,7 +81,6 @@ Sin saldo, pero no sin suerte.
     <string name="tie">¡Empate, sin cambios!</string>
     <string name="current_balance">Saldo actual: %1$d</string>
     <string name="wait_for_result">Esperando resultado&#8230;</string>
-    Y en strings.xml de inglés:
 
     <string name="move_rock">PIEDRA</string>
     <string name="move_paper">PAPEL</string>

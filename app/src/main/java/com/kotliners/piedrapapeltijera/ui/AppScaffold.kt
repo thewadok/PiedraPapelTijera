@@ -71,10 +71,19 @@ fun MusicToggleButton() {
             R.drawable.altavoz_off   // musica parada
         }
 
+           /* isOn = !isOn
+            // Al pulsar cambiamos el estado de la musica
+            activity?.toggleMusic()
+
+        }
+    ) {
+        // Elegimos qué imagen mostrar según si está encendido o apagado
+        val iconRes = if (isOn) R.drawable.altavoz_on else R.drawable.altavoz_off
+*/
         Icon(
             painter = painterResource(id = iconRes),
             contentDescription = if (isOn) "Desactivar música" else "Activar música",
-            tint = TextoBlanco // para que se vea bien en la barra
+            tint = TextoBlanco
         )
     }
 }

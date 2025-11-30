@@ -164,6 +164,7 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                 // Si no da permiso, seguimos sin ubicación
                 null
             }
+
             // Siempre jugamos, con o sin ubicación
             pendingMove?.let { jugarCon(it, loc) }
         }
@@ -231,7 +232,6 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                     fontSize = 26.sp,
                     color = TextoBlanco
                 )
-
                 // Selector Apuesta
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -359,6 +359,7 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
 
                 // Resultado
                 if (result != null) {
+
                     Spacer(Modifier.height(10.dp))
 
                     val userMoveText = moveLabel(userMove)

@@ -59,9 +59,14 @@ fun SettingScreen(
             putString("music_track", trackKey)
         }
 
-        (activity as? MainActivity)?.let {
-            it.stopService(Intent(it, MusicService::class.java))
-            it.startService(Intent(it, MusicService::class.java))
+        val mainActivity = activity as? MainActivity ?: return
+
+        // Siempre paramos el servicio primero para evitar cualquier solapamiento extraño
+        mainActivity.stopService(Intent(mainActivity, MusicService::class.java))
+
+        // Si no es "mute", arrancamos de nuevo el servicio con la pista nueva
+        if (trackKey != "mute") {
+            mainActivity.startService(Intent(mainActivity, MusicService::class.java))
         }
     }
 

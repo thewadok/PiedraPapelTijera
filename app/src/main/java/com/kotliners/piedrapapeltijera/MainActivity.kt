@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
     // Permisos de calendario
     private val requestCalendarPerms = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
-    ) { /* No necesitamos manejar nada aquí */ }
+    ) { }
 
     // Control de música
     fun toggleMusic() {
@@ -48,7 +48,6 @@ class MainActivity : ComponentActivity() {
     }
 
     fun isMusicRunning() = MusicService.isRunning
-
 
     // onCreate
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -29,7 +29,6 @@ import com.kotliners.piedrapapeltijera.utils.locale.LocaleManager
 import com.kotliners.piedrapapeltijera.utils.media.MusicService
 import com.kotliners.piedrapapeltijera.utils.system.exitGame
 
-
 @Composable
 fun SettingScreen(
     nav: NavHostController,
@@ -167,13 +166,17 @@ fun SettingScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { seleccionarMusica(key) }
+                    .clickable {
+                        seleccionarMusica(key)
+                    }
                     .padding(vertical = 1.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 RadioButton(
                     selected = selectedTrack == key,
-                    onClick = { seleccionarMusica(key) }
+                    onClick = {
+                        seleccionarMusica(key)
+                    }
                 )
                 Spacer(Modifier.width(4.dp))
                 Text(stringResource(labelRes), color = TextoBlanco)

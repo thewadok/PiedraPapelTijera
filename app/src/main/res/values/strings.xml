@@ -114,6 +114,7 @@ Sin saldo, pero no sin suerte.
     <string name="music_option_alt2">Música alternativa 2</string>
     <string name="music_option_mute">Silenciar música</string>
 
+
     <!-- Geolocalización -->
     <string name="geo_location">Geolocalización: Lat %1$.4f, Lon %2$.4f</string>
     <string name="geo_not_available">No se han obtenido parámetros de longitud ni latitud</string>

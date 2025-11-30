@@ -80,5 +80,8 @@ object SoundEffects {
         soundPool = null
         loaded = false
         soundsLoaded = 0
+        clickId = 0
+        winId = 0
+        loseId = 0
     }
 }

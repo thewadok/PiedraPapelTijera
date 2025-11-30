@@ -4,7 +4,6 @@ import android.app.Service
 import android.content.Intent
 import android.media.AudioManager
 import android.media.MediaPlayer
-import android.os.Binder
 import android.os.IBinder
 import com.kotliners.piedrapapeltijera.R
 import kotlinx.coroutines.CoroutineScope
@@ -15,18 +14,10 @@ import kotlinx.coroutines.cancel
 
 @Suppress("DEPRECATION")
 class MusicService : Service() {
-
     companion object {
         @Volatile
         var isRunning: Boolean = false
     }
-
-    // Con esta funcion podremos acceder al servicio desde la Activity
-    inner class LocalBinder : Binder() {
-        fun getService(): MusicService = this@MusicService
-    }
-
-    private val binder = LocalBinder()
 
     // MediaPlayer va ha  reproducir la música de fondo
     private var mediaPlayer: MediaPlayer? = null
@@ -43,19 +34,13 @@ class MusicService : Service() {
     //Para saber si debemos reanudar al recuperar el foco
     private var shouldResumeAfterFocusGain = false
 
-    override fun onBind(intent: Intent?): IBinder = binder
+    override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onCreate() {
         super.onCreate()
 
         //Inicializo el AudioManager para el sistema de audio
         audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
-
-        // Inicializamos el MediaPlayer en segundo plano
-        serviceScope.launch {
-            val resId = getSelectedTrackResId() ?: return@launch
-            initPlayer(resId)
-        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -68,6 +53,11 @@ class MusicService : Service() {
         return START_STICKY
     }
 
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        pauseMusic()
+        super.onTaskRemoved(rootIntent)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         isRunning = false
@@ -77,7 +67,6 @@ class MusicService : Service() {
         mediaPlayer?.release()
         mediaPlayer = null
         currentTrackResId = null
-
         abandonAudioFocus()
         serviceScope.cancel()
     }
@@ -91,8 +80,8 @@ class MusicService : Service() {
             "fondo"  -> R.raw.fondo
             "fondo2" -> R.raw.fondo2
             "fondo3" -> R.raw.fondo3
-            "mute"   -> null            // Silenciado: sin música
-            else     -> R.raw.fondo     // Por si acaso
+            "mute"   -> null
+            else     -> R.raw.fondo
         }
     }
 
@@ -117,18 +106,11 @@ class MusicService : Service() {
     fun playMusic() {
         serviceScope.launch {
             val resId = getSelectedTrackResId()
-
-            // Caso "mute": paramos y destruimos el servicio
             if (resId == null) {
-                mediaPlayer?.stop()
-                mediaPlayer?.release()
-                mediaPlayer = null
-                currentTrackResId = null
-                abandonAudioFocus()
-                isRunning =false
-                stopSelf()
+                stopMusic()
                 return@launch
             }
+
             // Si la pista ha cambiado o no hay player, recreamos el MediaPlayer
             if (mediaPlayer == null || currentTrackResId != resId) {
                 if (!requestAudioFocus()) {
@@ -142,17 +124,23 @@ class MusicService : Service() {
             }
         }
     }
-
-
-    //Paro la musica si esta sonando
     fun pauseMusic() {
         serviceScope.launch {
             if (mediaPlayer?.isPlaying == true) {
                 mediaPlayer?.pause()
+                abandonAudioFocus()
             }
-            // Si la paramos desde la app, soltamos el foco de audio
-            abandonAudioFocus()
         }
+    }
+
+    private fun stopMusic() {
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
+        currentTrackResId = null
+        abandonAudioFocus()
+        isRunning = false
+        stopSelf()
     }
 
     //Devuelve true si la musica esta sonando
@@ -162,35 +150,23 @@ class MusicService : Service() {
 
     // Listener para los cambios de foco de audio (llamadas, alarmas, YouTube, etc.)
     private val audioFocusChangeListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
-        when (focusChange) {
-            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
-                // Pérdida temporal (llamada, notificación, etc.)
-                if (mediaPlayer?.isPlaying == true) {
-                    shouldResumeAfterFocusGain = true
-                    mediaPlayer?.pause()
+        serviceScope.launch {
+            when (focusChange) {
+                AudioManager.AUDIOFOCUS_LOSS_TRANSIENT, AudioManager.AUDIOFOCUS_LOSS -> {
+                    if (mediaPlayer?.isPlaying == true) {
+                        shouldResumeAfterFocusGain = true
+                        mediaPlayer?.pause()
+                    }
                 }
-            }
-
-            AudioManager.AUDIOFOCUS_LOSS -> {
-                // Otra app se queda con el audio (YouTube, Spotify, etc.)
-                // Pausamos y dejamos marcado que, si recuperamos el foco, reanudemos
-                if (mediaPlayer?.isPlaying == true) {
-                    shouldResumeAfterFocusGain = true
-                    mediaPlayer?.pause()
+                AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
+                    mediaPlayer?.setVolume(0.2f, 0.2f)
                 }
-            }
-
-            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
-                // Podemos "bajar volumen" en vez de parar
-                mediaPlayer?.setVolume(0.2f, 0.2f)
-            }
-
-            AudioManager.AUDIOFOCUS_GAIN -> {
-                // Recuperamos el foco: subimos volumen y reanudamos si toca
-                mediaPlayer?.setVolume(1f, 1f)
-                if (shouldResumeAfterFocusGain) {
-                    shouldResumeAfterFocusGain = false
-                    mediaPlayer?.start()
+                AudioManager.AUDIOFOCUS_GAIN -> {
+                    mediaPlayer?.setVolume(1f, 1f)
+                    if (shouldResumeAfterFocusGain) {
+                        shouldResumeAfterFocusGain = false
+                        mediaPlayer?.start()
+                    }
                 }
             }
         }

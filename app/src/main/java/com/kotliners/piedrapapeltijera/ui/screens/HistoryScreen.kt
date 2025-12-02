@@ -12,12 +12,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.kotliners.piedrapapeltijera.R
 import com.kotliners.piedrapapeltijera.data.local.entity.Partida
 import com.kotliners.piedrapapeltijera.game.GameResult
+import com.kotliners.piedrapapeltijera.utils.locale.moveLabel
 import com.kotliners.piedrapapeltijera.ui.theme.FondoNegro
 import com.kotliners.piedrapapeltijera.ui.theme.TextoBlanco
 import com.kotliners.piedrapapeltijera.ui.theme.AmarilloNeon
@@ -39,8 +42,8 @@ fun HistoryScreen(
             .background(FondoNegro)
             .padding(16.dp)
     ) {
-
-       TituloPrincipal("Historial de partidas")
+        // Título
+        TituloPrincipal(stringResource(R.string.history_title))
 
         Spacer(Modifier.height(8.dp))
 
@@ -50,7 +53,7 @@ fun HistoryScreen(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    "Todavía no has jugado ",
+                    text = stringResource(R.string.no_games_yet),
                     color = TextoBlanco,
                     fontSize = 18.sp
                 )
@@ -69,6 +72,9 @@ fun HistoryScreen(
 
 @Composable
 private fun PartidaCard(p: Partida) {
+
+    val jugadaJugadorTxt = moveLabel(p.jugadaJugador)
+    val jugadaCpuTxt = moveLabel(p.jugadaCpu)
     val fechaFormateada = SimpleDateFormat(
         "dd/MM/yyyy HH:mm",
         Locale.getDefault()
@@ -93,35 +99,71 @@ private fun PartidaCard(p: Partida) {
             Spacer(Modifier.height(4.dp))
 
             Text(
-                text = "Tú: ${p.jugadaJugador}  |  Banca: ${p.jugadaCpu}",
+                text = stringResource(
+                    R.string.player_vs_bank_history,
+                    jugadaJugadorTxt,
+                    jugadaCpuTxt
+                ),
                 color = TextoBlanco,
                 fontSize = 16.sp
             )
 
             Text(
-                text = "Resultado: ${resultadoTexto(p.resultado)}",
+                text = stringResource(
+                    R.string.result_label,
+                    resultadoTexto(p.resultado)
+                ),
                 color = TextoBlanco,
                 fontSize = 16.sp
             )
 
             Text(
-                text = "Apuesta: ${p.apuesta} monedas",
+                text = stringResource(
+                    R.string.bet_amount,
+                    p.apuesta
+                ),
                 color = TextoBlanco,
                 fontSize = 15.sp
             )
 
             val cambio = if (p.cambioMonedas >= 0) "+${p.cambioMonedas}" else "${p.cambioMonedas}"
             Text(
-                text = "Cambio saldo: $cambio",
+                text = stringResource(
+                    R.string.balance_change,
+                    cambio
+                ),
                 color = TextoBlanco,
                 fontSize = 15.sp
             )
+
+            if (p.latitud != null && p.longitud != null) {
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    text = stringResource(
+                        R.string.geo_location,
+                        p.latitud,
+                        p.longitud
+                    ),
+                    color = TextoBlanco,
+                    fontSize = 15.sp
+                )
+            } else {
+                Text(
+                    text = stringResource(R.string.geo_not_available),
+                    color = TextoBlanco,
+                    fontSize = 14.sp
+                )
+            }
         }
     }
 }
 
-private fun resultadoTexto(r: GameResult): String = when (r) {
-    GameResult.GANAS -> "GANASTE "
-    GameResult.PIERDES -> "PERDISTE "
-    GameResult.EMPATE -> "EMPATE "
+
+@Composable
+private fun resultadoTexto(r: GameResult): String {
+    return when (r) {
+        GameResult.GANAS -> stringResource(R.string.result_win)
+        GameResult.PIERDES -> stringResource(R.string.result_lose)
+        GameResult.EMPATE -> stringResource(R.string.result_draw)
+    }
 }

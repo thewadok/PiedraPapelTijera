@@ -10,7 +10,7 @@ import com.kotliners.piedrapapeltijera.data.local.entity.Partida
 
 @Database(
     entities = [Jugador::class, Partida::class],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

@@ -1,71 +1,97 @@
 package com.kotliners.piedrapapeltijera
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.SystemBarStyle
-import androidx.activity.viewModels
-import com.kotliners.piedrapapeltijera.ui.theme.*
-import com.kotliners.piedrapapeltijera.ui.AppRoot
-import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
 import androidx.activity.result.contract.ActivityResultContracts
-import android.content.Intent
+import com.kotliners.piedrapapeltijera.ui.AppRoot
+import com.kotliners.piedrapapeltijera.ui.theme.FondoNegro
+import com.kotliners.piedrapapeltijera.utils.locale.LocaleManager
+import com.kotliners.piedrapapeltijera.utils.notifications.NotificationsPermission
 import com.kotliners.piedrapapeltijera.utils.media.MusicService
 import com.kotliners.piedrapapeltijera.utils.media.SoundEffects
 
-//Activity principal desde donde arrancamos
+/**
+ * Activity principal combinada:
+ Localización aplicada al contexto base
+ Música y efectos del equipo
+ Permisos de calendario
+ Permiso de notificaciones
+ Duración de la victoria
+ */
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: MainViewModel by viewModels()
 
-    // Pedimos permisos de calendario
-    private val requestCalendarPerms = registerForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions()
-    ) { perms ->
-        val granted = perms[android.Manifest.permission.WRITE_CALENDAR] == true &&
-                perms[android.Manifest.permission.READ_CALENDAR] == true
+    // Localización antes de crear la actividad
+    override fun attachBaseContext(newBase: Context) {
+        val context = LocaleManager.applySavedLocale(newBase)
+        super.attachBaseContext(context)
     }
 
-    //Cambiamos el estado de la musica on/off usando service
+    // Permisos de calendario
+    private val requestCalendarPerms = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { }
+
+    // Control de música
     fun toggleMusic() {
         if (MusicService.isRunning) {
-            // Parar el servicio: se detiene la música
             stopService(Intent(this, MusicService::class.java))
         } else {
-            // Arrancar el servicio: empieza la música
             startService(Intent(this, MusicService::class.java))
         }
     }
 
-    //Nos va ha indicar si tenemos activada la musica
-    fun isMusicRunning(): Boolean {
-        return MusicService.isRunning
-    }
+    fun isMusicRunning() = MusicService.isRunning
 
-
+    // onCreate
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Solicitamos permisos al iniciar
+        // Pedir permisos del calendario
         requestCalendarPerms.launch(
             arrayOf(
                 android.Manifest.permission.READ_CALENDAR,
                 android.Manifest.permission.WRITE_CALENDAR
             )
         )
-        //Iniciamos la musica de fondo (Luego le pondre boton para poder apagarla durante la partida)
+
+        // Iniciar música y efectos
         startService(Intent(this, MusicService::class.java))
-        //Tambien iniciamos el resto de sonidos
         SoundEffects.init(applicationContext)
 
-        //Configuramos la barra de estado
+        // onfiguración visual
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.dark(FondoNegro.value.toInt()),
             navigationBarStyle = SystemBarStyle.dark(FondoNegro.value.toInt())
         )
+
+        // Cargar Compose
         setContent {
             AppRoot()
+        }
+
+        // Permiso de notificaciones
+        NotificationsPermission.requestIfNeeded(this)
+
+        // Procesar posible tiempo recibido desde una notificación
+        handleNotificationIntent()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        SoundEffects.release()
+    }
+
+    private fun handleNotificationIntent() {
+        val time = intent.getStringExtra("EXTRA_TIME")
+        if (!time.isNullOrEmpty()) {
+            Toast.makeText(this, "Tiempo de resolución: $time", Toast.LENGTH_LONG).show()
         }
     }
 }

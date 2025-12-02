@@ -47,12 +47,14 @@ class MainViewModel : ViewModel() {
 
         //Observamos en tiempo real el total de partidas jugadas
         historial.observarTotalPartidas()
+            .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(onNext = { partidas.value = it })
             .also { disposables.add(it) }
 
         //Observamos historial completo de partidas
         historial.observarHistorial()
+            .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onNext = { historialPartidas.value = it },
@@ -90,9 +92,11 @@ class MainViewModel : ViewModel() {
         movJugador: Move,
         movCpu: Move,
         resultado: GameResult,
-        apuesta: Int
+        apuesta: Int,
+        latitud: Double?,
+        longitud: Double?
     ) {
-        historial.registrarPartida(movJugador, movCpu, resultado, apuesta)
+        historial.registrarPartida(movJugador, movCpu, resultado, apuesta, latitud, longitud)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onComplete = { /* OK */ },
@@ -125,7 +129,10 @@ class MainViewModel : ViewModel() {
     Creamos la función onPlayerWin para gestionar lo que ocurre cuando el jugador gana una partida.
     Desde aquí llamamos a VictoryManager.
      */
-    fun onPlayerWin(context: Context, screenshot: Bitmap) {
+    fun onPlayerWin(
+        context: Context,
+                    screenshot: Bitmap
+    ) {
         viewModelScope.launch {
             victoryManager.handleVictory(context, screenshot)
         }

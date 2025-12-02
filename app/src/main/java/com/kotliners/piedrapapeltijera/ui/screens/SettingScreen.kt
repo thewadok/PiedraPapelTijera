@@ -1,5 +1,6 @@
 package com.kotliners.piedrapapeltijera.ui.screens
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.compose.foundation.background
@@ -7,34 +8,27 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.RadioButton
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.content.edit
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.kotliners.piedrapapeltijera.R
 import com.kotliners.piedrapapeltijera.MainActivity
 import com.kotliners.piedrapapeltijera.navigation.Screen
 import com.kotliners.piedrapapeltijera.navigation.safeNavigate
-import com.kotliners.piedrapapeltijera.ui.components.Center
-import com.kotliners.piedrapapeltijera.ui.components.NeonTextoBoton
-import com.kotliners.piedrapapeltijera.ui.components.Parrafo
-import com.kotliners.piedrapapeltijera.ui.components.TituloPrincipal
-import com.kotliners.piedrapapeltijera.ui.theme.FondoNegro
-import com.kotliners.piedrapapeltijera.ui.theme.TextoBlanco
+import com.kotliners.piedrapapeltijera.ui.components.*
+import com.kotliners.piedrapapeltijera.ui.theme.*
 import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
+import com.kotliners.piedrapapeltijera.utils.locale.LocaleManager
 import com.kotliners.piedrapapeltijera.utils.media.MusicService
+import com.kotliners.piedrapapeltijera.utils.system.exitGame
 
-// Pantalla de Ajustes
 @Composable
 fun SettingScreen(
     nav: NavHostController,
@@ -42,30 +36,36 @@ fun SettingScreen(
 ) {
     val scroll = rememberScrollState()
     val context = LocalContext.current
-    val activity = context as? MainActivity
+    val activity = context as? Activity
 
-    // para el diálogo de salir del juego
+    // Idioma guardado
+    var selectedLang by remember { mutableStateOf(LocaleManager.getSavedLanguage(context)) }
+
+    // Diálogo salir del juego
     var showExitDialog by remember { mutableStateOf(false) }
 
-    // Preferencias donde guardamos que musica va a usar el juego
-    val prefs = remember {
-        context.getSharedPreferences("settings", Context.MODE_PRIVATE)
-    }
+    // Música
+    val prefs = remember { context.getSharedPreferences("settings", Context.MODE_PRIVATE) }
 
-    // Leemos la música guardada, por defecto es "fondo"
     var selectedTrack by remember {
         mutableStateOf(prefs.getString("music_track", "fondo") ?: "fondo")
     }
 
-    // Función para cambiar de música y reiniciar el servicio
     fun seleccionarMusica(trackKey: String) {
         selectedTrack = trackKey
-        prefs.edit().putString("music_track", trackKey).apply()
 
-        // Reiniciamos el MusicService para que cargue la nueva melodía
-        activity?.let {
-            it.stopService(Intent(it, MusicService::class.java))
-            it.startService(Intent(it, MusicService::class.java))
+        prefs.edit {
+            putString("music_track", trackKey)
+        }
+
+        val mainActivity = activity as? MainActivity ?: return
+
+        // Siempre paramos el servicio primero para evitar cualquier solapamiento extraño
+        mainActivity.stopService(Intent(mainActivity, MusicService::class.java))
+
+        // Si no es "mute", arrancamos de nuevo el servicio con la pista nueva
+        if (trackKey != "mute") {
+            mainActivity.startService(Intent(mainActivity, MusicService::class.java))
         }
     }
 
@@ -78,112 +78,128 @@ fun SettingScreen(
         horizontalAlignment = Alignment.Start
     ) {
 
-        TituloPrincipal("Ajustes de configuración")
+        // Título principal
+        TituloPrincipal(stringResource(R.string.settings_title))
 
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(12.dp))
 
-        // RESET
-        NeonTextoBoton("Reset") {
+        // Reset
+        NeonTextoBoton(stringResource(R.string.reset_button)) {
             viewModel.resetJuego()
             nav.safeNavigate(Screen.Game.route)
         }
 
         Spacer(Modifier.height(8.dp))
 
-        Parrafo(
-            "Toca Reset para restablecer tu estado al estado inicial."
-        )
+        Parrafo(stringResource(R.string.reset_description))
 
         Spacer(Modifier.height(24.dp))
 
-        // RESCATE
-        NeonTextoBoton("Rescate") {
+        // Rescate
+        NeonTextoBoton(stringResource(R.string.rescue_button)) {
             viewModel.rescate()
             nav.safeNavigate(Screen.Game.route)
         }
 
         Spacer(Modifier.height(8.dp))
 
-        Parrafo(
-            "Toca Rescate y compra 50 monedas extra para continuar."
-        )
+        Parrafo(stringResource(R.string.rescue_description))
 
         Spacer(Modifier.height(24.dp))
 
-        // AJUSTES DE MÚSICA
-        TituloPrincipal("Música de fondo")
+        // Selección de idioma
+        TituloSeccion(stringResource(R.string.language_section_title))
 
         Spacer(Modifier.height(8.dp))
 
-        Parrafo(
-            "Selecciona la melodía de fondo o silencia la música del juego durante la partida."
-        )
+        Parrafo(stringResource(R.string.language_instruction))
 
         Spacer(Modifier.height(12.dp))
 
-        // Lista de opciones de música disponibles
+        // Español
+        Button(
+            onClick = {
+                if (selectedLang != "es") {
+                    selectedLang = "es"
+                    LocaleManager.updateActivityLocale(activity!!, "es")
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(stringResource(R.string.language_spanish))
+        }
+
+        Spacer(Modifier.height(8.dp))
+
+        // Inglés
+        Button(
+            onClick = {
+                if (selectedLang != "en") {
+                    selectedLang = "en"
+                    LocaleManager.updateActivityLocale(activity!!, "en")
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(stringResource(R.string.language_english))
+        }
+
+        Spacer(Modifier.height(24.dp))
+
+        // Música
+        TituloSeccion(stringResource(R.string.music_section_title))
+
+        Spacer(Modifier.height(8.dp))
+
+        Parrafo(stringResource(R.string.music_section_description))
+
+        Spacer(Modifier.height(8.dp))
+
         val opcionesMusica = listOf(
-            "fondo"  to "Música original",
-            "fondo2" to "Música alternativa 1",
-            "fondo3" to "Música alternativa 2",
-            "mute"   to "Silenciar música de fondo"
+            "fondo" to R.string.music_option_original,
+            "fondo2" to R.string.music_option_alt1,
+            "fondo3" to R.string.music_option_alt2,
+            "mute" to R.string.music_option_mute
         )
 
-        opcionesMusica.forEach { (key, label) ->
+        opcionesMusica.forEach { (key, labelRes) ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        // Cuando se toca la fila, cambiamos la música
                         seleccionarMusica(key)
                     }
-                    .padding(vertical = 4.dp),
+                    .padding(vertical = 1.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 RadioButton(
-                    selected = (selectedTrack == key),
+                    selected = selectedTrack == key,
                     onClick = {
                         seleccionarMusica(key)
                     }
                 )
-                Spacer(Modifier.width(8.dp))
-                Text(
-                    text = label,
-                    color = TextoBlanco
-                )
+                Spacer(Modifier.width(4.dp))
+                Text(stringResource(labelRes), color = TextoBlanco)
             }
         }
 
-        Spacer(Modifier.height(24.dp))
+        Spacer(Modifier.height(12.dp))
 
-        // Botón para salir del juego desde ajustes
-        NeonTextoBoton("Salir del juego") {
+        // Salir del juego
+        NeonTextoBoton(stringResource(R.string.exit_game)) {
             showExitDialog = true
         }
 
         Spacer(Modifier.height(24.dp))
-
-        Center("Resto de ajustes en Producto 2")
     }
 
-    // Diálogo de confirmación para salir del juego
     if (showExitDialog) {
-        AlertDialog(
-            onDismissRequest = { showExitDialog = false },
-            title = { Text("Salir del juego") },
-            text = { Text("¿Seguro que quieres cerrar la aplicación?") },
-            confirmButton = {
-                TextButton(onClick = {
-                    showExitDialog = false
-                    activity?.finish()
-                }) {
-                    Text("Salir")
-                }
+        ExitGameDialog(
+            onConfirmExit = {
+                activity?.exitGame()
             },
-            dismissButton = {
-                TextButton(onClick = { showExitDialog = false }) {
-                    Text("Cancelar")
-                }
+            onDismiss = {
+                showExitDialog = false
             }
         )
     }

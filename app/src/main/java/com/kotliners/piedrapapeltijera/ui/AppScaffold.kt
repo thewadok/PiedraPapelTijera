@@ -6,13 +6,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material.icons.filled.HelpOutline
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
+import androidx.compose.material.icons.automirrored.filled.HelpOutline
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Leaderboard
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -21,7 +20,6 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -32,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.kotliners.piedrapapeltijera.MainActivity
@@ -43,6 +42,8 @@ import com.kotliners.piedrapapeltijera.ui.theme.AmarilloNeon
 import com.kotliners.piedrapapeltijera.ui.theme.FondoNegro
 import com.kotliners.piedrapapeltijera.ui.theme.TextoBlanco
 import com.kotliners.piedrapapeltijera.ui.theme.TextoNegro
+import com.kotliners.piedrapapeltijera.utils.system.exitGame
+
 
 @Composable
 fun MusicToggleButton() {
@@ -57,10 +58,12 @@ fun MusicToggleButton() {
 
     IconButton(
         onClick = {
+
+            // Cambiar el estado local primero
+            isOn = !isOn
+
             // Al pulsar cambiamos el estado de la musica
             activity?.toggleMusic()
-            // Actualizamos el estado local para cambiar el icono
-            isOn = activity?.isMusicRunning() ?: false
         }
     ) {
         // Elegimos qué imagen mostrar según si está encendido o apagado
@@ -73,10 +76,11 @@ fun MusicToggleButton() {
         Icon(
             painter = painterResource(id = iconRes),
             contentDescription = if (isOn) "Desactivar música" else "Activar música",
-            tint = TextoBlanco // para que se vea bien en la barra
+            tint = TextoBlanco
         )
     }
 }
+
 
 @Composable
 fun ExitGameButton() {
@@ -85,31 +89,20 @@ fun ExitGameButton() {
     var showDialog by remember { mutableStateOf(false) }
 
     if (showDialog) {
-        AlertDialog(
-            onDismissRequest = { showDialog = false },
-            title = { Text("Salir del juego") },
-            text = { Text("¿Seguro que quieres salir de la aplicación?") },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        showDialog = false
-                        activity?.finish()  // Cerramos la Activity
-                    }
-                ) {
-                    Text("Salir")
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { showDialog = false }) {
-                    Text("Cancelar")
-                }
+        com.kotliners.piedrapapeltijera.ui.components.ExitGameDialog(
+            onConfirmExit = {
+                showDialog = false
+                activity?.exitGame()
+                            },
+            onDismiss = {
+                showDialog = false
             }
         )
     }
 
     IconButton(onClick = { showDialog = true }) {
         Icon(
-            imageVector = Icons.Default.ExitToApp,
+            imageVector = Icons.AutoMirrored.Filled.ExitToApp,
             contentDescription = "Salir del juego",
             tint = TextoBlanco
         )
@@ -126,16 +119,6 @@ fun AppScaffold(
     val backStack by nav.currentBackStackEntryAsState()
     val current = backStack?.destination?.route ?: Screen.Home.route
 
-    val title = when (current) {
-        Screen.Home.route -> Screen.Home.title
-        Screen.History.route -> Screen.History.title
-        Screen.Ranking.route -> Screen.Ranking.title
-        Screen.Setting.route -> Screen.Setting.title
-        Screen.Help.route -> Screen.Help.title
-        Screen.Game.route -> Screen.Game.title
-        else -> "Inicio"
-    }
-
     val items = listOf(
         Screen.Home,
         Screen.History,
@@ -147,7 +130,7 @@ fun AppScaffold(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { BrandBar(title) },
+                title = { BrandBar() },
                 actions = {
                     // Altavoz + botón salir
                     MusicToggleButton()
@@ -187,14 +170,14 @@ fun AppScaffold(
                                 )
 
                                 Screen.Help -> Icon(
-                                    Icons.Default.HelpOutline,
+                                    Icons.AutoMirrored.Filled.HelpOutline,
                                     contentDescription = null
                                 )
 
                                 else -> {}
                             }
                         },
-                        label = { Text(screen.title) },
+                        label = { Text(stringResource(screen.titleResId)) },
                         colors = NavigationBarItemDefaults.colors(
                             selectedIconColor = TextoNegro,
                             selectedTextColor   = TextoBlanco,

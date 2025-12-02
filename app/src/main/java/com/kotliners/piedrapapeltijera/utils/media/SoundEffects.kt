@@ -8,7 +8,6 @@ import com.kotliners.piedrapapeltijera.R
 
 // Gestor de sonidos cortos (clicks, victoria, derrota)
 object SoundEffects {
-
     private var soundPool: SoundPool? = null
 
     // Ids de los sonidos dentro del SoundPool
@@ -19,7 +18,11 @@ object SoundEffects {
     // Para saber si ya se han cargado los sonidos
     private var loaded = false
 
-    // Llamar solo una vez al iniciar la app (por ejemplo en MainActivity)
+    // Contador de sonidos cargados
+    private var soundsLoaded = 0
+    private const val TOTAL_SOUNDS = 3
+
+    // Llamar solo una vez al iniciar la app
     fun init(context: Context) {
         if (soundPool != null) return  // ya está inicializado
 
@@ -32,8 +35,13 @@ object SoundEffects {
                     .build()
             )
             .build().apply {
-                setOnLoadCompleteListener { _, _, _ ->
-                    loaded = true
+                setOnLoadCompleteListener { _, _, status ->
+                    if (status == 0) { // 0 = éxito
+                        soundsLoaded++
+                        if (soundsLoaded >= TOTAL_SOUNDS) {
+                            loaded = true
+                        }
+                    }
                 }
             }
 
@@ -71,5 +79,9 @@ object SoundEffects {
         soundPool?.release()
         soundPool = null
         loaded = false
+        soundsLoaded = 0
+        clickId = 0
+        winId = 0
+        loseId = 0
     }
 }

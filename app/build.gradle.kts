@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -69,10 +70,12 @@ dependencies {
     implementation(libs.google.material)
     implementation(libs.google.accompanist.systemuicontroller)
 
-    // --- ROOM + RXJAVA ---
+    // --- ROOM + RXJAVA  / Firebase ---
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.rxjava3)
+    implementation(libs.firebase.database)
+    implementation(libs.firebase.firestore)
     ksp(libs.androidx.room.compiler)
 
     implementation(libs.rxjava3)
@@ -96,4 +99,5 @@ dependencies {
     // --- DEBUG ---
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+
 }

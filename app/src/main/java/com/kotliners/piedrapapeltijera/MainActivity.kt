@@ -15,6 +15,7 @@ import com.kotliners.piedrapapeltijera.utils.locale.LocaleManager
 import com.kotliners.piedrapapeltijera.utils.notifications.NotificationsPermission
 import com.kotliners.piedrapapeltijera.utils.media.MusicService
 import com.kotliners.piedrapapeltijera.utils.media.SoundEffects
+import com.google.firebase.database.FirebaseDatabase
 
 /**
  * Activity principal combinada:
@@ -52,6 +53,7 @@ class MainActivity : ComponentActivity() {
     // onCreate
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
 
         // Pedir permisos del calendario
         requestCalendarPerms.launch(

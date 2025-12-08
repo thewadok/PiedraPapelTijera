@@ -1,5 +1,6 @@
 [versions]
 agp = "8.13.0"
+converterMoshi = "3.0.0"
 kotlin = "2.0.21"
 coreKtx = "1.17.0"
 junit = "4.13.2"
@@ -9,10 +10,12 @@ lifecycleRuntimeKtx = "2.9.4"
 lifecycleRuntimeCompose = "2.9.4"
 activityCompose = "1.11.0"
 composeBom = "2024.09.00"
+moshiKotlin = "1.15.2"
 navigation = "2.9.5"
 coroutines = "1.10.2"
 material = "1.13.0"
 accompanist = "0.36.0"
+retrofit = "3.0.0"
 room = "2.6.1"
 ksp = "2.0.21-1.0.25"
 rxjava3 = "3.1.8"
@@ -27,6 +30,7 @@ firebaseFirestore = "26.0.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "converterMoshi" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -53,6 +57,8 @@ androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "
 androidx-room-ktx     = { module = "androidx.room:room-ktx",     version.ref = "room" }
 androidx-room-compiler= { module = "androidx.room:room-compiler",version.ref = "room" }
 androidx-room-rxjava3 = { module = "androidx.room:room-rxjava3", version.ref = "room" }
+moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshiKotlin" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 rxjava3 = { module = "io.reactivex.rxjava3:rxjava", version.ref = "rxjava3" }
 rxandroid = { module = "io.reactivex.rxjava3:rxandroid", version.ref = "rxandroid" }
 rxkotlin = { module = "io.reactivex.rxjava3:rxkotlin", version.ref = "rxkotlin" }

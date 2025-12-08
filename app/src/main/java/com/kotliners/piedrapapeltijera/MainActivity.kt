@@ -15,7 +15,10 @@ import com.kotliners.piedrapapeltijera.utils.locale.LocaleManager
 import com.kotliners.piedrapapeltijera.utils.notifications.NotificationsPermission
 import com.kotliners.piedrapapeltijera.utils.media.MusicService
 import com.kotliners.piedrapapeltijera.utils.media.SoundEffects
-import com.google.firebase.database.FirebaseDatabase
+import androidx.lifecycle.lifecycleScope
+import com.kotliners.piedrapapeltijera.data.remote.firebase.RetrofitInstance
+import kotlinx.coroutines.launch
+
 
 /**
  * Activity principal combinada:
@@ -53,6 +56,35 @@ class MainActivity : ComponentActivity() {
     // onCreate
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+/* Dejo este codigo comentado porque ya he verificado que sí conecta de forma adecuada
+        // TEST: leer datos de Firebase con Retrofit + Moshi
+        lifecycleScope.launch {
+            try {
+                val jugadoresMap = RetrofitInstance.api.getJugadores()
+                val partidasMap = RetrofitInstance.api.getPartidas()
+                val premio = RetrofitInstance.api.getPremioComun()
+
+                val sb = StringBuilder()
+                sb.append("JUGADORES:\n")
+                for ((uid, jugador) in jugadoresMap) {
+                    sb.append("uid=$uid | nombre=${jugador.nombre} | monedas=${jugador.monedas} | victorias=${jugador.victorias} | derrotas=${jugador.derrotas}\n")
+                }
+
+                sb.append("\nPARTIDAS:\n")
+                for ((idPartida, partida) in partidasMap) {
+                    sb.append("id=$idPartida | jugadorId=${partida.jugadorId} | resultado=${partida.resultado} | apuesta=${partida.apuesta}\n")
+                }
+
+                sb.append("\nPREMIO COMÚN:\n")
+                sb.append("monedasEnBote=${premio.monedasEnBote} | ultimoGanadorUid=${premio.ultimoGanadorUid}\n")
+
+                android.util.Log.d("FirebaseRetrofitTest", sb.toString())
+
+            } catch (e: Exception) {
+                android.util.Log.e("FirebaseRetrofitTest", "ERROR al llamar a Firebase: ${e.message}", e)
+            }
+        }*/
+
 
 
         // Pedir permisos del calendario

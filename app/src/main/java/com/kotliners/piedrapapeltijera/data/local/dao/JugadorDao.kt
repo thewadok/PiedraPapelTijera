@@ -9,6 +9,7 @@ import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.core.Flowable
 
+
 @Dao
 interface JugadorDao {
 

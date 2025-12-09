@@ -1,13 +1,14 @@
 package com.kotliners.piedrapapeltijera.navigation
 
+import com.kotliners.piedrapapeltijera.R
 //Rutas
-sealed class Screen(val route: String, val title: String){
-    data object Splash : Screen("splash","Splash")
-    data object Home : Screen( "home", "Home")
-    data object History : Screen( "history", "Historial")
-    data object Ranking : Screen( "ranking", "Ranking")
-    data object Setting : Screen("setting", "Ajustes")
-    data object Help : Screen("help","Ayuda")
+sealed class Screen(val route: String, val titleResId: Int){
+    data object Splash : Screen("splash",R.string.app_name)
+    data object Home : Screen( "home", R.string.title_home)
+    data object History : Screen( "history", R.string.history_title)
+    data object Ranking : Screen( "ranking", R.string.results_title)
+    data object Setting : Screen("setting", R.string.settings_title)
+    data object Help : Screen("help",R.string.help)
 
-    data object Game : Screen("game","Juego")
+    data object Game : Screen("game",R.string.play_button)
 }

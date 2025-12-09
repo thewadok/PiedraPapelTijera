@@ -1,17 +1,13 @@
-val room_version = "2.6.1"
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    //id("com.google.devtools.ksp") version "2.0.21-1.0.20" apply false
-    //alias(libs.plugins.google.devtools.ksp)
     alias(libs.plugins.ksp)
 }
 
 android {
     namespace = "com.kotliners.piedrapapeltijera"
-    compileSdkVersion(36)
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.kotliners.piedrapapeltijera"
@@ -32,24 +28,29 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     kotlinOptions {
         jvmTarget = "11"
     }
+
     buildFeatures {
         compose = true
     }
-    buildToolsVersion = "36.1.0"
 }
 
 dependencies {
 
+    // --- CORE ---
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+
+    // --- COMPOSE ---
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
@@ -57,33 +58,43 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.compose.material.icons.extended)
+    implementation(libs.androidx.compose.runtime.livedata)
+
+    // --- LIFECYCLE & COROUTINES ---
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+
+    // --- MATERIAL & SYSTEM BARS ---
     implementation(libs.google.material)
     implementation(libs.google.accompanist.systemuicontroller)
+
+    // --- ROOM + RXJAVA ---
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.rxjava3)
+    ksp(libs.androidx.room.compiler)
+
     implementation(libs.rxjava3)
     implementation(libs.rxandroid)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.rxkotlin)
-    implementation(libs.androidx.room.rxjava3)
-    implementation(libs.rxkotlin)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.runtime.livedata)
 
+    // --- DocumentFile (DEVELOP) ---
+    implementation(libs.androidx.documentfile)
+
+    // --- Geolocalización (DEVELOP) ---
+    implementation(libs.google.play.services.location)
+
+    // --- TESTING ---
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
-
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
 
+    // --- DEBUG ---
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
-
-    ksp(libs.androidx.room.compiler)
-
 }

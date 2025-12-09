@@ -15,7 +15,9 @@ class PartidaRepository(private val dao: PartidaDao) {
         jugadaJugador: Move,
         jugadaCpu: Move,
         resultado: GameResult,
-        apuesta: Int
+        apuesta: Int,
+        latitud: Double?,
+        longitud: Double?
     ): Completable {
         val cambio = when (resultado) {
             GameResult.GANAS -> +apuesta
@@ -28,7 +30,9 @@ class PartidaRepository(private val dao: PartidaDao) {
             jugadaCpu = jugadaCpu,
             resultado = resultado,
             apuesta = apuesta,
-            cambioMonedas = cambio
+            cambioMonedas = cambio,
+            latitud = latitud,
+            longitud = longitud
         )
         return dao.insertar(p).subscribeOn(Schedulers.io())
     }

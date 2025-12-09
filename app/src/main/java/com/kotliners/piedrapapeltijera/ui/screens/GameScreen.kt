@@ -1,19 +1,23 @@
 package com.kotliners.piedrapapeltijera.ui.screens
 
+import android.Manifest
+import android.location.Location
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.setValue
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -26,62 +30,186 @@ import com.kotliners.piedrapapeltijera.ui.theme.AmarilloNeon
 import com.kotliners.piedrapapeltijera.ui.theme.TextoBlanco
 import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
 import com.kotliners.piedrapapeltijera.ui.components.NeonGloboInfo
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import com.kotliners.piedrapapeltijera.utils.location.LocationManager
+import com.kotliners.piedrapapeltijera.utils.media.SoundEffects
+import androidx.compose.runtime.getValue
+import com.kotliners.piedrapapeltijera.notifications.VictoryNotification
+import com.kotliners.piedrapapeltijera.ui.components.VictoryDialog
+import com.kotliners.piedrapapeltijera.utils.calendar.rememberCalendarPermissionState
+import com.kotliners.piedrapapeltijera.utils.calendar.CalendarHelper
+import com.kotliners.piedrapapeltijera.utils.locale.moveLabel
+import com.kotliners.piedrapapeltijera.utils.media.rememberCaptureCurrentView
+import kotlinx.coroutines.launch
+import android.content.pm.PackageManager
+import androidx.core.content.ContextCompat
+import androidx.compose.animation.Crossfade
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.text.font.FontWeight
+import com.kotliners.piedrapapeltijera.ui.theme.AzulNeon
+import com.kotliners.piedrapapeltijera.ui.theme.RosaNeon
 
 @Composable
 fun GameScreen(viewModel: MainViewModel = viewModel()) {
 
+    // Estado del juego
     var userMove by remember { mutableStateOf<Move?>(null) }
     var computerMove by remember { mutableStateOf<Move?>(null) }
     var result by remember { mutableStateOf<GameResult?>(null) }
-    var betAmount by remember { mutableStateOf(10) } // apuesta inicial mínima
+    var betAmount by remember { mutableIntStateOf(10) }
     var message by remember { mutableStateOf("") }
+    var showVictoryDialog by remember { mutableStateOf(false) }
 
-    // Saldo y partidas desde Room a través del ViewModel
+    // Estado para bloquear nuevos turnos
+    var isRoundInProgress by remember { mutableStateOf(false) }
+
+    val context = LocalContext.current
     val saldo = viewModel.monedas.observeAsState(0).value
     val partidas = viewModel.partidas.observeAsState(0).value
 
-    fun jugarCon(mov: Move) {
-        // Validar apuesta con saldo actual persistido
-        if (betAmount <= 0 || betAmount > saldo) {
-            message = "Apuesta inválida."
+    // Utilidades media
+    // Función para capturar la pantalla
+    val captureView = rememberCaptureCurrentView()
+
+    // Permisos de calendario
+    val (requestCalendarPermissions, calendarGranted) = rememberCalendarPermissionState()
+
+    // Scope para coroutinas
+    val coroutineScope = rememberCoroutineScope()
+
+    // Gestión de ubicación
+    val locationManager = remember { LocationManager(context) }
+
+    var pendingMove by remember { mutableStateOf<Move?>(null) }
+
+    // Función principal del juego
+    fun jugarCon(mov: Move, location: Location?) {
+        if (betAmount !in 1..saldo) {
+            message = context.getString(R.string.invalid_bet)
+
+            // Desbloqueamos porque no se ha jugado realmente
+            isRoundInProgress = false
+            pendingMove = null
             return
         }
 
+        val startTime = System.currentTimeMillis()
         val (r, c) = GameLogic.play(mov)
-        result = r
-        computerMove = c
-        userMove = mov
+        val durationMs = (System.currentTimeMillis() - startTime).coerceAtLeast(100)
 
-        when (r) {
-            GameResult.GANAS -> {
-                viewModel.cambiarMonedas(+betAmount)
-                viewModel.registrarPartida(mov, c, r, betAmount)
-                message = "¡Ganaste $betAmount monedas!"
+        // Lanzamos corrutina para aplicar el resultado y desbloquear después de 3s
+        coroutineScope.launch {
+            kotlinx.coroutines.delay(2000)
+
+            result = r
+            computerMove = c
+            userMove = mov
+
+            when (r) {
+                GameResult.GANAS -> {
+                    viewModel.cambiarMonedas(+betAmount)
+                    viewModel.registrarPartida(
+                        mov, c, r, betAmount,
+                        location?.latitude,
+                        location?.longitude
+                    )
+                    message = context.getString(R.string.you_won, betAmount)
+
+                    SoundEffects.playWin()
+
+                    // Mostramos notificación de victoria con tiempo real
+                    VictoryNotification.show(context, durationMs)
+
+                    // Mostramos dialogo con opcion de guardar la captura de pantalla
+                    showVictoryDialog = true
+
+                }
+
+                GameResult.PIERDES -> {
+                    viewModel.cambiarMonedas(-betAmount)
+                    viewModel.registrarPartida(
+                        mov, c, r, betAmount,
+                        location?.latitude,
+                        location?.longitude
+                    )
+                    message = context.getString(R.string.you_lost, betAmount)
+
+                    SoundEffects.playLose()
+                }
+
+                GameResult.EMPATE -> {
+                    viewModel.registrarPartida(
+                        mov, c, r, betAmount,
+                        location?.latitude,
+                        location?.longitude
+                    )
+                    message = context.getString(R.string.tie)
+                }
             }
-            GameResult.PIERDES -> {
-                viewModel.cambiarMonedas(-betAmount)
-                viewModel.registrarPartida(mov, c, r, betAmount)
-                message = "Perdiste $betAmount monedas."
-            }
-            GameResult.EMPATE -> {
-                viewModel.registrarPartida(mov, c, r, betAmount)
-                message = "Empate, sin cambios."
-            }
+            isRoundInProgress = false
+            pendingMove = null
         }
     }
 
+    // Solicitud de permisos de ubicación.
+    val requestPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
 
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(FondoNegro)
+    ) { isGranted: Boolean ->
+        coroutineScope.launch {
+            val loc: Location? = if (isGranted) {
+                // Si da permiso, intentamos obtener la ubicación
+                locationManager.getCurrentLocation()
+            } else {
+
+                // Si no da permiso, seguimos sin ubicación
+                null
+            }
+
+            // Siempre jugamos, con o sin ubicación
+            pendingMove?.let { jugarCon(it, loc) }
+        }
+    }
+
+    fun iniciarJuego(mov: Move) {
+
+        // Si ya hay una jugada en progreso, no permitimos más
+        if (isRoundInProgress) return
+
+        // Marcamos que empieza una jugada
+        isRoundInProgress = true
+        pendingMove = mov
+
+        val hasPermission = ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+        if (hasPermission) {
+            // Si tenemos permiso, jugamos y sacamos la ubicación en segundo plano
+            coroutineScope.launch {
+                val location = locationManager.getCurrentLocation()
+                jugarCon(mov, location)
+            }
+        } else {
+
+            // Solo si nO hay permiso, mostramos el diálogo del sistema
+            requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        }
+    }
+
+    // UI de la pantalla
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(FondoNegro)
     ) {
         val scroll = rememberScrollState()
 
         Column(
-            Modifier.fillMaxSize().verticalScroll(scroll).padding(16.dp),
-            horizontalAlignment = Alignment.Start
+            Modifier
+                .fillMaxSize()
+                .verticalScroll(scroll)
+                .padding(16.dp)
         ) {
             NeonGloboInfo(
                 partidas = partidas,
@@ -91,155 +219,229 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                     .heightIn(min = 84.dp)
                     .align(Alignment.CenterHorizontally)
             )
-
             Spacer(Modifier.height(24.dp))
 
-            //Contenido principal
             Column(
-                modifier = Modifier
-                    .padding(horizontal = 24.dp),
+                modifier = Modifier.padding(horizontal = 8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(20.dp)
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Text(
-                    "¡Apuesta tus monedas!",
+                    text = stringResource(R.string.bet_your_coins),
                     style = MaterialTheme.typography.headlineSmall,
+                    fontSize = 26.sp,
                     color = TextoBlanco
                 )
-
-                //Selector de apuesta con + y -
+                // Selector Apuesta
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    //Botón de restar apuesta
                     Button(
                         onClick = {
+                            SoundEffects.playClick()
                             if (betAmount > 10) betAmount -= 10
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-                        contentPadding = PaddingValues(0.dp),
-                        elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
+                        contentPadding = PaddingValues(0.dp)
                     ) {
-                        Text(
-                            text = "-",
-                            fontSize = 125.sp,
-                            style = MaterialTheme.typography.headlineLarge,
-                            color = TextoBlanco
-                        )
+                        Text("-", fontSize = 125.sp, color = TextoBlanco)
                     }
 
-                    // Muestra la cantidad actual
                     Text(
-                        text = "$betAmount monedas",
+                        "$betAmount ${stringResource(R.string.coins)}",
                         style = MaterialTheme.typography.titleLarge,
+                        fontSize = 26.sp,
                         color = AmarilloNeon
                     )
 
-                    // Botón de sumar apuesta
                     Button(
                         onClick = {
-                            if (betAmount + 10 <= saldo)
-                                betAmount += 10
+                            SoundEffects.playClick()
+                            if (betAmount + 10 <= saldo) betAmount += 10
                         },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.Transparent,
-                            contentColor = TextoBlanco
-                        ),
-                        contentPadding = PaddingValues(0.dp),
-                        elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                        contentPadding = PaddingValues(0.dp)
                     ) {
+                        Text("+", fontSize = 75.sp, color = TextoBlanco)
+                    }
+                }
+
+                // Texto con animación fade: elegir jugada / esperando resultado
+                Crossfade(targetState = isRoundInProgress, label = "move_text_fade") { blocked ->
+                    if (blocked) {
                         Text(
-                            text = "+",
-                            fontSize = 75.sp,
-                            style = MaterialTheme.typography.headlineLarge,
+                            text = stringResource(R.string.wait_for_result),
+                            style = MaterialTheme.typography.headlineSmall,
+                            fontSize = 26.sp,
+                            color = Color.Gray
+                        )
+                    } else {
+                        Text(
+                            stringResource(R.string.choose_move),
+                            style = MaterialTheme.typography.headlineSmall,
+                            fontSize = 26.sp,
                             color = TextoBlanco
                         )
                     }
                 }
 
-                Text(
-                    text = "Elige tu jugada:",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = TextoBlanco
-                )
+                Spacer(Modifier.height(12.dp))
 
-                //Botones de jugada
+                val buttonsAlpha = if (isRoundInProgress) 0.4f else 1f
+
+                // Botones: Piedra, Papel, Tijera
+
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 20.dp),
+                        .padding(horizontal = 20.dp)
+                        .alpha(buttonsAlpha),
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-
-                    //Piedra
+                    // PIEDRA
                     Button(
                         onClick = {
-                            jugarCon(Move.PIEDRA)
+                            SoundEffects.playClick()
+                            iniciarJuego(Move.PIEDRA)
                         },
+                        enabled = !isRoundInProgress,
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                         contentPadding = PaddingValues(0.dp),
                         elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.icono_piedra_neon),
-                            contentDescription = "Piedra",
+                            contentDescription = stringResource(R.string.rock),
                             modifier = Modifier.size(95.dp)
                         )
                     }
 
-                    //Papel
+                    // PAPEL
                     Button(
                         onClick = {
-                            jugarCon(Move.PAPEL)
+                            SoundEffects.playClick()
+                            iniciarJuego(Move.PAPEL)
                         },
+                        enabled = !isRoundInProgress,
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                         contentPadding = PaddingValues(0.dp),
                         elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.icono_papel_neon),
-                            contentDescription = "Papel",
+                            contentDescription = stringResource(R.string.paper),
                             modifier = Modifier.size(95.dp)
                         )
                     }
 
-                    //Tijera (tamaño ajustado)
+                    // TIJERA
                     Button(
                         onClick = {
-                            jugarCon(Move.TIJERA)
+                            SoundEffects.playClick()
+                            iniciarJuego(Move.TIJERA)
                         },
+                        enabled = !isRoundInProgress,
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                         contentPadding = PaddingValues(0.dp),
                         elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.icono_tijera_neon),
-                            contentDescription = "Tijera",
+                            contentDescription = stringResource(R.string.scissors),
                             modifier = Modifier
                                 .size(110.dp)
-                                .padding(end = 4.dp) // pequeño margen para centrar mejor
+                                .padding(end = 4.dp)
                         )
                     }
                 }
 
-                // Resultado y saldo
+                // Resultado
                 if (result != null) {
-                    Spacer(Modifier.height(16.dp))
+
+                    Spacer(Modifier.height(10.dp))
+
+                    val userMoveText = moveLabel(userMove)
+                    val computerMoveText = moveLabel(computerMove)
+
                     Text(
-                        "Jugador: ${userMove?.name} | Banca: ${computerMove?.name}",
-                        color = TextoBlanco
+                        text = stringResource(
+                            R.string.player_vs_bank,
+                            userMoveText,
+                            computerMoveText
+                        ),
+                        color = AzulNeon,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(bottom = 4.dp)
                     )
+
                     Text(
                         message,
-                        style = MaterialTheme.typography.titleMedium,
-                        color = TextoBlanco
-                    )
+                        color = AmarilloNeon,
+                        fontSize = 22.sp,
+                        modifier = Modifier.padding(bottom = 6.dp)
+                        )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
                     Text(
-                        "Saldo actual: $saldo",
-                        style = MaterialTheme.typography.titleLarge,
-                        color = TextoBlanco
+                        text = stringResource(R.string.current_balance, saldo),
+                        fontSize = 30.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = RosaNeon
+                    )
+                }
+
+                // Mostramos el dialogo de victoria
+                if (showVictoryDialog) {
+                    VictoryDialog(
+                        onConfirm = { saveScreenshot, addCalendar ->
+                            showVictoryDialog = false
+
+
+                            val eventTitle = context.getString(R.string.calendar_event_title)
+                            val eventDescription = context.getString(
+                                R.string.calendar_event_description,
+                                betAmount,
+                                saldo
+                            )
+
+                            coroutineScope.launch {
+
+                                // Guardar captura
+                                if (saveScreenshot) {
+                                    // Capturamos la pantalla solo si el usuario quiere guardarla
+                                    val screenshot = captureView()
+
+                                    // Llamamos a la corrutina onPlayerWin cuando hay victoria
+                                    viewModel.onPlayerWin(
+                                        context = context,
+                                        screenshot = screenshot
+                                    )
+                                }
+
+                                // Añadir al calendario
+                                if (addCalendar) {
+                                    if (!calendarGranted.value) {
+                                        requestCalendarPermissions()
+                                    } else {
+                                        CalendarHelper.insertVictoryEvent(
+                                            context = context,
+                                            title = eventTitle,
+                                            description = eventDescription
+                                        )
+                                    }
+                                }
+                            }
+                        },
+
+                        onDismiss = {
+                            // Cerramos el diálogo sin hacer nada
+                            showVictoryDialog = false
+                        }
                     )
                 }
             }

@@ -46,10 +46,31 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontWeight
 import com.kotliners.piedrapapeltijera.ui.theme.AzulNeon
-import com.kotliners.piedrapapeltijera.ui.theme.RosaNeon
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
+import com.kotliners.piedrapapeltijera.ui.viewmodel.PremioViewModel
+import com.kotliners.piedrapapeltijera.ui.components.NeonGloboBote
 
 @Composable
 fun GameScreen(viewModel: MainViewModel = viewModel()) {
+
+    // ViewModel del premio común
+    val premioViewModel: PremioViewModel = viewModel()
+
+    // Estado del premio en tiempo real
+    val premioState = premioViewModel.uiState.collectAsState()
+
+    // Al notificar un premio ganado, lo sumamos al saldo local
+    LaunchedEffect(premioState.value.ultimoPremioGanado) {
+        val premio = premioState.value.ultimoPremioGanado
+        if (premio > 0) {
+
+            viewModel.cambiarMonedas(premio)
+
+            // Evitamos duplicados
+            premioViewModel.marcarPremioConsumido()
+        }
+    }
 
     // Estado del juego
     var userMove by remember { mutableStateOf<Move?>(null) }
@@ -122,6 +143,9 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                     // Mostramos dialogo con opcion de guardar la captura de pantalla
                     showVictoryDialog = true
 
+                    // Reclamamos el premio común
+                    val uidJugador = "demo-uid"
+                    premioViewModel.onJugadorGana(uidJugador)
                 }
 
                 GameResult.PIERDES -> {
@@ -131,8 +155,11 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                         location?.latitude,
                         location?.longitude
                     )
-                    message = context.getString(R.string.you_lost, betAmount)
 
+                    // Sumamos la apuesta al premio común
+                    premioViewModel.onJugadorPierde(betAmount)
+
+                    message = context.getString(R.string.you_lost, betAmount)
                     SoundEffects.playLose()
                 }
 
@@ -219,7 +246,16 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                     .heightIn(min = 84.dp)
                     .align(Alignment.CenterHorizontally)
             )
+
             Spacer(Modifier.height(24.dp))
+
+            NeonGloboBote(
+                titulo = "¡BOTE!",
+                monedas = premioState.value.monedasEnBote,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(bottom = 16.dp)
+            )
 
             Column(
                 modifier = Modifier.padding(horizontal = 8.dp),
@@ -380,19 +416,9 @@ fun GameScreen(viewModel: MainViewModel = viewModel()) {
                     Text(
                         message,
                         color = AmarilloNeon,
-                        fontSize = 22.sp,
+                        fontSize = 30.sp,
                         modifier = Modifier.padding(bottom = 6.dp)
                         )
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Text(
-                        text = stringResource(R.string.current_balance, saldo),
-                        fontSize = 30.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        style = MaterialTheme.typography.headlineSmall,
-                        color = RosaNeon
-                    )
                 }
 
                 // Mostramos el dialogo de victoria

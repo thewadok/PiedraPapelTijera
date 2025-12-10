@@ -1,7 +1,7 @@
 package com.kotliners.piedrapapeltijera.data.remote.firebase
 
 data class PartidaRemota(
-    val jugadorId: Int? = null,
+    val uid: String? = null,
     val fecha: Long? = null,
     val jugadaJugador: String? = null,
     val jugadaCpu: String? = null,

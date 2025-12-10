@@ -16,7 +16,6 @@ import com.kotliners.piedrapapeltijera.utils.notifications.NotificationsPermissi
 import com.kotliners.piedrapapeltijera.utils.media.MusicService
 import com.kotliners.piedrapapeltijera.utils.media.SoundEffects
 import androidx.lifecycle.lifecycleScope
-import com.kotliners.piedrapapeltijera.data.remote.firebase.RetrofitInstance
 import kotlinx.coroutines.launch
 
 
@@ -62,25 +61,50 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 /* Dejo este codigo comentado porque ya he verificado que sí conecta de forma adecuada*/
 
+        /** // TEST COMPLETO: jugadores, top 10, partidas y premio común
       lifecycleScope.launch {
           try {
+              // 1) Todos los jugadores (mapa uid -> JugadorRemoto)
+              val jugadoresMap = firebaseRepo.fetchJugadores()
+
+              // 2) Top 10 jugadores ordenados por victorias
               val topJugadores = firebaseRepo.fetchTopJugadores(limit = 10)
+
+              // 3) Todas las partidas remotas
+              val partidasMap = firebaseRepo.fetchPartidas()
+
+              // 4) Premio común
               val premio = firebaseRepo.fetchPremioComun()
 
               val sb = StringBuilder()
-              sb.append("TOP JUGADORES (Repository):\n")
+
+              sb.append("=== JUGADORES (MAPA) ===\n")
+              for ((uid, jugador) in jugadoresMap) {
+                  sb.append("uid=$uid | nombre=${jugador.nombre} | monedas=${jugador.monedas} | victorias=${jugador.victorias} | derrotas=${jugador.derrotas}\n")
+              }
+
+              sb.append("\n=== TOP JUGADORES (ORDENADOS POR VICTORIAS) ===\n")
               topJugadores.forEachIndexed { index, jugador ->
                   sb.append("${index + 1}. nombre=${jugador.nombre} | victorias=${jugador.victorias} | monedas=${jugador.monedas}\n")
               }
 
-              sb.append("\nPREMIO COMÚN (Repository):\n")
+              sb.append("\n=== PARTIDAS ===\n")
+              for ((idPartida, partida) in partidasMap) {
+                  sb.append(
+                      "id=$idPartida | uid=${partida.uid} | resultado=${partida.resultado} | " +
+                      "jugadaJugador=${partida.jugadaJugador} | jugadaCpu=${partida.jugadaCpu} | apuesta=${partida.apuesta} | cambioMonedas=${partida.cambioMonedas}\n"
+                  )
+              }
+
+              sb.append("\n=== PREMIO COMÚN ===\n")
               sb.append("monedasEnBote=${premio.monedasEnBote} | ultimoGanadorUid=${premio.ultimoGanadorUid}\n")
 
-              android.util.Log.d("FirebaseRepoTest", sb.toString())
+              android.util.Log.d("FirebaseFullTest", sb.toString())
+
           } catch (e: Exception) {
-              android.util.Log.e("FirebaseRepoTest", "ERROR desde Repository: ${e.message}", e)
+              android.util.Log.e("FirebaseFullTest", "ERROR en test completo: ${e.message}", e)
           }
-      }
+      }*/
 
 
         // Pedir permisos del calendario

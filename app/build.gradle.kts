@@ -103,4 +103,10 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.firebase.database)
+
+    // --- RETROFIT + MOSHI (para Firebase REST) ---
+    implementation(libs.retrofit2)
+    implementation(libs.retrofit2.converter.moshi)
+    implementation(libs.moshi)
+    implementation(libs.moshi.kotlin)
 }

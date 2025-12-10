@@ -15,6 +15,9 @@ import com.kotliners.piedrapapeltijera.utils.locale.LocaleManager
 import com.kotliners.piedrapapeltijera.utils.notifications.NotificationsPermission
 import com.kotliners.piedrapapeltijera.utils.media.MusicService
 import com.kotliners.piedrapapeltijera.utils.media.SoundEffects
+import androidx.lifecycle.lifecycleScope
+import com.kotliners.piedrapapeltijera.data.remote.firebase.RetrofitInstance
+import kotlinx.coroutines.launch
 
 /**
  * Activity principal combinada:
@@ -52,6 +55,65 @@ class MainActivity : ComponentActivity() {
     // onCreate
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // TEST: leer datos de Firebase con Retrofit + Moshi
+        lifecycleScope.launch {
+            try {
+                // Llamadas a la API
+                val jugadoresMap = RetrofitInstance.api.getJugadores()
+                val partidasMap = RetrofitInstance.api.getPartidas()
+                val premio = RetrofitInstance.api.getPremioComun()
+
+                // Convertimos los Map a List (solo nos interesan los valores)
+                val jugadoresLista = jugadoresMap.values.toList()
+                val partidasLista = partidasMap.values.toList()
+
+                val sb = StringBuilder()
+
+                // ---- JUGADORES ----
+                sb.append("JUGADORES:\n")
+                for (jugador in jugadoresLista) {
+                    val uid = jugador.uid ?: "(sin uid)"
+                    val nombre = jugador.nombre ?: "Desconocido"
+                    val monedas = jugador.monedas ?: 0
+                    val victorias = jugador.victorias ?: 0
+                    val derrotas = jugador.derrotas ?: 0
+
+                    sb.append("uid=$uid | nombre=$nombre | monedas=$monedas | victorias=$victorias | derrotas=$derrotas\n")
+                }
+
+                // ---- PARTIDAS ----
+                sb.append("\nPARTIDAS:\n")
+                for (partida in partidasLista) {
+                    val uidPartida = partida.uid ?: "(sin uid)"
+                    val fecha = partida.fecha ?: 0L
+                    val jugadaJugador = partida.jugadaJugador ?: "?"
+                    val jugadaCpu = partida.jugadaCpu ?: "?"
+                    val resultado = partida.resultado ?: "desconocido"
+                    val apuesta = partida.apuesta ?: 0
+                    val cambioMonedas = partida.cambioMonedas ?: 0
+                    val latitud = partida.latitud ?: 0.0
+                    val longitud = partida.longitud ?: 0.0
+
+                    sb.append(
+                        "uid=$uidPartida | fecha=$fecha | jugadaJugador=$jugadaJugador | " +
+                                "jugadaCpu=$jugadaCpu | resultado=$resultado | apuesta=$apuesta | " +
+                                "cambioMonedas=$cambioMonedas | lat=$latitud | lon=$longitud\n"
+                    )
+                }
+
+                // ---- PREMIO COMÚN ----
+                sb.append("\nPREMIO COMÚN:\n")
+                val monedasEnBote = premio.monedasEnBote ?: 0
+                val ultimoGanadorUid = premio.ultimoGanadorUid ?: "(ninguno)"
+                sb.append("monedasEnBote=$monedasEnBote | ultimoGanadorUid=$ultimoGanadorUid\n")
+
+                android.util.Log.d("FirebaseRetrofitTest", sb.toString())
+
+            } catch (e: Exception) {
+                android.util.Log.e("FirebaseRetrofitTest", "ERROR al llamar a Firebase: ${e.message}", e)
+            }
+        }
 
         // Pedir permisos del calendario
         requestCalendarPerms.launch(

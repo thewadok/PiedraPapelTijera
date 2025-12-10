@@ -1,5 +1,6 @@
 package com.kotliners.piedrapapeltijera.data.remote.firebase
 
+
 // Modelo del jugador en Firebase
 data class JugadorRemoto(
     val uid: String? = null,
@@ -8,3 +9,4 @@ data class JugadorRemoto(
     val victorias: Int? = null,
     val derrotas: Int? = null
 )
+

@@ -34,7 +34,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-
     kotlinOptions {
         jvmTarget = "11"
     }
@@ -103,10 +102,10 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.firebase.database)
+    implementation(libs.firebase.firestore)
 
-    // --- RETROFIT + MOSHI (para Firebase REST) ---
-    implementation(libs.retrofit2)
-    implementation(libs.retrofit2.converter.moshi)
-    implementation(libs.moshi)
+    // --- RETROFIT + MOSHI ---
+    implementation(libs.retrofit)
+    implementation(libs.converter.moshi)
     implementation(libs.moshi.kotlin)
 }

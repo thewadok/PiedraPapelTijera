@@ -5,3 +5,4 @@ data class PremioComunRemoto(
     val monedasEnBote: Int? = null,
     val ultimoGanadorUid: String? = null
 )
+

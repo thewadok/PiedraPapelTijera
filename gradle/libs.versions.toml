@@ -1,5 +1,6 @@
 [versions]
 agp = "8.13.0"
+converterMoshi = "2.9.0"
 kotlin = "2.0.21"
 coreKtx = "1.17.0"
 junit = "4.13.2"
@@ -9,10 +10,12 @@ lifecycleRuntimeKtx = "2.9.4"
 lifecycleRuntimeCompose = "2.9.4"
 activityCompose = "1.11.0"
 composeBom = "2024.09.00"
+moshiKotlin = "1.15.2"
 navigation = "2.9.5"
 coroutines = "1.10.2"
 material = "1.13.0"
 accompanist = "0.36.0"
+retrofit = "2.9.0"
 room = "2.6.1"
 ksp = "2.0.21-1.0.25"
 rxjava3 = "3.1.8"
@@ -22,12 +25,12 @@ rxkotlin = "3.0.1"
 documentfile = "1.0.1"
 playServicesLocation = "21.3.0"
 firebaseBom = "33.5.1"
-googleServices = "4.4.2"
-retrofit = "2.9.0"
+googleServices = "4.4.4"
 moshi = "1.15.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "converterMoshi" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -54,19 +57,20 @@ androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "
 androidx-room-ktx     = { module = "androidx.room:room-ktx",     version.ref = "room" }
 androidx-room-compiler= { module = "androidx.room:room-compiler",version.ref = "room" }
 androidx-room-rxjava3 = { module = "androidx.room:room-rxjava3", version.ref = "room" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 rxjava3 = { module = "io.reactivex.rxjava3:rxjava", version.ref = "rxjava3" }
 rxandroid = { module = "io.reactivex.rxjava3:rxandroid", version.ref = "rxandroid" }
 rxkotlin = { module = "io.reactivex.rxjava3:rxkotlin", version.ref = "rxkotlin" }
 androidx-compose-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata" }
 androidx-documentfile = { group = "androidx.documentfile", name = "documentfile", version.ref = "documentfile" }
 google-play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
+
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-auth = { module = "com.google.firebase:firebase-auth-ktx" }
 firebase-database = { module = "com.google.firebase:firebase-database-ktx" }
-retrofit2 = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
-retrofit2_converter_moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofit" }
 moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
-moshi_kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
+moshi_kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshiKotlin" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -74,3 +78,4 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 ksp                   = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
+

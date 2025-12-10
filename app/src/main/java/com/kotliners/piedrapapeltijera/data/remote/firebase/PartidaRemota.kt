@@ -1,5 +1,6 @@
 package com.kotliners.piedrapapeltijera.data.remote.firebase
 
+
 // Modelo del partida en Firebase
 data class PartidaRemota(
     val uid: String? = null,
@@ -12,3 +13,4 @@ data class PartidaRemota(
     val latitud: Double? = null,
     val longitud: Double? = null
 )
+

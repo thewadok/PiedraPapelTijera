@@ -29,6 +29,9 @@ import kotlinx.coroutines.launch
  */
 class MainActivity : ComponentActivity() {
 
+    //Creo una instancia del Firebase para poder conectar
+    private val firebaseRepo =
+        com.kotliners.piedrapapeltijera.data.repository.remote.FirebaseGameRepository()
 
     // Localización antes de crear la actividad
     override fun attachBaseContext(newBase: Context) {
@@ -55,65 +58,52 @@ class MainActivity : ComponentActivity() {
     // onCreate
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+/* Dejo este codigo comentado porque ya he verificado que sí conecta de forma adecuada*/
 
-        // TEST: leer datos de Firebase con Retrofit + Moshi
-        lifecycleScope.launch {
-            try {
-                // Llamadas a la API
-                val jugadoresMap = RetrofitInstance.api.getJugadores()
-                val partidasMap = RetrofitInstance.api.getPartidas()
-                val premio = RetrofitInstance.api.getPremioComun()
+        /** // TEST COMPLETO: jugadores, top 10, partidas y premio común
+      lifecycleScope.launch {
+          try {
+              // 1) Todos los jugadores (mapa uid -> JugadorRemoto)
+              val jugadoresMap = firebaseRepo.fetchJugadores()
 
-                // Convertimos los Map a List (solo nos interesan los valores)
-                val jugadoresLista = jugadoresMap.values.toList()
-                val partidasLista = partidasMap.values.toList()
+              // 2) Top 10 jugadores ordenados por victorias
+              val topJugadores = firebaseRepo.fetchTopJugadores(limit = 10)
 
-                val sb = StringBuilder()
+              // 3) Todas las partidas remotas
+              val partidasMap = firebaseRepo.fetchPartidas()
 
-                // ---- JUGADORES ----
-                sb.append("JUGADORES:\n")
-                for (jugador in jugadoresLista) {
-                    val uid = jugador.uid ?: "(sin uid)"
-                    val nombre = jugador.nombre ?: "Desconocido"
-                    val monedas = jugador.monedas ?: 0
-                    val victorias = jugador.victorias ?: 0
-                    val derrotas = jugador.derrotas ?: 0
+              // 4) Premio común
+              val premio = firebaseRepo.fetchPremioComun()
 
-                    sb.append("uid=$uid | nombre=$nombre | monedas=$monedas | victorias=$victorias | derrotas=$derrotas\n")
-                }
+              val sb = StringBuilder()
 
-                // ---- PARTIDAS ----
-                sb.append("\nPARTIDAS:\n")
-                for (partida in partidasLista) {
-                    val uidPartida = partida.uid ?: "(sin uid)"
-                    val fecha = partida.fecha ?: 0L
-                    val jugadaJugador = partida.jugadaJugador ?: "?"
-                    val jugadaCpu = partida.jugadaCpu ?: "?"
-                    val resultado = partida.resultado ?: "desconocido"
-                    val apuesta = partida.apuesta ?: 0
-                    val cambioMonedas = partida.cambioMonedas ?: 0
-                    val latitud = partida.latitud ?: 0.0
-                    val longitud = partida.longitud ?: 0.0
+              sb.append("=== JUGADORES (MAPA) ===\n")
+              for ((uid, jugador) in jugadoresMap) {
+                  sb.append("uid=$uid | nombre=${jugador.nombre} | monedas=${jugador.monedas} | victorias=${jugador.victorias} | derrotas=${jugador.derrotas}\n")
+              }
 
-                    sb.append(
-                        "uid=$uidPartida | fecha=$fecha | jugadaJugador=$jugadaJugador | " +
-                                "jugadaCpu=$jugadaCpu | resultado=$resultado | apuesta=$apuesta | " +
-                                "cambioMonedas=$cambioMonedas | lat=$latitud | lon=$longitud\n"
-                    )
-                }
+              sb.append("\n=== TOP JUGADORES (ORDENADOS POR VICTORIAS) ===\n")
+              topJugadores.forEachIndexed { index, jugador ->
+                  sb.append("${index + 1}. nombre=${jugador.nombre} | victorias=${jugador.victorias} | monedas=${jugador.monedas}\n")
+              }
 
-                // ---- PREMIO COMÚN ----
-                sb.append("\nPREMIO COMÚN:\n")
-                val monedasEnBote = premio.monedasEnBote ?: 0
-                val ultimoGanadorUid = premio.ultimoGanadorUid ?: "(ninguno)"
-                sb.append("monedasEnBote=$monedasEnBote | ultimoGanadorUid=$ultimoGanadorUid\n")
+              sb.append("\n=== PARTIDAS ===\n")
+              for ((idPartida, partida) in partidasMap) {
+                  sb.append(
+                      "id=$idPartida | uid=${partida.uid} | resultado=${partida.resultado} | " +
+                      "jugadaJugador=${partida.jugadaJugador} | jugadaCpu=${partida.jugadaCpu} | apuesta=${partida.apuesta} | cambioMonedas=${partida.cambioMonedas}\n"
+                  )
+              }
 
-                android.util.Log.d("FirebaseRetrofitTest", sb.toString())
+              sb.append("\n=== PREMIO COMÚN ===\n")
+              sb.append("monedasEnBote=${premio.monedasEnBote} | ultimoGanadorUid=${premio.ultimoGanadorUid}\n")
 
-            } catch (e: Exception) {
-                android.util.Log.e("FirebaseRetrofitTest", "ERROR al llamar a Firebase: ${e.message}", e)
-            }
-        }
+              android.util.Log.d("FirebaseFullTest", sb.toString())
+
+          } catch (e: Exception) {
+              android.util.Log.e("FirebaseFullTest", "ERROR en test completo: ${e.message}", e)
+          }
+      }*/
 
         // Pedir permisos del calendario
         requestCalendarPerms.launch(

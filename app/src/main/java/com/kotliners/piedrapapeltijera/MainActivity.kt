@@ -30,6 +30,10 @@ import kotlinx.coroutines.launch
  */
 class MainActivity : ComponentActivity() {
 
+    //Creo una instancia del Firebase para poder conectar
+    private val firebaseRepo =
+        com.kotliners.piedrapapeltijera.data.repository.remote.FirebaseGameRepository()
+
 
     // Localización antes de crear la actividad
     override fun attachBaseContext(newBase: Context) {
@@ -56,35 +60,27 @@ class MainActivity : ComponentActivity() {
     // onCreate
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-/* Dejo este codigo comentado porque ya he verificado que sí conecta de forma adecuada
-        // TEST: leer datos de Firebase con Retrofit + Moshi
-        lifecycleScope.launch {
-            try {
-                val jugadoresMap = RetrofitInstance.api.getJugadores()
-                val partidasMap = RetrofitInstance.api.getPartidas()
-                val premio = RetrofitInstance.api.getPremioComun()
+/* Dejo este codigo comentado porque ya he verificado que sí conecta de forma adecuada*/
 
-                val sb = StringBuilder()
-                sb.append("JUGADORES:\n")
-                for ((uid, jugador) in jugadoresMap) {
-                    sb.append("uid=$uid | nombre=${jugador.nombre} | monedas=${jugador.monedas} | victorias=${jugador.victorias} | derrotas=${jugador.derrotas}\n")
-                }
+      lifecycleScope.launch {
+          try {
+              val topJugadores = firebaseRepo.fetchTopJugadores(limit = 10)
+              val premio = firebaseRepo.fetchPremioComun()
 
-                sb.append("\nPARTIDAS:\n")
-                for ((idPartida, partida) in partidasMap) {
-                    sb.append("id=$idPartida | jugadorId=${partida.jugadorId} | resultado=${partida.resultado} | apuesta=${partida.apuesta}\n")
-                }
+              val sb = StringBuilder()
+              sb.append("TOP JUGADORES (Repository):\n")
+              topJugadores.forEachIndexed { index, jugador ->
+                  sb.append("${index + 1}. nombre=${jugador.nombre} | victorias=${jugador.victorias} | monedas=${jugador.monedas}\n")
+              }
 
-                sb.append("\nPREMIO COMÚN:\n")
-                sb.append("monedasEnBote=${premio.monedasEnBote} | ultimoGanadorUid=${premio.ultimoGanadorUid}\n")
+              sb.append("\nPREMIO COMÚN (Repository):\n")
+              sb.append("monedasEnBote=${premio.monedasEnBote} | ultimoGanadorUid=${premio.ultimoGanadorUid}\n")
 
-                android.util.Log.d("FirebaseRetrofitTest", sb.toString())
-
-            } catch (e: Exception) {
-                android.util.Log.e("FirebaseRetrofitTest", "ERROR al llamar a Firebase: ${e.message}", e)
-            }
-        }*/
-
+              android.util.Log.d("FirebaseRepoTest", sb.toString())
+          } catch (e: Exception) {
+              android.util.Log.e("FirebaseRepoTest", "ERROR desde Repository: ${e.message}", e)
+          }
+      }
 
 
         // Pedir permisos del calendario

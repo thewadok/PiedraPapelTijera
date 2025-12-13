@@ -1,8 +1,79 @@
 package com.kotliners.piedrapapeltijera.ui.screens
 
-import androidx.compose.runtime.Composable
-import com.kotliners.piedrapapeltijera.ui.components.Center
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.kotliners.piedrapapeltijera.ui.viewmodel.RankingViewModel
+import com.kotliners.piedrapapeltijera.ui.theme.TextoBlanco
+import com.kotliners.piedrapapeltijera.ui.components.TituloPrincipal
 
-//Pantalla Ranking
 @Composable
-fun RankingScreen() = Center ( "Ranking (Producto 3)")
+fun RankingScreen(viewModel: RankingViewModel = viewModel()) {
+
+    val jugadores by viewModel.topJugadores.collectAsState()
+    val loading by viewModel.loading.collectAsState()
+    val error by viewModel.error.collectAsState()
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+
+        TituloPrincipal(text = "🏆 Top 10 Jugadores")
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        when {
+            loading -> {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+
+            error != null -> {
+                Text(
+                    text = error ?: "",
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+
+            else -> {
+                LazyColumn {
+                    itemsIndexed(jugadores) { index, jugador ->
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 4.dp)
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(12.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(
+                                    text = "${index + 1}. ${jugador.nombre ?: "Jugador"}",
+                                    color = TextoBlanco
+                                )
+                                Text(
+                                    text = "🏆 ${jugador.victorias ?: 0}",
+                                    color = TextoBlanco
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

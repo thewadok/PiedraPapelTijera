@@ -59,7 +59,7 @@ fun HomeScreen(
 
             Spacer(Modifier.height(16.dp))
 
-            // 🔹 Botón "Jugar"
+            // Botón "Jugar"
             Button(
                 onClick = { nav.safeNavigate(Screen.Game.route) },
                 modifier = Modifier
@@ -89,7 +89,7 @@ fun HomeScreen(
 
             Spacer(Modifier.height(24.dp))
 
-            // 🔹 Reglas básicas
+            // Reglas básicas
             TituloPrincipal(stringResource(R.string.help_rules_title))
 
             Spacer(Modifier.height(8.dp))
@@ -103,7 +103,7 @@ fun HomeScreen(
 
             Spacer(Modifier.height(12.dp))
 
-            // 🔸 Líneas con íconos
+            // Líneas con íconos
             ReglaConIcono(
                 iconRes = R.drawable.icono_piedra_neon,
                 titulo = stringResource(R.string.rock),
@@ -122,7 +122,7 @@ fun HomeScreen(
 
             Spacer(Modifier.height(16.dp))
 
-            // 🔹 Resultados
+            // Resultados
             TituloSeccion(stringResource(R.string.results_title))
 
             Spacer(Modifier.height(8.dp))
@@ -133,7 +133,7 @@ fun HomeScreen(
 
             Spacer(Modifier.height(16.dp))
 
-            // 🔹 Apuestas
+            // Apuestas
             TituloSeccion(stringResource(R.string.bets_title))
 
             Spacer(Modifier.height(8.dp))
@@ -142,7 +142,7 @@ fun HomeScreen(
 
             Spacer(Modifier.height(16.dp))
 
-            // 🔹 Rescate
+            // Rescate
             TituloSeccion(stringResource(R.string.rescue_title))
 
             Spacer(Modifier.height(8.dp))
@@ -150,7 +150,7 @@ fun HomeScreen(
 
             Spacer(Modifier.height(16.dp))
 
-            // 🔹 Cómo jugar
+            // Cómo jugar
             TituloSeccion(stringResource(R.string.how_to_play_title))
 
             Spacer(Modifier.height(8.dp))

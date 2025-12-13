@@ -155,4 +155,14 @@ No balance, but not out of luck.
     <string name="help_howto_text">Select your move by tapping one of the three icons. The system chooses its move and shows the result.</string>
     <string name="help_tips_title">Tips</string>
     <string name="help_tips_text">Manage your coins wisely. The more games you win, the more rewards you get!</string>
+
+    <!-- Login -->
+    <string name="login_title">Sign in</string>
+    <string name="login_desc">
+    Sign in with Google to save your victories, coins and take part in the shared prize.</string>
+    <string name="login_button">Sign in with Google</string>
+    <string name="login_loading">Loading&#8230;</string>
+    <string name="login_cancelled">Sign-in cancelled</string>
+    <string name="login_token_error">Could not retrieve Google token</string>
+    <string name="login_firebase_error">Firebase authentication error</string>
 </resources>

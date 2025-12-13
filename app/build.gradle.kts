@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -85,6 +86,11 @@ dependencies {
 
     // --- Geolocalización (DEVELOP) ---
     implementation(libs.google.play.services.location)
+
+    // --- Firebase libs ---
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
+    implementation(libs.google.play.services.auth)
 
     // --- TESTING ---
     testImplementation(libs.junit)

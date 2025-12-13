@@ -142,6 +142,9 @@ Sin saldo, pero no sin suerte.
     <string name="permission_location">Geolocalización</string>
     <string name="permission_notifications">Notificaciones</string>
 
+    <!-- Web Client_ID -->
+    <string name="default_web_client_id">"735329306020-7bdikk4c8v8sofeh9v5qb8j0lmiuh455.apps.googleusercontent.com"</string>
+
     <!-- Salir del juego -->
     <string name="exit_game">Salir del juego</string>
     <string name="exit_game_title">Salir del juego</string>

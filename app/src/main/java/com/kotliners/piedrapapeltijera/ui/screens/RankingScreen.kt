@@ -10,8 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kotliners.piedrapapeltijera.ui.viewmodel.RankingViewModel
-import com.kotliners.piedrapapeltijera.ui.theme.TextoBlanco
 import com.kotliners.piedrapapeltijera.ui.components.TituloPrincipal
+import androidx.compose.ui.text.font.FontWeight
+import com.kotliners.piedrapapeltijera.ui.theme.*
+
 
 @Composable
 fun RankingScreen(viewModel: RankingViewModel = viewModel()) {
@@ -57,10 +59,16 @@ fun RankingScreen(viewModel: RankingViewModel = viewModel()) {
                         val balance = victorias - derrotas
                         val balanceTxt = if (balance >= 0) "+$balance" else "$balance"
 
+                        val colorBalance = if (balance >= 0) AmarilloNeon else RosaNeon
+
                         Card(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(vertical = 4.dp)
+                                .padding(vertical = 4.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = AzulNeon,
+                                contentColor = TextoNegro
+                            )
                         ) {
                             Row(
                                 modifier = Modifier
@@ -71,16 +79,21 @@ fun RankingScreen(viewModel: RankingViewModel = viewModel()) {
                             ) {
                                 Text(
                                     text = "${index + 1}. ${jugador.nombre ?: "Jugador"}",
-                                    color = TextoBlanco
+                                    color = TextoNegro,
+                                    fontWeight = FontWeight.Bold
                                 )
-                                Column(horizontalAlignment = Alignment.End) {
+                                Column(
+                                    horizontalAlignment = Alignment.End
+                                ) {
                                     Text(
                                         text = "$monedas Monedas",
-                                        color = TextoBlanco
+                                        color = TextoNegro,
+                                        fontWeight = FontWeight.SemiBold
                                     )
                                     Text(
                                         text = "$balanceTxt Balance victorias",
-                                        color = TextoBlanco
+                                        color = colorBalance,
+                                        fontWeight = FontWeight.Bold
                                     )
                                 }
                             }

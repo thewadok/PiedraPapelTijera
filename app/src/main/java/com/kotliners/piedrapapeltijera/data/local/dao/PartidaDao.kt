@@ -15,15 +15,15 @@ interface PartidaDao {
     fun insertar(partida: Partida): Completable
 
     @Query("SELECT * FROM partidas WHERE jugadorId = :jugadorId ORDER BY fecha DESC")
-    fun observarHistorial(jugadorId: Int): Flowable<List<Partida>>
+    fun observarHistorial(jugadorId: String): Flowable<List<Partida>>
 
     @Query("SELECT COUNT(*) FROM partidas WHERE jugadorId = :jugadorId")
-    fun contar(jugadorId: Int): Single<Int>
+    fun contar(jugadorId: String): Single<Int>
 
     @Query("DELETE FROM partidas WHERE jugadorId = :jugadorId")
-    fun borrarTodo(jugadorId: Int): Completable
+    fun borrarTodo(jugadorId: String): Completable
 
     @Query("SELECT COUNT(*) FROM partidas WHERE jugadorId = :jugadorId")
-    fun observarTotalPartidas(jugadorId: Int): Flowable<Int>
+    fun observarTotalPartidas(jugadorId: String): Flowable<Int>
 
 }

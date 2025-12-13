@@ -26,12 +26,12 @@ interface JugadorDao {
     @Query("SELECT monedas FROM jugador WHERE id_jugador = :id")
     fun observarMonedas(id: String): Flowable<Int>
 
-    // Actualizar monedas del jugador
-    @Query("UPDATE jugador SET monedas = :nuevasMonedas WHERE id_jugador = :idJugador")
-    fun actualizarMonedas(idJugador: Int, nuevasMonedas: Int): Completable
+    // Para actualizar las monedas, usamos el ID de tipo String.
+    @Query("UPDATE jugador SET monedas = :nuevasMonedas WHERE id_jugador = :id")
+    fun actualizarMonedas(id: String, nuevasMonedas: Int): Completable
 
-    //Sumar/restar de forma atómica
-    @Query("UPDATE jugador SET monedas = monedas + :cantidad")
-    fun sumarRestarMonedas(cantidad: Int): Completable
+    // Para sumar/restar, también necesitamos saber a qué jugador.
+    @Query("UPDATE jugador SET monedas = monedas + :cantidad WHERE id_jugador = :id")
+    fun sumarRestarMonedas(id: String, cantidad: Int): Completable
 
 }

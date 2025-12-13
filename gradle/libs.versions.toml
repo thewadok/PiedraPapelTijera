@@ -24,6 +24,7 @@ lifecycle = "2.8.6"
 rxkotlin = "3.0.1"
 documentfile = "1.0.1"
 playServicesLocation = "21.3.0"
+playServicesAuth = "21.2.0"
 firebaseBom = "33.5.1"
 googleServices = "4.4.4"
 moshi = "1.15.0"
@@ -64,6 +65,7 @@ rxkotlin = { module = "io.reactivex.rxjava3:rxkotlin", version.ref = "rxkotlin" 
 androidx-compose-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata" }
 androidx-documentfile = { group = "androidx.documentfile", name = "documentfile", version.ref = "documentfile" }
 google-play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
+google-play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-auth = { module = "com.google.firebase:firebase-auth-ktx" }

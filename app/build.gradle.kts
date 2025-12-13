@@ -104,6 +104,9 @@ dependencies {
     implementation(libs.firebase.database)
     implementation(libs.firebase.firestore)
 
+    // --- GOOGLE SIGN-IN ---
+    implementation(libs.google.play.services.auth)
+
     // --- RETROFIT + MOSHI ---
     implementation(libs.retrofit)
     implementation(libs.converter.moshi)

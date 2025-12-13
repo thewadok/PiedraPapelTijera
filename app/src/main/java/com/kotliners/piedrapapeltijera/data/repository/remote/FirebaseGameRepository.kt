@@ -35,7 +35,10 @@ class FirebaseGameRepository(
 
         // Convertimos el mapa en lista y ordenamos por victorias desc.
         return mapa.values
-            .sortedByDescending { it.victorias ?: 0 }
+            .sortedWith(
+                compareByDescending<JugadorRemoto> { it.monedas ?: 0 }
+                    .thenByDescending { (it.victorias ?: 0) - (it.derrotas ?: 0) }
+            )
             .take(limit)
     }
 

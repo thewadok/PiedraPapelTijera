@@ -168,5 +168,11 @@ Sin saldo, pero no sin suerte.
     <string name="login_cancelled">Inicio de sesión cancelado</string>
     <string name="login_token_error">No se pudo obtener el token de Google</string>
     <string name="login_firebase_error">Error autenticando con Firebase</string>
+    <string name="login_google_error">Error en Google Sign-In</string>
+
+    <!-- Google Sign-In -->
+    <string name="default_web_client_id">
+        735329306020-7bdikk4c8v8sofeh9v5qb8j0lmiuh455.apps.googleusercontent.com
+    </string>
 
 </resources>

@@ -27,7 +27,6 @@ import com.kotliners.piedrapapeltijera.ui.components.Parrafo
 import com.kotliners.piedrapapeltijera.ui.components.TituloPrincipal
 import com.kotliners.piedrapapeltijera.ui.theme.AzulNeon
 import com.kotliners.piedrapapeltijera.ui.theme.FondoNegro
-import com.kotliners.piedrapapeltijera.ui.theme.TextoBlanco
 import com.kotliners.piedrapapeltijera.ui.theme.TextoNegro
 
 @Composable
@@ -37,7 +36,7 @@ fun LoginScreen(
     val context = LocalContext.current
     val auth = remember { FirebaseAuth.getInstance() }
 
-    var error by remember { mutableStateOf<String?>(null) }
+    var errorRes by remember { mutableStateOf<Int?>(null) }
     var loading by remember { mutableStateOf(false) }
 
     val launcher = rememberLauncherForActivityResult(
@@ -46,7 +45,7 @@ fun LoginScreen(
         loading = false
 
         if (result.resultCode != Activity.RESULT_OK) {
-            error = stringResource(R.string.login_cancelled)
+            errorRes = R.string.login_cancelled
             return@rememberLauncherForActivityResult
         }
 
@@ -58,7 +57,7 @@ fun LoginScreen(
             val idToken = account.idToken
 
             if (idToken.isNullOrBlank()) {
-                error = stringResource(R.string.login_token_error)
+                errorRes = R.string.login_token_error
                 return@rememberLauncherForActivityResult
             }
 
@@ -70,17 +69,17 @@ fun LoginScreen(
                     if (t.isSuccessful) {
                         onLoginOk()
                     } else {
-                        error = stringResource(R.string.login_firebase_error)
+                        errorRes =R.string.login_firebase_error
                     }
                 }
 
         } catch (e: ApiException) {
-            error = "Error en Google Sign-In: ${e.statusCode}"
+            errorRes = R.string.login_google_error
         }
     }
 
     fun startGoogleSignIn() {
-        error = null
+        errorRes = null
         loading = true
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -141,10 +140,10 @@ fun LoginScreen(
                 )
             }
 
-            error?.let {
+            errorRes?.let { resId ->
                 Spacer(Modifier.height(12.dp))
                 Text(
-                    text = it,
+                    text = stringResource(resId),
                     color = MaterialTheme.colorScheme.error,
                     fontSize = 14.sp
                 )

@@ -24,7 +24,7 @@ data class Partida (
         autoGenerate = true
     )
     val id: Int = 0,
-    val jugadorId: Int,
+    val jugadorId: String,
     val fecha: Long = System.currentTimeMillis(),
     val jugadaJugador: Move,
     val jugadaCpu: Move,

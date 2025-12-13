@@ -5,8 +5,9 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "jugador")
 data class Jugador (
-    @PrimaryKey(autoGenerate = true)
-    val id_jugador: Int = 0,
-    val nombre: String = "Jugador",
+    @PrimaryKey
+    val id_jugador: String,
+    val nombre: String?,
+    val email: String?,
     val monedas: Int = 100
 )

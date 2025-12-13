@@ -2,6 +2,7 @@ package com.kotliners.piedrapapeltijera.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.kotliners.piedrapapeltijera.data.local.entity.Jugador
 import io.reactivex.rxjava3.core.Completable
@@ -12,16 +13,18 @@ import io.reactivex.rxjava3.core.Flowable
 @Dao
 interface JugadorDao {
 
-    @Insert
-    fun insertarJugador(jugador: Jugador): Single<Long>
+    // Cambiamos a 'OnConflictStrategy.IGNORE' para que si intentamos insertar un jugador
+    // que ya existe (mismo UID), simplemente no haga nada y no dé un error.
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertarJugador(jugador: Jugador): Completable
 
-    // Obtener el jugador
-    @Query("SELECT * FROM jugador LIMIT 1")
-    fun obtenerJugador(): Maybe<Jugador>
+    // Ahora, para obtener un jugador, necesitamos saber su ID.
+    @Query("SELECT * FROM jugador WHERE id_jugador = :id")
+    fun obtenerJugador(id: String): Maybe<Jugador>
 
-    // Observar el saldo del jugador en tiempo real
-    @Query("SELECT monedas FROM jugador LIMIT 1")
-    fun observarMonedas(): Flowable<Int>
+    // Para observar el saldo de monedas, también necesitamos el ID del jugador.
+    @Query("SELECT monedas FROM jugador WHERE id_jugador = :id")
+    fun observarMonedas(id: String): Flowable<Int>
 
     // Actualizar monedas del jugador
     @Query("UPDATE jugador SET monedas = :nuevasMonedas WHERE id_jugador = :idJugador")

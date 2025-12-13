@@ -49,7 +49,7 @@ import com.kotliners.piedrapapeltijera.ui.theme.AzulNeon
 import com.kotliners.piedrapapeltijera.ui.theme.RosaNeon
 
 @Composable
-fun GameScreen(viewModel: MainViewModel = viewModel()) {
+fun GameScreen(viewModel: MainViewModel) {
 
     // Estado del juego
     var userMove by remember { mutableStateOf<Move?>(null) }

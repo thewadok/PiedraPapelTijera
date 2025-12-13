@@ -32,7 +32,7 @@ import java.util.Locale
 
 @Composable
 fun HistoryScreen(
-    viewModel: MainViewModel = viewModel()
+    viewModel: MainViewModel
 ) {
     val partidas = viewModel.historialPartidas.observeAsState(emptyList()).value
 

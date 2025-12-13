@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import android.content.Context
 import android.graphics.Bitmap
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.launch
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -18,8 +19,10 @@ import com.kotliners.piedrapapeltijera.game.Move
 import com.kotliners.piedrapapeltijera.game.GameResult
 import com.kotliners.piedrapapeltijera.utils.victory.VictoryManager
 import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.kotlin.subscribeBy
+import kotlinx.coroutines.launch
 
-class MainViewModel : ViewModel() {
+class MainViewModel(private val user: FirebaseUser) : ViewModel() {
 
     private val repo = JugadorRepository(MyApp.db.jugadorDao())
     private val historial = PartidaRepository(MyApp.db.partidaDao())
@@ -35,8 +38,8 @@ class MainViewModel : ViewModel() {
     init {
         // Creamos el jugador si no existe
         // Observamos el saldo en tiempo real y lo publicamos en LiveData
-        repo.ensureJugador()
-            .andThen(repo.observarMonedas())
+        repo.ensureJugador(user)
+            .andThen(repo.observarMonedas(user.uid))
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -46,14 +49,14 @@ class MainViewModel : ViewModel() {
             .also { disposables.add(it) }
 
         //Observamos en tiempo real el total de partidas jugadas
-        historial.observarTotalPartidas()
+        historial.observarTotalPartidas(user.uid)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(onNext = { partidas.value = it })
             .also { disposables.add(it) }
 
         //Observamos historial completo de partidas
-        historial.observarHistorial()
+        historial.observarHistorial(user.uid)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -65,7 +68,7 @@ class MainViewModel : ViewModel() {
 
     // +n o -n para ganar/perder monedas
     fun cambiarMonedas(cantidad: Int) {
-        repo.cambiarMonedas(cantidad)
+        repo.cambiarMonedas(user.uid, cantidad)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -77,7 +80,7 @@ class MainViewModel : ViewModel() {
 
     // Fijamos un saldo exacto
     fun setMonedas(nuevoSaldo: Int) {
-        repo.setMonedas(nuevoSaldo)
+        repo.setMonedas(user.uid, nuevoSaldo)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -96,7 +99,7 @@ class MainViewModel : ViewModel() {
         latitud: Double?,
         longitud: Double?
     ) {
-        historial.registrarPartida(movJugador, movCpu, resultado, apuesta, latitud, longitud)
+        historial.registrarPartida(user.uid, movJugador, movCpu, resultado, apuesta, latitud, longitud)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onComplete = { /* OK */ },
@@ -108,7 +111,7 @@ class MainViewModel : ViewModel() {
     // Restablecemos el juego al estado inicial.
     fun resetJuego() {
         setMonedas(100)
-        historial.borrarHistorial()
+        historial.borrarHistorial(user.uid)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onComplete = { historialPartidas.value = emptyList() },

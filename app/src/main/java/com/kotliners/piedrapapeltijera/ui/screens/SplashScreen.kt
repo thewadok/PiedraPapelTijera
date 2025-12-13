@@ -15,13 +15,18 @@ import com.kotliners.piedrapapeltijera.R
 import com.kotliners.piedrapapeltijera.navigation.Screen
 import com.kotliners.piedrapapeltijera.ui.theme.FondoNegro
 import kotlinx.coroutines.delay
+import com.google.firebase.auth.FirebaseAuth
 
 //Pantalla de Bienvenida
 @Composable
 fun SplashScreen(nav: NavHostController){
     LaunchedEffect(Unit) {
-        delay(5000)
-        nav.navigate(Screen.Home.route){
+        delay(3000)
+
+        val user = FirebaseAuth.getInstance().currentUser
+        val destino = if (user != null) Screen.Home.route else Screen.Login.route
+
+        nav.navigate(destino){
             popUpTo(Screen.Splash.route)  { inclusive = true }
             launchSingleTop = true
         }

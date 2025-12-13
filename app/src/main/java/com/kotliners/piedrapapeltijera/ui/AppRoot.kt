@@ -43,7 +43,8 @@ fun AppRoot(user: FirebaseUser, navController: NavHostController) {
                 composable(Screen.Ranking.route) { AppScaffold(nav) { RankingScreen()} }
                 composable(Screen.Setting.route) { AppScaffold(nav) { SettingScreen(nav)} }
                 composable(Screen.Help.route) { AppScaffold(nav) { HelpScreen()} }
-                composable(Screen.Game.route) {AppScaffold(nav) { GameScreen(viewModel)} }
+                composable(Screen.Game.route) {AppScaffold(nav) { GameScreen(viewModel
+                )} }
             }
         }
     }

@@ -13,6 +13,8 @@ import com.kotliners.piedrapapeltijera.ui.screens.RankingScreen
 import com.kotliners.piedrapapeltijera.ui.screens.SettingScreen
 import com.kotliners.piedrapapeltijera.ui.screens.SplashScreen
 import com.kotliners.piedrapapeltijera.navigation.Screen
+import com.kotliners.piedrapapeltijera.ui.screens.LoginScreen
+import com.google.firebase.auth.FirebaseAuth
 import com.kotliners.piedrapapeltijera.ui.theme.PiedraPapelTijeraTheme
 
 //Raiz de la app
@@ -26,6 +28,12 @@ fun AppRoot() {
                 startDestination = Screen.Splash.route
             ){
                 composable(Screen.Splash.route) {SplashScreen(nav) }
+                composable(Screen.Login.route) { LoginScreen(onLoginOk = {
+                    nav.navigate(Screen.Home.route) {
+                        popUpTo(Screen.Login.route) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                })}
                 composable(Screen.Home.route) { AppScaffold(nav) { HomeScreen(nav)} }
                 composable(Screen.History.route) { AppScaffold(nav) { HistoryScreen()} }
                 composable(Screen.Ranking.route) { AppScaffold(nav) { RankingScreen()} }

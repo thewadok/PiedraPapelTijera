@@ -26,7 +26,7 @@ fun RankingScreen(viewModel: RankingViewModel = viewModel()) {
             .padding(16.dp)
     ) {
 
-        TituloPrincipal(text = "🏆 Top 10 Jugadores")
+        TituloPrincipal(text = "Top 10 Jugadores")
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -50,6 +50,13 @@ fun RankingScreen(viewModel: RankingViewModel = viewModel()) {
             else -> {
                 LazyColumn {
                     itemsIndexed(jugadores) { index, jugador ->
+
+                        val monedas = jugador.monedas ?: 0
+                        val victorias = jugador.victorias ?: 0
+                        val derrotas = jugador.derrotas ?: 0
+                        val balance = victorias - derrotas
+                        val balanceTxt = if (balance >= 0) "+$balance" else "$balance"
+
                         Card(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -59,16 +66,23 @@ fun RankingScreen(viewModel: RankingViewModel = viewModel()) {
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(12.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Text(
                                     text = "${index + 1}. ${jugador.nombre ?: "Jugador"}",
                                     color = TextoBlanco
                                 )
-                                Text(
-                                    text = "🏆 ${jugador.victorias ?: 0}",
-                                    color = TextoBlanco
-                                )
+                                Column(horizontalAlignment = Alignment.End) {
+                                    Text(
+                                        text = "$monedas Monedas",
+                                        color = TextoBlanco
+                                    )
+                                    Text(
+                                        text = "$balanceTxt Balance victorias",
+                                        color = TextoBlanco
+                                    )
+                                }
                             }
                         }
                     }

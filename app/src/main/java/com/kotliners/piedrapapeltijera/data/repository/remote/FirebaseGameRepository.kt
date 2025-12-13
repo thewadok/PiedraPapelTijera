@@ -27,8 +27,10 @@ class FirebaseGameRepository(
     }
 
     /**
-     * Devuelve los 10 mejores jugadores ordenados por número de victorias.
-     * Se ordena en el repositorio para no forzar al profesor a usar Firebase queries.
+     * Devuelve los 10 mejores jugadores ordenados por:
+     *  * 1) Monedas
+     *  * 2) Desempate: balance entre victorias - derrotas
+     * Se ordena en el repositorio para evitar dependencias con queries complejas en Firebase.
      */
     suspend fun fetchTopJugadores(limit: Int = 10): List<JugadorRemoto> {
         val mapa = api.getJugadores()
@@ -44,7 +46,6 @@ class FirebaseGameRepository(
 
     /**
      * Devuelve todas las partidas remotas.
-     * No lo usas aún, pero está preparado para añadir ranking de partidas o historial remoto.
      */
     suspend fun fetchPartidas(): Map<String, PartidaRemota> {
         return api.getPartidas()

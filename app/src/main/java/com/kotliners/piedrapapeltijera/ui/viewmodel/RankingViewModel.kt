@@ -29,6 +29,7 @@ class RankingViewModel(
         viewModelScope.launch {
             try {
                 _loading.value = true
+                _error.value = null
                 _topJugadores.value = repository.fetchTopJugadores()
             } catch (e: Exception) {
                 _error.value = "Error al cargar el ranking"

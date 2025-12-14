@@ -52,7 +52,10 @@ class MainViewModel(private val user: FirebaseUser) : ViewModel() {
         historial.observarTotalPartidas(user.uid)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribeBy(onNext = { partidas.value = it })
+            .subscribeBy(
+                onNext = { partidas.value = it },
+                onError = { e -> Log.e("MainViewModel", "Error observando total de partidas", e)}
+            )
             .also { disposables.add(it) }
 
         //Observamos historial completo de partidas

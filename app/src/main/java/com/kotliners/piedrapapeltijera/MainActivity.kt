@@ -22,6 +22,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.compose.rememberNavController
 import com.kotliners.piedrapapeltijera.ui.auth.AuthManager
 import com.kotliners.piedrapapeltijera.ui.screens.LoginScreen
 import kotlinx.coroutines.launch
@@ -121,7 +122,8 @@ class MainActivity : ComponentActivity() {
             } else {
                 // El usuario ya está autenticado, mostramos la app principal.
                 // Más adelante, pasaremos aquí una función para cerrar sesión.
-                AppRoot()
+                val navController = rememberNavController()
+                AppRoot(user = user!!, navController = navController)
             }
         }
 

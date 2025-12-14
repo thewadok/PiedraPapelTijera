@@ -17,7 +17,7 @@ class MyApp : Application() {
         db = Room.databaseBuilder(
             applicationContext,
             AppDatabase::class.java,
-            "piedra_papel_tijera.db"
+            "piedra_papel_tijera_v2.db"
         )
             .fallbackToDestructiveMigration()
             .build()

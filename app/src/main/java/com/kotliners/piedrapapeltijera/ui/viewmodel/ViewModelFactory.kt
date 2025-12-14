@@ -9,7 +9,7 @@ import com.google.firebase.auth.FirebaseUser
  * Su única responsabilidad es saber cómo crear una instancia de MainViewModel
  * cuando este necesita un 'FirebaseUser' en su constructor.
  */
-class ViewModelFactory(private val user: FirebaseUser) : ViewModelProvider.Factory {    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+class ViewModelFactory(private val user: FirebaseUser) : ViewModelProvider.Factory { override fun <T : ViewModel> create(modelClass: Class<T>): T {
     // Comprueba si la clase que se pide crear es MainViewModel.
     if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
         // Si lo es, crea una instancia pasándole el 'user' y la devuelve.

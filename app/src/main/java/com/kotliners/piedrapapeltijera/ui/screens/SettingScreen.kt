@@ -28,12 +28,42 @@ import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
 import com.kotliners.piedrapapeltijera.utils.locale.LocaleManager
 import com.kotliners.piedrapapeltijera.utils.media.MusicService
 import com.kotliners.piedrapapeltijera.utils.system.exitGame
+import androidx.navigation.compose.currentBackStackEntryAsState
+import com.kotliners.piedrapapeltijera.MyApp
+import com.kotliners.piedrapapeltijera.data.repository.JugadorRepository
+import com.kotliners.piedrapapeltijera.data.repository.PartidaRepository
+import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModelFactory
+
 
 @Composable
 fun SettingScreen(
-    nav: NavHostController,
-    viewModel: MainViewModel = viewModel()
+    nav: NavHostController
 ) {
+
+    val factory = remember {
+        MainViewModelFactory(
+            JugadorRepository(MyApp.db.jugadorDao()),
+            PartidaRepository(MyApp.db.partidaDao())
+        )
+    }
+
+    val navBackStackEntry by nav.currentBackStackEntryAsState()
+
+    // Intentamos obtener el backStackEntry de Home; si no existe, devolvemos null
+    val homeEntry = remember(navBackStackEntry) {
+        runCatching { nav.getBackStackEntry(Screen.Home.route) }.getOrNull()
+    }
+
+    // Si existe Home en el backstack, compartimos VM; si no, usamos VM local del destino
+    val viewModel: MainViewModel = if (homeEntry != null) {
+        viewModel(
+            viewModelStoreOwner = homeEntry,
+            factory = factory
+        )
+    } else {
+        viewModel(factory = factory)
+    }
+
     val scroll = rememberScrollState()
     val context = LocalContext.current
     val activity = context as? Activity

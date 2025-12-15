@@ -10,7 +10,6 @@ import kotlinx.coroutines.launch
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import com.kotliners.piedrapapeltijera.MyApp
 import com.kotliners.piedrapapeltijera.data.repository.JugadorRepository
 import com.kotliners.piedrapapeltijera.data.repository.PartidaRepository
 import com.kotliners.piedrapapeltijera.data.local.entity.Partida
@@ -19,12 +18,12 @@ import com.kotliners.piedrapapeltijera.game.GameResult
 import com.kotliners.piedrapapeltijera.utils.victory.VictoryManager
 import io.reactivex.rxjava3.schedulers.Schedulers
 
-class MainViewModel : ViewModel() {
+class MainViewModel(
+    private val repo: JugadorRepository,
+    private val historial: PartidaRepository
+) : ViewModel() {
 
-    private val repo = JugadorRepository(MyApp.db.jugadorDao())
-    private val historial = PartidaRepository(MyApp.db.partidaDao())
     private val disposables = CompositeDisposable()
-
     private val victoryManager: VictoryManager = VictoryManager()
 
     // Expuesto para la UI

@@ -11,3 +11,11 @@ fun NavHostController.safeNavigate(route: String) {
         restoreState = true
     }
 }
+
+// Navegación de logout para borrar toda la pila
+fun NavHostController.logoutTo(route: String) {
+    navigate(route) {
+        popUpTo(0) { inclusive = true }
+        launchSingleTop = true
+    }
+}

@@ -14,7 +14,6 @@ import com.kotliners.piedrapapeltijera.ui.screens.SettingScreen
 import com.kotliners.piedrapapeltijera.ui.screens.SplashScreen
 import com.kotliners.piedrapapeltijera.navigation.Screen
 import com.kotliners.piedrapapeltijera.ui.screens.LoginScreen
-import com.google.firebase.auth.FirebaseAuth
 import com.kotliners.piedrapapeltijera.ui.theme.PiedraPapelTijeraTheme
 
 //Raiz de la app
@@ -35,11 +34,11 @@ fun AppRoot() {
                     }
                 })}
                 composable(Screen.Home.route) { AppScaffold(nav) { HomeScreen(nav)} }
-                composable(Screen.History.route) { AppScaffold(nav) { HistoryScreen()} }
+                composable(Screen.History.route) { AppScaffold(nav) { HistoryScreen(nav)} }
                 composable(Screen.Ranking.route) { AppScaffold(nav) { RankingScreen()} }
                 composable(Screen.Setting.route) { AppScaffold(nav) { SettingScreen(nav)} }
                 composable(Screen.Help.route) { AppScaffold(nav) { HelpScreen()} }
-                composable(Screen.Game.route) {AppScaffold(nav) { GameScreen()} }
+                composable(Screen.Game.route) {AppScaffold(nav) { GameScreen(nav)} }
             }
         }
     }

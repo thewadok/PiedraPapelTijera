@@ -11,6 +11,12 @@ data class LoginUiState(
     // UID autenticado pendiente de crear en Firebase Database
     val pendingUid: String? = null,
 
+    // Nombre sugerido
+    val suggestedName: String = "",
+
+    // Indicamos si el nombre introducido no es válido
+    val nameError: Boolean = false,
+
     // Recurso de error
     val errorRes: Int? = null
 )

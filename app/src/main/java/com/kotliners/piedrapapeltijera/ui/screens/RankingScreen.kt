@@ -16,7 +16,9 @@ import com.kotliners.piedrapapeltijera.ui.theme.*
 
 
 @Composable
-fun RankingScreen(viewModel: RankingViewModel = viewModel()) {
+fun RankingScreen() {
+
+    val viewModel: RankingViewModel = viewModel(key = "RankingViewModel")
 
     val jugadores by viewModel.topJugadores.collectAsState()
     val loading by viewModel.loading.collectAsState()

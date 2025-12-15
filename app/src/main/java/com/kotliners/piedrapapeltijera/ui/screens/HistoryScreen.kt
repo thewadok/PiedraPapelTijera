@@ -29,11 +29,46 @@ import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.compose.runtime.*
+import com.kotliners.piedrapapeltijera.MyApp
+import com.kotliners.piedrapapeltijera.data.repository.JugadorRepository
+import com.kotliners.piedrapapeltijera.data.repository.PartidaRepository
+import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModelFactory
+import com.kotliners.piedrapapeltijera.navigation.Screen
 
 @Composable
 fun HistoryScreen(
-    viewModel: MainViewModel = viewModel()
+    nav: NavHostController
 ) {
+
+    val factory = remember {
+        MainViewModelFactory(
+            JugadorRepository(MyApp.db.jugadorDao()),
+            PartidaRepository(MyApp.db.partidaDao())
+        )
+    }
+
+    // Key que cambia cuando cambia el backstack
+    val navBackStackEntry by nav.currentBackStackEntryAsState()
+
+    // Intentamos obtener Home; si no está en el backstack, devolvemos null
+    val homeEntry = remember(navBackStackEntry) {
+        runCatching { nav.getBackStackEntry(Screen.Home.route) }.getOrNull()
+    }
+
+    // Si existe Home → compartimos ViewModel
+    // Si no existe → creamos uno nuevo con factory
+    val viewModel: MainViewModel = if (homeEntry != null) {
+        viewModel(
+            viewModelStoreOwner = homeEntry,
+            factory = factory
+        )
+    } else {
+        viewModel(factory = factory)
+    }
+
     val partidas = viewModel.historialPartidas.observeAsState(emptyList()).value
 
     Column(

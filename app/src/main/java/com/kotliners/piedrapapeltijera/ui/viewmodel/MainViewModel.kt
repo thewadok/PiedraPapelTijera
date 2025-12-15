@@ -1,22 +1,22 @@
-package com.kotliners.piedrapapeltijera.ui.theme.viewmodel
+package com.kotliners.piedrapapeltijera.ui.viewmodel
 
-import android.util.Log
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import android.content.Context
 import android.graphics.Bitmap
-import kotlinx.coroutines.launch
-import io.reactivex.rxjava3.kotlin.subscribeBy
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import android.util.Log
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.kotliners.piedrapapeltijera.data.local.entity.Partida
 import com.kotliners.piedrapapeltijera.data.repository.local.JugadorRepository
 import com.kotliners.piedrapapeltijera.data.repository.local.PartidaRepository
-import com.kotliners.piedrapapeltijera.data.local.entity.Partida
-import com.kotliners.piedrapapeltijera.game.Move
 import com.kotliners.piedrapapeltijera.game.GameResult
+import com.kotliners.piedrapapeltijera.game.Move
 import com.kotliners.piedrapapeltijera.utils.victory.VictoryManager
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.launch
 
 class MainViewModel(
     private val repo: JugadorRepository,
@@ -130,7 +130,7 @@ class MainViewModel(
      */
     fun onPlayerWin(
         context: Context,
-                    screenshot: Bitmap
+        screenshot: Bitmap
     ) {
         viewModelScope.launch {
             victoryManager.handleVictory(context, screenshot)

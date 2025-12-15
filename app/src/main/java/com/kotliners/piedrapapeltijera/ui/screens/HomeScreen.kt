@@ -22,13 +22,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.verticalScroll
-import com.kotliners.piedrapapeltijera.ui.theme.viewmodel.MainViewModel
+import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.livedata.observeAsState
 import com.kotliners.piedrapapeltijera.MyApp
 import com.kotliners.piedrapapeltijera.data.repository.local.JugadorRepository
 import com.kotliners.piedrapapeltijera.data.repository.local.PartidaRepository
-import com.kotliners.piedrapapeltijera.ui.theme.viewmodel.MainViewModelFactory
+import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModelFactory
 
 @Composable
 fun HomeScreen(

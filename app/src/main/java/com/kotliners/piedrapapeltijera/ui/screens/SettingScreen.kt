@@ -24,7 +24,7 @@ import com.kotliners.piedrapapeltijera.navigation.Screen
 import com.kotliners.piedrapapeltijera.navigation.safeNavigate
 import com.kotliners.piedrapapeltijera.ui.components.*
 import com.kotliners.piedrapapeltijera.ui.theme.*
-import com.kotliners.piedrapapeltijera.ui.theme.viewmodel.MainViewModel
+import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
 import com.kotliners.piedrapapeltijera.utils.locale.LocaleManager
 import com.kotliners.piedrapapeltijera.utils.media.MusicService
 import com.kotliners.piedrapapeltijera.utils.system.exitGame
@@ -32,7 +32,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.kotliners.piedrapapeltijera.MyApp
 import com.kotliners.piedrapapeltijera.data.repository.local.JugadorRepository
 import com.kotliners.piedrapapeltijera.data.repository.local.PartidaRepository
-import com.kotliners.piedrapapeltijera.ui.theme.viewmodel.MainViewModelFactory
+import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
 
 

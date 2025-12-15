@@ -53,7 +53,13 @@ class MainViewModel(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onNext = { monedas.value = it },
-                onError = { e -> Log.e("MainViewModel", "Error inicializando/observando monedas", e) }
+                onError = { e ->
+                    Log.e(
+                        "MainViewModel",
+                        "Error inicializando/observando monedas",
+                        e
+                    )
+                }
             )
             .also { disposables.add(it) }
 
@@ -156,7 +162,45 @@ class MainViewModel(
         super.onCleared()
     }
 
+    // Sincronizamos el resultado de una partida tanto en local (Room) como en remoto (Firebase).
+    private fun syncResultado(
+        deltaMonedas: Int,
+        victoria: Boolean
+    ) {
+        // Local (Room)
+        cambiarMonedas(deltaMonedas)
+
+        // Remoto (Firebase)
+        val uid = currentUid() ?: return
+
+        authRepo.sumarMonedas(
+            uid = uid,
+            delta = deltaMonedas,
+            onError = { Log.e("MainViewModel", "Error actualizando monedas en Firebase") }
+        )
+
+        if (victoria) {
+            authRepo.sumarVictoria(
+                uid = uid,
+                onError = { Log.e("MainViewModel", "Error sumando victoria en Firebase") }
+            )
+        } else {
+            authRepo.sumarDerrota(
+                uid = uid,
+                onError = { Log.e("MainViewModel", "Error sumando derrota en Firebase") }
+            )
+        }
+    }
+
+    fun aplicarVictoria(apuesta: Int) =
+        syncResultado(deltaMonedas = apuesta, victoria = true)
+
+    fun aplicarDerrota(apuesta: Int) =
+        syncResultado(deltaMonedas = -apuesta, victoria = false)
+
     // Devuelvemos el UID del usuario actualmente logueado en Firebase, o null si no hay sesión.
     private fun currentUid(): String? =
         FirebaseAuth.getInstance().currentUser?.uid
+
 }
+

@@ -31,20 +31,20 @@ fun AppRoot(user: FirebaseUser, navController: NavHostController) {
     val viewModel: MainViewModel = viewModel(factory = factory)
 
     PiedraPapelTijeraTheme {
-        val nav = rememberNavController()
+        // val nav = rememberNavController()
         MaterialTheme {
             NavHost(
-                navController = nav,
-                startDestination = Screen.Splash.route
+                navController = navController,
+                startDestination = Screen.Home.route
             ){
-                composable(Screen.Splash.route) {SplashScreen(nav) }
-                composable(Screen.Home.route) { AppScaffold(nav) { HomeScreen(nav)} }
-                composable(Screen.History.route) { AppScaffold(nav) { HistoryScreen(viewModel)} }
-                composable(Screen.Ranking.route) { AppScaffold(nav) { RankingScreen()} }
-                composable(Screen.Setting.route) { AppScaffold(nav) { SettingScreen(nav)} }
-                composable(Screen.Help.route) { AppScaffold(nav) { HelpScreen()} }
-                composable(Screen.Game.route) {AppScaffold(nav) { GameScreen(viewModel
-                )} }
+                composable(Screen.Splash.route) {SplashScreen(navController) }
+                composable(Screen.Home.route) { AppScaffold(navController) { HomeScreen(navController, viewModel)} }
+                composable(Screen.History.route) { AppScaffold(navController) { HistoryScreen(viewModel)} }
+                composable(Screen.Ranking.route) { AppScaffold(navController) { RankingScreen()} }
+                composable(Screen.Setting.route) { AppScaffold(navController) { SettingScreen(navController)} }
+                composable(Screen.Help.route) { AppScaffold(navController) { HelpScreen()} }
+                composable(Screen.Game.route) {AppScaffold(navController) { GameScreen(viewModel)
+                } }
             }
         }
     }

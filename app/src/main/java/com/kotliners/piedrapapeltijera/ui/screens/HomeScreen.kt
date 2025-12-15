@@ -25,12 +25,11 @@ import androidx.compose.foundation.verticalScroll
 import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.livedata.observeAsState
+import com.google.firebase.auth.FirebaseAuth
+import com.kotliners.piedrapapeltijera.ui.viewmodel.ViewModelFactory
 
 @Composable
-fun HomeScreen(
-    nav: NavHostController,
-    viewModel: MainViewModel = viewModel()
-) {
+fun HomeScreen(nav: NavHostController, viewModel: MainViewModel) {
     val scroll = rememberScrollState()
     val saldo = viewModel.monedas.observeAsState(0).value
     val partidas = viewModel.partidas.observeAsState(0).value

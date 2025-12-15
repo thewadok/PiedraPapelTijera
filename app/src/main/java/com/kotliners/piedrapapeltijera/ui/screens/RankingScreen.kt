@@ -9,7 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.kotliners.piedrapapeltijera.ui.viewmodel.RankingViewModel
+import com.kotliners.piedrapapeltijera.ui.theme.viewmodel.RankingViewModel
 import com.kotliners.piedrapapeltijera.ui.components.TituloPrincipal
 import androidx.compose.ui.text.font.FontWeight
 import com.kotliners.piedrapapeltijera.ui.theme.*

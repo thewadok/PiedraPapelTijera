@@ -1,4 +1,4 @@
-package com.kotliners.piedrapapeltijera.ui.viewmodel
+package com.kotliners.piedrapapeltijera.ui.theme.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

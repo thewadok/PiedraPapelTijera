@@ -25,7 +25,7 @@ import com.kotliners.piedrapapeltijera.ui.theme.FondoNegro
 import com.kotliners.piedrapapeltijera.ui.theme.TextoBlanco
 import com.kotliners.piedrapapeltijera.ui.theme.AmarilloNeon
 import com.kotliners.piedrapapeltijera.ui.components.TituloPrincipal
-import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
+import com.kotliners.piedrapapeltijera.ui.theme.viewmodel.MainViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -35,7 +35,7 @@ import androidx.compose.runtime.*
 import com.kotliners.piedrapapeltijera.MyApp
 import com.kotliners.piedrapapeltijera.data.repository.local.JugadorRepository
 import com.kotliners.piedrapapeltijera.data.repository.local.PartidaRepository
-import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModelFactory
+import com.kotliners.piedrapapeltijera.ui.theme.viewmodel.MainViewModelFactory
 import com.kotliners.piedrapapeltijera.navigation.Screen
 
 @Composable

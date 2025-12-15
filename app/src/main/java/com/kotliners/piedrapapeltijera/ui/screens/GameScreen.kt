@@ -28,7 +28,7 @@ import com.kotliners.piedrapapeltijera.game.Move
 import com.kotliners.piedrapapeltijera.ui.theme.FondoNegro
 import com.kotliners.piedrapapeltijera.ui.theme.AmarilloNeon
 import com.kotliners.piedrapapeltijera.ui.theme.TextoBlanco
-import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
+import com.kotliners.piedrapapeltijera.ui.theme.viewmodel.MainViewModel
 import com.kotliners.piedrapapeltijera.ui.components.NeonGloboInfo
 import com.kotliners.piedrapapeltijera.utils.location.LocationManager
 import com.kotliners.piedrapapeltijera.utils.media.SoundEffects
@@ -51,9 +51,9 @@ import androidx.compose.runtime.LaunchedEffect
 import com.kotliners.piedrapapeltijera.MyApp
 import com.kotliners.piedrapapeltijera.data.repository.local.JugadorRepository
 import com.kotliners.piedrapapeltijera.data.repository.local.PartidaRepository
-import com.kotliners.piedrapapeltijera.ui.viewmodel.PremioViewModel
+import com.kotliners.piedrapapeltijera.ui.theme.viewmodel.PremioViewModel
 import com.kotliners.piedrapapeltijera.ui.components.NeonGloboBote
-import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModelFactory
+import com.kotliners.piedrapapeltijera.ui.theme.viewmodel.MainViewModelFactory
 import androidx.compose.runtime.remember
 import com.kotliners.piedrapapeltijera.navigation.Screen
 import androidx.navigation.NavHostController

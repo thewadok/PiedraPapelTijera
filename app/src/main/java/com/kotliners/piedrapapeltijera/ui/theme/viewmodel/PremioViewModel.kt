@@ -1,10 +1,10 @@
-package com.kotliners.piedrapapeltijera.ui.viewmodel
+package com.kotliners.piedrapapeltijera.ui.theme.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.database.ValueEventListener
 import com.kotliners.piedrapapeltijera.data.remote.firebase.PremioComunRemoto
-import com.kotliners.piedrapapeltijera.data.remote.firebase.PremioViewState
+import com.kotliners.piedrapapeltijera.ui.state.PremioViewState
 import com.kotliners.piedrapapeltijera.data.repository.remote.PremioRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

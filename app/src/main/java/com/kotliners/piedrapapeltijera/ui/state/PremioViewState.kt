@@ -1,4 +1,4 @@
-package com.kotliners.piedrapapeltijera.data.remote.firebase
+package com.kotliners.piedrapapeltijera.ui.state
 
 // Modelo que usaremos en la UI para mostrar el estado del premio común.
  data class PremioViewState (

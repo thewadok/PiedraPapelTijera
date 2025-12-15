@@ -17,13 +17,26 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.launch
+import com.google.firebase.auth.FirebaseAuth
+import com.kotliners.piedrapapeltijera.data.repository.remote.AuthRepository
 
 class MainViewModel(
+
+    // Repositorio local jugador
     private val repo: JugadorRepository,
-    private val historial: PartidaRepository
+
+    // Repositorio local de partidas
+    private val historial: PartidaRepository,
+
+    // Repo remoto de autenticación
+    private val authRepo: AuthRepository
+
 ) : ViewModel() {
 
+    // Contenedor para cancelar todas las suscripciones RxJava al cerrar el ViewModel
     private val disposables = CompositeDisposable()
+
+    // Clase encargada de manejar acciones al ganar
     private val victoryManager: VictoryManager = VictoryManager()
 
     // Expuesto para la UI
@@ -137,8 +150,13 @@ class MainViewModel(
         }
     }
 
+    // Limpiamos todas las suscripciones RxJava para evitar fugas de memoria.
     override fun onCleared() {
         disposables.clear()
         super.onCleared()
     }
+
+    // Devuelvemos el UID del usuario actualmente logueado en Firebase, o null si no hay sesión.
+    private fun currentUid(): String? =
+        FirebaseAuth.getInstance().currentUser?.uid
 }

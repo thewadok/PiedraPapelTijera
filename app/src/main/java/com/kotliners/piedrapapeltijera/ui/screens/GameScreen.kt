@@ -48,11 +48,42 @@ import androidx.compose.ui.text.font.FontWeight
 import com.kotliners.piedrapapeltijera.ui.theme.AzulNeon
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.LaunchedEffect
+import com.kotliners.piedrapapeltijera.MyApp
+import com.kotliners.piedrapapeltijera.data.repository.JugadorRepository
+import com.kotliners.piedrapapeltijera.data.repository.PartidaRepository
 import com.kotliners.piedrapapeltijera.ui.viewmodel.PremioViewModel
 import com.kotliners.piedrapapeltijera.ui.components.NeonGloboBote
+import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModelFactory
+import androidx.compose.runtime.remember
+import com.kotliners.piedrapapeltijera.navigation.Screen
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 
 @Composable
-fun GameScreen(viewModel: MainViewModel = viewModel()) {
+fun GameScreen(nav: NavHostController) {
+
+    // Creamos la Factory con remember para no recrearla en cada recomposición
+    val factory = remember {
+        MainViewModelFactory(
+            JugadorRepository(MyApp.db.jugadorDao()),
+            PartidaRepository(MyApp.db.partidaDao())
+        )
+    }
+
+    // Key que cambia cuando cambia el backstack
+    val navBackStackEntry by nav.currentBackStackEntryAsState()
+
+    // getBackStackEntry protegido: si no existe Home, devuelve null
+    val homeEntry = remember(navBackStackEntry) {
+        runCatching { nav.getBackStackEntry(Screen.Home.route) }.getOrNull()
+    }
+
+    // VM compartido si existe Home; si no, VM local para esta pantalla (pero con factory)
+    val viewModel: MainViewModel = if (homeEntry != null) {
+        viewModel(viewModelStoreOwner = homeEntry, factory = factory)
+    } else {
+        viewModel(factory = factory)
+    }
 
     // ViewModel del premio común
     val premioViewModel: PremioViewModel = viewModel()

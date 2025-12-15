@@ -2,6 +2,9 @@ package com.kotliners.piedrapapeltijera.data.repository.remote
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.MutableData
+import com.google.firebase.database.Transaction
+
 
 /**
  * Repositorio de autenticación y jugador remoto
@@ -60,5 +63,66 @@ class AuthRepository {
         jugadorRef(uid).setValue(jugador)
             .addOnSuccessListener { onOk() }
             .addOnFailureListener { onError() }
+    }
+
+    // Sumamos o restamos monedas al jugador de forma segura usando una transacción
+    fun sumarMonedas(uid: String, delta: Int, onOk: () -> Unit = {}, onError: () -> Unit = {}) {
+
+        jugadorRef(uid).child("monedas")
+            .runTransaction(object : Transaction.Handler {
+
+                // Leemos el valor actual y lo actualizamos de forma atómica
+                override fun doTransaction(currentData: MutableData): Transaction.Result {
+                    val actual = currentData.getValue(Int::class.java) ?: 0
+                    currentData.value = actual + delta
+                    return Transaction.success(currentData)
+                }
+
+                // Indica si la operación se ha completado correctamente o no.
+                override fun onComplete(error: com.google.firebase.database.DatabaseError?, committed: Boolean, snapshot: com.google.firebase.database.DataSnapshot?) {
+                    if (error != null || !committed) onError() else onOk()
+                }
+            })
+    }
+
+
+    // Incrementamos en 1 el número de victorias del jugador de forma segura usando una transacción
+    fun sumarVictoria(uid: String, onOk: () -> Unit = {}, onError: () -> Unit = {}) {
+
+        jugadorRef(uid).child("victorias")
+            .runTransaction(object : Transaction.Handler {
+
+                // Obtenemos el número actual de victorias y lo incrementa en 1
+                override fun doTransaction(currentData: MutableData): Transaction.Result {
+                    val actual = currentData.getValue(Int::class.java) ?: 0
+                    currentData.value = actual + 1
+                    return Transaction.success(currentData)
+                }
+
+                // Callback final de la transacción
+                override fun onComplete(error: com.google.firebase.database.DatabaseError?, committed: Boolean, snapshot: com.google.firebase.database.DataSnapshot?) {
+                    if (error != null || !committed) onError() else onOk()
+                }
+            })
+    }
+
+    // Incrementamos en 1 el número de derrotas del jugador de forma segura usando una transacción
+    fun sumarDerrota(uid: String, onOk: () -> Unit = {}, onError: () -> Unit = {}) {
+
+        jugadorRef(uid).child("derrotas")
+            .runTransaction(object : Transaction.Handler {
+
+                // Obtenemos el número actual de derrotas y lo incrementa en 1
+                override fun doTransaction(currentData: MutableData): Transaction.Result {
+                    val actual = currentData.getValue(Int::class.java) ?: 0
+                    currentData.value = actual + 1
+                    return Transaction.success(currentData)
+                }
+
+                // Callback final de la transacción
+                override fun onComplete(error: com.google.firebase.database.DatabaseError?, committed: Boolean, snapshot: com.google.firebase.database.DataSnapshot?) {
+                    if (error != null || !committed) onError() else onOk()
+                }
+            })
     }
 }

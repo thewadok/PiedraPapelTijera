@@ -28,24 +28,35 @@ import com.kotliners.piedrapapeltijera.ui.components.TituloPrincipal
 import com.kotliners.piedrapapeltijera.ui.theme.AzulNeon
 import com.kotliners.piedrapapeltijera.ui.theme.FondoNegro
 import com.kotliners.piedrapapeltijera.ui.theme.TextoNegro
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.kotliners.piedrapapeltijera.ui.viewmodel.LoginViewModel
+
 
 @Composable
 fun LoginScreen(
     onLoginOk: () -> Unit
 ){
+    // ViewModel del login
+    val vm: LoginViewModel = viewModel()
+
+    // Estado de la UI
+    val uiState = vm.uiState
+
+    // Contexto de Android
     val context = LocalContext.current
+
+    // Firebase Auth
     val auth = remember { FirebaseAuth.getInstance() }
 
-    var errorRes by remember { mutableStateOf<Int?>(null) }
-    var loading by remember { mutableStateOf(false) }
-
+    // Launcher para el resultado del login con Google
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        loading = false
+        vm.setLoading(false)
 
+        // Si el usuario cancela el login
         if (result.resultCode != Activity.RESULT_OK) {
-            errorRes = R.string.login_cancelled
+            vm.setError(R.string.login_cancelled)
             return@rememberLauncherForActivityResult
         }
 
@@ -56,32 +67,50 @@ fun LoginScreen(
             val account = task.getResult(ApiException::class.java)
             val idToken = account.idToken
 
+            // Error si no hay token
             if (idToken.isNullOrBlank()) {
-                errorRes = R.string.login_token_error
+                vm.setError(R.string.login_token_error)
                 return@rememberLauncherForActivityResult
             }
 
-            loading = true
+            // Autenticación con Firebase
+            vm.setLoading(true)
             val credential = GoogleAuthProvider.getCredential(idToken, null)
             auth.signInWithCredential(credential)
                 .addOnCompleteListener { t ->
-                    loading = false
+                    vm.setLoading(false)
+
                     if (t.isSuccessful) {
-                        onLoginOk()
+                        val user = auth.currentUser
+                        val uid = user?.uid
+                        val displayName = user?.displayName
+
+                        // Error inesperado
+                        if (uid.isNullOrBlank()) {
+                            vm.setError(R.string.login_firebase_error)
+                            return@addOnCompleteListener
+                        }
+
+                        // Delegamos la lógica al ViewModel
+                        vm.onGoogleLoginSuccess(
+                            uid = uid,
+                            displayName = displayName,
+                            onLoginOk = onLoginOk
+                        )
                     } else {
-                        errorRes =R.string.login_firebase_error
+                        vm.setError(R.string.login_firebase_error)
                     }
                 }
 
         } catch (e: ApiException) {
-            errorRes = R.string.login_google_error
+            vm.setError(R.string.login_google_error)
         }
     }
 
+    // Inicia el flujo de login con Google
     fun startGoogleSignIn() {
-        errorRes = null
-        loading = true
-
+        vm.clearError()
+        vm.setLoading(true)
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(context.getString(R.string.default_web_client_id))
             .requestEmail()
@@ -91,11 +120,12 @@ fun LoginScreen(
 
         // Forzamos selector de cuenta
         client.signOut().addOnCompleteListener {
-            loading = false
+            vm.setLoading(false)
             launcher.launch(client.signInIntent)
         }
     }
 
+    // UI
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -106,19 +136,21 @@ fun LoginScreen(
             modifier = Modifier
                 .fillMaxSize(),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.Start
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            // Titulo
             TituloPrincipal(stringResource(R.string.login_title))
 
             Spacer(Modifier.height(10.dp))
 
+            // Descripción
             Parrafo(stringResource(R.string.login_desc))
 
             Spacer(Modifier.height(18.dp))
 
             Button(
                 onClick = { startGoogleSignIn() },
-                enabled = !loading,
+                enabled = !uiState.loading,
                 modifier = Modifier
                     .fillMaxWidth(0.85f)
                     .height(72.dp)
@@ -131,7 +163,7 @@ fun LoginScreen(
                 )
             ) {
                 Text(
-                    text = if (loading) stringResource(R.string.login_loading)
+                    text = if (uiState.loading) stringResource(R.string.login_loading)
                     else stringResource(R.string.login_button),
                     style = MaterialTheme.typography.titleLarge.copy(
                         fontSize = 22.sp,
@@ -140,12 +172,45 @@ fun LoginScreen(
                 )
             }
 
-            errorRes?.let { resId ->
+            // Mensaje de error
+            uiState.errorRes?.let { resId ->
                 Spacer(Modifier.height(12.dp))
                 Text(
                     text = stringResource(resId),
                     color = MaterialTheme.colorScheme.error,
                     fontSize = 14.sp
+                )
+            }
+
+            // Diálogo obligatorio para elegir nombre
+            if (uiState.showNameDialog) {
+                AlertDialog(
+                    onDismissRequest = { /* no cerrar */ },
+                    title = {
+                        Text(stringResource(R.string.choose_name_title))
+                    },
+                    text = {
+                        OutlinedTextField(
+                            value = uiState.suggestedName,
+                            onValueChange = { vm.onNameChanged(it) },
+                            label = {
+                                Text(stringResource(R.string.choose_name_hint))
+                            },
+                            isError = uiState.nameError
+                        )
+                    },
+                    confirmButton = {
+                        Button(
+                            onClick = {
+                                vm.onConfirmName(
+                                    nombre = uiState.suggestedName,
+                                    onLoginOk = onLoginOk
+                                )
+                            }
+                        ) {
+                            Text(stringResource(R.string.continue_button))
+                        }
+                    }
                 )
             }
         }

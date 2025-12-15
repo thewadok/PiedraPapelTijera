@@ -165,14 +165,19 @@ No balance, but not out of luck.
 
     <!-- Login -->
     <string name="login_title">Sign in</string>
-    <string name="login_desc">
-    Sign in with Google to save your victories, coins and take part in the shared prize.</string>
+    <string name="login_desc">Sign in with your Google account to start playing.</string>
     <string name="login_button">Sign in with Google</string>
     <string name="login_loading">Loading&#8230;</string>
     <string name="login_cancelled">Sign-in cancelled</string>
     <string name="login_token_error">Could not retrieve Google token</string>
     <string name="login_firebase_error">Firebase authentication error</string>
     <string name="login_google_error">Google Sign-In error</string>
+
+    <!-- Choose name -->
+    <string name="choose_name_title">Choose your name</string>
+    <string name="choose_name_hint">Player name</string>
+    <string name="choose_name_error">Please enter a valid name</string>
+    <string name="continue_button">Continue</string>
 
     <!-- Google Sign-In -->
     <string name="default_web_client_id">

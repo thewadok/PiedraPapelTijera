@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.database.ValueEventListener
 import com.kotliners.piedrapapeltijera.data.remote.firebase.PremioComunRemoto
 import com.kotliners.piedrapapeltijera.data.repository.remote.PremioRepository
-import com.kotliners.piedrapapeltijera.ui.state.PremioViewState
+import com.kotliners.piedrapapeltijera.ui.state.PremioUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -20,8 +20,8 @@ class PremioViewModel(
     private val premioRepository: PremioRepository = PremioRepository()
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(PremioViewState())
-    val uiState: StateFlow<PremioViewState> = _uiState
+    private val _uiState = MutableStateFlow(PremioUiState())
+    val uiState: StateFlow<PremioUiState> = _uiState
 
     private var premioListener: ValueEventListener? = null
 

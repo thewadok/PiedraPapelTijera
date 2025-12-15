@@ -147,6 +147,13 @@ No balance, but not out of luck.
     <string name="exit_game_confirm">Exit</string>
     <string name="exit_game_cancel">Cancel</string>
 
+    <!-- Log out -->
+    <string name="logout">Log out</string>
+    <string name="logout_title">Log out</string>
+    <string name="logout_message">Do you want to log out and exit the application?</string>
+    <string name="logout_confirm">Log out</string>
+    <string name="logout_cancel">Cancel</string>
+
     <!-- Help HTML -->
     <string name="help_title">Game Help</string>
     <string name="help_rules_title">Basic Rules</string>

@@ -149,6 +149,12 @@ Sin saldo, pero no sin suerte.
     <string name="exit_game_confirm">Salir</string>
     <string name="exit_game_cancel">Cancelar</string>
 
+    <!-- Cerrar sesión -->
+    <string name="logout">Cerrar sesión</string>
+    <string name="logout_title">Cerrar sesión</string>
+    <string name="logout_message">¿Quieres cerrar sesión y salir de la aplicación?</string>
+    <string name="logout_confirm">Cerrar sesión</string>
+    <string name="logout_cancel">Cancelar</string>
 
     <!-- Ayuda HTML -->
     <string name="help_title">Ayuda del Juego</string>

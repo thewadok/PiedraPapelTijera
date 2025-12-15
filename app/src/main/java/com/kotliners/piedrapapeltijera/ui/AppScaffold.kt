@@ -90,6 +90,10 @@ fun ExitGameButton() {
 
     if (showDialog) {
         com.kotliners.piedrapapeltijera.ui.components.ExitGameDialog(
+            title = stringResource(R.string.exit_game_title),
+            message = stringResource(R.string.exit_game_message),
+            confirmText = stringResource(R.string.exit_game_confirm),
+            dismissText = stringResource(R.string.exit_game_cancel),
             onConfirmExit = {
                 showDialog = false
                 activity?.exitGame()

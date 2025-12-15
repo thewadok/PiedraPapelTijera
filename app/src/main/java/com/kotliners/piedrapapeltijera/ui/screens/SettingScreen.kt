@@ -33,6 +33,7 @@ import com.kotliners.piedrapapeltijera.MyApp
 import com.kotliners.piedrapapeltijera.data.repository.JugadorRepository
 import com.kotliners.piedrapapeltijera.data.repository.PartidaRepository
 import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModelFactory
+import com.google.firebase.auth.FirebaseAuth
 
 
 @Composable
@@ -73,6 +74,9 @@ fun SettingScreen(
 
     // Diálogo salir del juego
     var showExitDialog by remember { mutableStateOf(false) }
+
+    // Diálogo cerrar sesión
+    var showLogoutDialog by remember { mutableStateOf(false) }
 
     // Música
     val prefs = remember { context.getSharedPreferences("settings", Context.MODE_PRIVATE) }
@@ -221,15 +225,49 @@ fun SettingScreen(
         }
 
         Spacer(Modifier.height(24.dp))
+
+        // Cerrar sesión
+        NeonTextoBoton(stringResource(R.string.logout)) {
+            showLogoutDialog = true
+        }
+
+        Spacer(Modifier.height(24.dp))
+
+
     }
 
     if (showExitDialog) {
         ExitGameDialog(
+            title = stringResource(R.string.exit_game_title),
+            message = stringResource(R.string.exit_game_message),
+            confirmText = stringResource(R.string.exit_game_confirm),
+            dismissText = stringResource(R.string.exit_game_cancel),
             onConfirmExit = {
                 activity?.exitGame()
             },
             onDismiss = {
                 showExitDialog = false
+            }
+        )
+    }
+
+    if (showLogoutDialog) {
+        ExitGameDialog(
+            title = stringResource(R.string.logout_title),
+            message = stringResource(R.string.logout_message),
+            confirmText = stringResource(R.string.logout_confirm),
+            dismissText = stringResource(R.string.logout_cancel),
+            onConfirmExit = {
+                showLogoutDialog = false
+
+                // Cerramos sesión Firebase
+                FirebaseAuth.getInstance().signOut()
+
+                // Cerramos la app completamente
+                activity?.finishAffinity()
+            },
+            onDismiss = {
+                showLogoutDialog = false
             }
         )
     }

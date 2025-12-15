@@ -1,4 +1,4 @@
-package com.kotliners.piedrapapeltijera.data.repository
+package com.kotliners.piedrapapeltijera.data.repository.local
 
 import com.kotliners.piedrapapeltijera.data.local.dao.PartidaDao
 import com.kotliners.piedrapapeltijera.data.local.entity.Partida

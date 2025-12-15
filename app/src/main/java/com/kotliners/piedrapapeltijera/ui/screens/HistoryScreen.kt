@@ -33,8 +33,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.compose.runtime.*
 import com.kotliners.piedrapapeltijera.MyApp
-import com.kotliners.piedrapapeltijera.data.repository.JugadorRepository
-import com.kotliners.piedrapapeltijera.data.repository.PartidaRepository
+import com.kotliners.piedrapapeltijera.data.repository.local.JugadorRepository
+import com.kotliners.piedrapapeltijera.data.repository.local.PartidaRepository
 import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModelFactory
 import com.kotliners.piedrapapeltijera.navigation.Screen
 

@@ -49,8 +49,8 @@ import com.kotliners.piedrapapeltijera.ui.theme.AzulNeon
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.LaunchedEffect
 import com.kotliners.piedrapapeltijera.MyApp
-import com.kotliners.piedrapapeltijera.data.repository.JugadorRepository
-import com.kotliners.piedrapapeltijera.data.repository.PartidaRepository
+import com.kotliners.piedrapapeltijera.data.repository.local.JugadorRepository
+import com.kotliners.piedrapapeltijera.data.repository.local.PartidaRepository
 import com.kotliners.piedrapapeltijera.ui.viewmodel.PremioViewModel
 import com.kotliners.piedrapapeltijera.ui.components.NeonGloboBote
 import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModelFactory

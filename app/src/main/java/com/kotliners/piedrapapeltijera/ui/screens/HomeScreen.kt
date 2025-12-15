@@ -26,8 +26,8 @@ import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.livedata.observeAsState
 import com.kotliners.piedrapapeltijera.MyApp
-import com.kotliners.piedrapapeltijera.data.repository.JugadorRepository
-import com.kotliners.piedrapapeltijera.data.repository.PartidaRepository
+import com.kotliners.piedrapapeltijera.data.repository.local.JugadorRepository
+import com.kotliners.piedrapapeltijera.data.repository.local.PartidaRepository
 import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModelFactory
 
 @Composable

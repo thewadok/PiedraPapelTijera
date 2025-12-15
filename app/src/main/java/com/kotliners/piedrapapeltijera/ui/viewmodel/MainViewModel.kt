@@ -10,8 +10,8 @@ import kotlinx.coroutines.launch
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import com.kotliners.piedrapapeltijera.data.repository.JugadorRepository
-import com.kotliners.piedrapapeltijera.data.repository.PartidaRepository
+import com.kotliners.piedrapapeltijera.data.repository.local.JugadorRepository
+import com.kotliners.piedrapapeltijera.data.repository.local.PartidaRepository
 import com.kotliners.piedrapapeltijera.data.local.entity.Partida
 import com.kotliners.piedrapapeltijera.game.Move
 import com.kotliners.piedrapapeltijera.game.GameResult

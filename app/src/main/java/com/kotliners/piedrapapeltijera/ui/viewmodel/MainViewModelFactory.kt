@@ -2,8 +2,8 @@ package com.kotliners.piedrapapeltijera.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.kotliners.piedrapapeltijera.data.repository.JugadorRepository
-import com.kotliners.piedrapapeltijera.data.repository.PartidaRepository
+import com.kotliners.piedrapapeltijera.data.repository.local.JugadorRepository
+import com.kotliners.piedrapapeltijera.data.repository.local.PartidaRepository
 
 class MainViewModelFactory (
     private val repo: JugadorRepository,

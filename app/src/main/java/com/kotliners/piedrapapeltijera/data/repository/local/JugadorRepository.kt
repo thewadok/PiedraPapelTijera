@@ -1,8 +1,10 @@
-package com.kotliners.piedrapapeltijera.data.repository
+package com.kotliners.piedrapapeltijera.data.repository.local
 
 import com.kotliners.piedrapapeltijera.data.local.dao.JugadorDao
 import com.kotliners.piedrapapeltijera.data.local.entity.Jugador
-import io.reactivex.rxjava3.core.*
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.schedulers.Schedulers
 
 class JugadorRepository(

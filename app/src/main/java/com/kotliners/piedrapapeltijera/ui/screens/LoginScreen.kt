@@ -134,20 +134,27 @@ fun LoginScreen(
             .padding(16.dp)
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Titulo
-            TituloPrincipal(stringResource(R.string.login_title))
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                TituloPrincipal(stringResource(R.string.login_title))
+            }
 
-            Spacer(Modifier.height(10.dp))
+            Spacer(Modifier.height(24.dp))
 
-            // Descripción
-            Parrafo(stringResource(R.string.login_desc))
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                Parrafo(stringResource(R.string.login_desc))
+            }
 
-            Spacer(Modifier.height(18.dp))
+            Spacer(Modifier.height(24.dp))
 
             Button(
                 onClick = { startGoogleSignIn() },

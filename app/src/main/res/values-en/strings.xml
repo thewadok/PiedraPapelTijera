@@ -165,7 +165,7 @@ No balance, but not out of luck.
 
     <!-- Login -->
     <string name="login_title">Sign in</string>
-    <string name="login_desc">Sign in with your Google account to start playing.</string>
+    <string name="login_desc">Sign in with your Google account to start playing</string>
     <string name="login_button">Sign in with Google</string>
     <string name="login_loading">Loading&#8230;</string>
     <string name="login_cancelled">Sign-in cancelled</string>

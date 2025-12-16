@@ -44,10 +44,15 @@ class PremioRepository (
 
             premioRef.runTransaction(object : Transaction.Handler {
                 override fun doTransaction(currentData: MutableData): Transaction.Result {
+
                     val nodoMonedas = currentData.child("monedasEnBote")
                     val nodoUltimo = currentData.child("ultimoGanadorUid")
 
+
+
+
                     val boteActual = nodoMonedas.getValue(Int::class.java) ?: 0
+                    android.util.Log.d("PremioRepo", "doTransaction boteActual=$boteActual uidJugador=$uidJugador")
 
                     return if (boteActual > 0) {
                         // Guardamos el valor del bote antes de ponerlo a 0

@@ -51,6 +51,7 @@ import androidx.compose.runtime.LaunchedEffect
 import com.kotliners.piedrapapeltijera.MyApp
 import com.kotliners.piedrapapeltijera.data.repository.local.JugadorRepository
 import com.kotliners.piedrapapeltijera.data.repository.local.PartidaRepository
+import com.kotliners.piedrapapeltijera.data.repository.remote.AuthRepository
 import com.kotliners.piedrapapeltijera.ui.viewmodel.PremioViewModel
 import com.kotliners.piedrapapeltijera.ui.components.NeonGloboBote
 import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModelFactory
@@ -59,6 +60,7 @@ import com.kotliners.piedrapapeltijera.navigation.Screen
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 
+
 @Composable
 fun GameScreen(nav: NavHostController) {
 
@@ -66,7 +68,8 @@ fun GameScreen(nav: NavHostController) {
     val factory = remember {
         MainViewModelFactory(
             JugadorRepository(MyApp.db.jugadorDao()),
-            PartidaRepository(MyApp.db.partidaDao())
+            PartidaRepository(MyApp.db.partidaDao()),
+            AuthRepository()
         )
     }
 
@@ -158,7 +161,11 @@ fun GameScreen(nav: NavHostController) {
 
             when (r) {
                 GameResult.GANAS -> {
-                    viewModel.cambiarMonedas(+betAmount)
+
+                    // Local + Firebase, monedas + victoria
+                    viewModel.aplicarVictoria(betAmount)
+
+                    // Historial local
                     viewModel.registrarPartida(
                         mov, c, r, betAmount,
                         location?.latitude,
@@ -175,12 +182,17 @@ fun GameScreen(nav: NavHostController) {
                     showVictoryDialog = true
 
                     // Reclamamos el premio común
-                    val uidJugador = "demo-uid"
-                    premioViewModel.onJugadorGana(uidJugador)
+                    viewModel.getCurrentUid()?.let { uidJugador ->
+                        premioViewModel.onJugadorGana(uidJugador)
+                    }
                 }
 
                 GameResult.PIERDES -> {
-                    viewModel.cambiarMonedas(-betAmount)
+
+                    // Local + Firebase, monedas + derrota
+                    viewModel.aplicarDerrota(betAmount)
+
+                    // Historial local
                     viewModel.registrarPartida(
                         mov, c, r, betAmount,
                         location?.latitude,
@@ -195,6 +207,8 @@ fun GameScreen(nav: NavHostController) {
                 }
 
                 GameResult.EMPATE -> {
+
+                    // Historial local
                     viewModel.registrarPartida(
                         mov, c, r, betAmount,
                         location?.latitude,

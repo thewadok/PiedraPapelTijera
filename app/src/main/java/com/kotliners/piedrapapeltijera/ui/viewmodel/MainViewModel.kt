@@ -171,7 +171,7 @@ class MainViewModel(
         cambiarMonedas(deltaMonedas)
 
         // Remoto (Firebase)
-        val uid = currentUid() ?: return
+        val uid = getCurrentUid() ?: return
 
         authRepo.sumarMonedas(
             uid = uid,
@@ -192,14 +192,16 @@ class MainViewModel(
         }
     }
 
+    // Aplica una victoria sumando la apuesta y marcando victoria
     fun aplicarVictoria(apuesta: Int) =
         syncResultado(deltaMonedas = apuesta, victoria = true)
 
+    // Aplica una derrota restando la apuesta y marcando derrota
     fun aplicarDerrota(apuesta: Int) =
         syncResultado(deltaMonedas = -apuesta, victoria = false)
 
     // Devuelvemos el UID del usuario actualmente logueado en Firebase, o null si no hay sesión.
-    private fun currentUid(): String? =
+    fun getCurrentUid(): String? =
         FirebaseAuth.getInstance().currentUser?.uid
 
 }

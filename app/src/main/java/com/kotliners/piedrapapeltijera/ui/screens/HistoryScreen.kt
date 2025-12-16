@@ -6,7 +6,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
@@ -28,7 +27,9 @@ import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import androidx.navigation.NavHostController
+import com.kotliners.piedrapapeltijera.ui.theme.AzulNeon
+import com.kotliners.piedrapapeltijera.ui.theme.TextoNegro
+import com.kotliners.piedrapapeltijera.ui.theme.RosaNeon
 
 @Composable
 fun HistoryScreen(
@@ -83,7 +84,7 @@ private fun PartidaCard(p: Partida) {
 
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.08f)
+            containerColor = AzulNeon
         ),
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -92,9 +93,9 @@ private fun PartidaCard(p: Partida) {
         ) {
             Text(
                 text = fechaFormateada,
-                color = AmarilloNeon,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.SemiBold
+                color = RosaNeon,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
             )
 
             Spacer(Modifier.height(4.dp))
@@ -105,7 +106,7 @@ private fun PartidaCard(p: Partida) {
                     jugadaJugadorTxt,
                     jugadaCpuTxt
                 ),
-                color = TextoBlanco,
+                color = TextoNegro,
                 fontSize = 16.sp
             )
 
@@ -114,7 +115,7 @@ private fun PartidaCard(p: Partida) {
                     R.string.result_label,
                     resultadoTexto(p.resultado)
                 ),
-                color = TextoBlanco,
+                color = TextoNegro,
                 fontSize = 16.sp
             )
 
@@ -123,7 +124,7 @@ private fun PartidaCard(p: Partida) {
                     R.string.bet_amount,
                     p.apuesta
                 ),
-                color = TextoBlanco,
+                color = TextoNegro,
                 fontSize = 15.sp
             )
 
@@ -133,7 +134,7 @@ private fun PartidaCard(p: Partida) {
                     R.string.balance_change,
                     cambio
                 ),
-                color = TextoBlanco,
+                color = TextoNegro,
                 fontSize = 15.sp
             )
 
@@ -145,13 +146,13 @@ private fun PartidaCard(p: Partida) {
                         p.latitud,
                         p.longitud
                     ),
-                    color = TextoBlanco,
+                    color = TextoNegro,
                     fontSize = 15.sp
                 )
             } else {
                 Text(
                     text = stringResource(R.string.geo_not_available),
-                    color = TextoBlanco,
+                    color = TextoNegro,
                     fontSize = 14.sp
                 )
             }

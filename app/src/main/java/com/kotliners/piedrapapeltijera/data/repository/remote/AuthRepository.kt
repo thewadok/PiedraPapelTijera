@@ -1,6 +1,7 @@
 package com.kotliners.piedrapapeltijera.data.repository.remote
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.MutableData
 import com.google.firebase.database.Transaction
@@ -18,9 +19,12 @@ class AuthRepository {
     // Referencia raíz de Firebase Realtime Database
     private val db = FirebaseDatabase.getInstance().reference
 
-    // Devolvemos el UID del usuario autenticado o null
+    // Devolvemos el UID del usuario autenticado o null si no hay sesión
     fun currentUid(): String? =
         auth.currentUser?.uid
+
+    // Devuelvemos el usuario autenticado completo, o null si no hay sesión
+    fun currentUser(): FirebaseUser? = auth.currentUser
 
     // Cierramos sesión en Firebase
     fun signOut() =
@@ -124,5 +128,25 @@ class AuthRepository {
                     if (error != null || !committed) onError() else onOk()
                 }
             })
+    }
+
+    // Fijamos el saldo exacto de monedas
+    fun setMonedas(uid: String, saldo: Int, onOk: () -> Unit = {}, onError: () -> Unit = {}) {
+        jugadorRef(uid).child("monedas")
+            .setValue(saldo)
+            .addOnSuccessListener { onOk() }
+            .addOnFailureListener { onError() }
+    }
+
+    // Reseteamos estadísticas, victorias/derrotas a 0
+    fun resetStats(uid: String, onOk: () -> Unit = {}, onError: () -> Unit = {}) {
+        val updates = mapOf<String, Any>(
+            "victorias" to 0,
+            "derrotas" to 0
+        )
+
+        jugadorRef(uid).updateChildren(updates)
+            .addOnSuccessListener { onOk() }
+            .addOnFailureListener { onError() }
     }
 }

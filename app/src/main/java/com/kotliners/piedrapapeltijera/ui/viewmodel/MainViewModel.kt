@@ -17,7 +17,6 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.launch
-import com.google.firebase.auth.FirebaseAuth
 import com.kotliners.piedrapapeltijera.data.repository.remote.AuthRepository
 
 class MainViewModel(
@@ -125,6 +124,8 @@ class MainViewModel(
 
     // Restablecemos el juego al estado inicial.
     fun resetJuego() {
+
+        // Local
         setMonedas(100)
         historial.borrarHistorial()
             .observeOn(AndroidSchedulers.mainThread())
@@ -133,6 +134,9 @@ class MainViewModel(
                 onError = { e -> Log.e("MainViewModel", "Error borrando historial", e) }
             )
             .also { disposables.add(it) }
+
+        // Remoto
+        syncReset()
     }
 
     // Rescatamos al jugador si se queda sin monedas.
@@ -172,7 +176,7 @@ class MainViewModel(
         cambiarMonedas(deltaMonedas)
 
         // Remoto (Firebase)
-        val uid = getCurrentUid() ?: return
+        val uid = authRepo.currentUid() ?: return
 
         authRepo.sumarMonedas(
             uid = uid,
@@ -193,13 +197,29 @@ class MainViewModel(
         }
     }
 
+    private fun syncReset() {
+
+        val uid = authRepo.currentUid() ?: return
+
+        authRepo.setMonedas(
+            uid = uid,
+            saldo = 100,
+            onError = { Log.e("MainViewModel", "Error reseteando monedas en Firebase") }
+        )
+
+        authRepo.resetStats(
+            uid = uid,
+            onError = { Log.e("MainViewModel", "Error reseteando stats en Firebase") }
+        )
+    }
+
     // Sincronizamos un rescate, sumamos monedas en local y remoto, sin tocar victorias/derrotas.
     private fun syncRescate() {
         // Local
         cambiarMonedas(50)
 
         // Remoto
-        val uid = getCurrentUid() ?: return
+        val uid = authRepo.currentUid() ?: return
         authRepo.sumarMonedas(
             uid = uid,
             delta = 50,
@@ -217,9 +237,5 @@ class MainViewModel(
 
     // Aplicamos rescate sumando 50 monedas
     fun aplicarRescate() = syncRescate()
-
-    // Devuelvemos el UID del usuario actualmente logueado en Firebase, o null si no hay sesión.
-    fun getCurrentUid(): String? =
-        FirebaseAuth.getInstance().currentUser?.uid
 }
 

@@ -2,19 +2,21 @@ package com.kotliners.piedrapapeltijera.ui.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.kotliners.piedrapapeltijera.data.repository.remote.AuthRepository
 
 // ViewModel encargado de gestionar la autenticación del usuario
-class AuthViewModel(app: Application) : AndroidViewModel(app){
-    private val auth = FirebaseAuth.getInstance()
+class AuthViewModel(
+    app: Application,
+    private val authRepo: AuthRepository
+) : AndroidViewModel(app) {
 
     // Devuelvemos el usuario que tiene la sesión iniciada
     val currentUser: FirebaseUser?
-        get() = auth.currentUser
+        get() = authRepo.currentUser()
 
     // Cierramos la sesión del usuario actual
     fun signOut() {
-        auth.signOut()
+        authRepo.signOut()
     }
 }

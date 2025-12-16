@@ -13,6 +13,7 @@ import com.kotliners.piedrapapeltijera.ui.viewmodel.RankingViewModel
 import com.kotliners.piedrapapeltijera.ui.components.TituloPrincipal
 import androidx.compose.ui.text.font.FontWeight
 import com.kotliners.piedrapapeltijera.ui.theme.*
+import androidx.compose.ui.unit.sp
 
 
 @Composable
@@ -72,32 +73,32 @@ fun RankingScreen() {
                                 contentColor = TextoNegro
                             )
                         ) {
-                            Row(
+                            Column(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(12.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
+                                verticalArrangement = Arrangement.spacedBy(4.dp),
+                                horizontalAlignment = Alignment.Start
                             ) {
                                 Text(
                                     text = "${index + 1}. ${jugador.nombre ?: "Jugador"}",
                                     color = TextoNegro,
+                                    fontWeight = FontWeight.Bold ,
+                                    fontSize = 18.sp
+                                )
+
+                                Spacer(modifier = Modifier.height(6.dp))
+
+                                Text(
+                                    text = "$monedas Monedas",
+                                    color = TextoNegro,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                                Text(
+                                    text = "$balanceTxt Balance victorias",
+                                    color = colorBalance,
                                     fontWeight = FontWeight.Bold
                                 )
-                                Column(
-                                    horizontalAlignment = Alignment.End
-                                ) {
-                                    Text(
-                                        text = "$monedas Monedas",
-                                        color = TextoNegro,
-                                        fontWeight = FontWeight.SemiBold
-                                    )
-                                    Text(
-                                        text = "$balanceTxt Balance victorias",
-                                        color = colorBalance,
-                                        fontWeight = FontWeight.Bold
-                                    )
-                                }
                             }
                         }
                     }

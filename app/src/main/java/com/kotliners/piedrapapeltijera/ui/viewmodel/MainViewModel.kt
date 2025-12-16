@@ -139,7 +139,8 @@ class MainViewModel(
     fun rescate() {
         val saldoActual = monedas.value ?: 0
         if (saldoActual <= 0) {
-            cambiarMonedas(50)
+            // Aplicamos el rescate sincronizando el saldo en local y en remoto.
+            aplicarRescate()
         }
     }
 
@@ -192,6 +193,20 @@ class MainViewModel(
         }
     }
 
+    // Sincronizamos un rescate, sumamos monedas en local y remoto, sin tocar victorias/derrotas.
+    private fun syncRescate() {
+        // Local
+        cambiarMonedas(50)
+
+        // Remoto
+        val uid = getCurrentUid() ?: return
+        authRepo.sumarMonedas(
+            uid = uid,
+            delta = 50,
+            onError = { Log.e("MainViewModel", "Error aplicando rescate en Firebase") }
+        )
+    }
+
     // Aplica una victoria sumando la apuesta y marcando victoria
     fun aplicarVictoria(apuesta: Int) =
         syncResultado(deltaMonedas = apuesta, victoria = true)
@@ -200,9 +215,11 @@ class MainViewModel(
     fun aplicarDerrota(apuesta: Int) =
         syncResultado(deltaMonedas = -apuesta, victoria = false)
 
+    // Aplicamos rescate sumando 50 monedas
+    fun aplicarRescate() = syncRescate()
+
     // Devuelvemos el UID del usuario actualmente logueado en Firebase, o null si no hay sesión.
     fun getCurrentUid(): String? =
         FirebaseAuth.getInstance().currentUser?.uid
-
 }
 

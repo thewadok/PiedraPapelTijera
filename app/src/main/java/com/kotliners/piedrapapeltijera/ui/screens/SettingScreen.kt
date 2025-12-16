@@ -34,6 +34,7 @@ import com.kotliners.piedrapapeltijera.data.repository.local.JugadorRepository
 import com.kotliners.piedrapapeltijera.data.repository.local.PartidaRepository
 import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
+import com.kotliners.piedrapapeltijera.data.repository.remote.AuthRepository
 
 
 @Composable
@@ -44,7 +45,8 @@ fun SettingScreen(
     val factory = remember {
         MainViewModelFactory(
             JugadorRepository(MyApp.db.jugadorDao()),
-            PartidaRepository(MyApp.db.partidaDao())
+            PartidaRepository(MyApp.db.partidaDao()),
+            AuthRepository()
         )
     }
 

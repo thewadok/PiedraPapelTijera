@@ -28,6 +28,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import com.kotliners.piedrapapeltijera.MyApp
 import com.kotliners.piedrapapeltijera.data.repository.local.JugadorRepository
 import com.kotliners.piedrapapeltijera.data.repository.local.PartidaRepository
+import com.kotliners.piedrapapeltijera.data.repository.remote.AuthRepository
 import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModelFactory
 
 @Composable
@@ -38,7 +39,8 @@ fun HomeScreen(
     val factory = remember {
         MainViewModelFactory(
             JugadorRepository(MyApp.db.jugadorDao()),
-            PartidaRepository(MyApp.db.partidaDao())
+            PartidaRepository(MyApp.db.partidaDao()),
+            AuthRepository()
         )
     }
 

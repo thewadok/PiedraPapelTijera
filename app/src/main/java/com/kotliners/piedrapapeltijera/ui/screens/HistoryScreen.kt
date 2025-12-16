@@ -35,6 +35,7 @@ import androidx.compose.runtime.*
 import com.kotliners.piedrapapeltijera.MyApp
 import com.kotliners.piedrapapeltijera.data.repository.local.JugadorRepository
 import com.kotliners.piedrapapeltijera.data.repository.local.PartidaRepository
+import com.kotliners.piedrapapeltijera.data.repository.remote.AuthRepository
 import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModelFactory
 import com.kotliners.piedrapapeltijera.navigation.Screen
 
@@ -46,7 +47,8 @@ fun HistoryScreen(
     val factory = remember {
         MainViewModelFactory(
             JugadorRepository(MyApp.db.jugadorDao()),
-            PartidaRepository(MyApp.db.partidaDao())
+            PartidaRepository(MyApp.db.partidaDao()),
+            AuthRepository()
         )
     }
 

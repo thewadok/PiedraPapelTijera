@@ -25,11 +25,17 @@ import androidx.compose.foundation.verticalScroll
 import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
 import androidx.compose.runtime.livedata.observeAsState
 
+
 @Composable
 fun HomeScreen(
     nav: NavHostController,
     mainViewModel: MainViewModel
 ) {
+
+    // Al entrar en Home, sincronizamos desde Firebase
+    LaunchedEffect(Unit) {
+        mainViewModel.syncMonedasDesdeFirebase()
+    }
 
     val scroll = rememberScrollState()
     val saldo = mainViewModel.monedas.observeAsState(0).value

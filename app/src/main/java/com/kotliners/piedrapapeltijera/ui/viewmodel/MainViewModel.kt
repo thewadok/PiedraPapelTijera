@@ -231,7 +231,7 @@ class MainViewModel(
     }
 
     // Sincronizamos monedas en Local tras volver a iniciar sesión
-    private fun syncMonedasDesdeFirebase() {
+    fun syncMonedasDesdeFirebase() {
         val uid = currentUid() ?: return
 
         authRepo.obtenerJugador(
@@ -245,6 +245,23 @@ class MainViewModel(
             onError = {
                 Log.e("MainViewModel", "Error leyendo jugador remoto para sincronizar monedas")
             }
+        )
+    }
+
+
+    // Sincronizamos en remoto la adquisición del bote
+    fun aplicarPremioComun(premio: Int) {
+        if (premio <= 0) return
+
+        // Local
+        cambiarMonedas(premio)
+
+        // Remoto
+        val uid = authRepo.currentUid() ?: return
+        authRepo.sumarMonedas(
+            uid = uid,
+            delta = premio,
+            onError = { Log.e("MainViewModel", "Error sumando premio común en Firebase") }
         )
     }
 

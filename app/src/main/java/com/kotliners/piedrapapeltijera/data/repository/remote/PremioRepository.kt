@@ -51,7 +51,7 @@ class PremioRepository (
 
 
 
-                    val boteActual = nodoMonedas.getValue(Int::class.java) ?: 0
+                    val boteActual = (nodoMonedas.getValue(Long::class.java) ?: 0L).toInt()
                     android.util.Log.d("PremioRepo", "doTransaction boteActual=$boteActual uidJugador=$uidJugador")
 
                     return if (boteActual > 0) {

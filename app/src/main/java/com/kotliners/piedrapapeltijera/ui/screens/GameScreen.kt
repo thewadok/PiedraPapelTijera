@@ -51,7 +51,6 @@ import androidx.compose.runtime.LaunchedEffect
 import com.kotliners.piedrapapeltijera.ui.viewmodel.PremioViewModel
 import com.kotliners.piedrapapeltijera.ui.components.NeonGloboBote
 import androidx.compose.runtime.remember
-import androidx.navigation.NavHostController
 
 @Composable
 fun GameScreen(
@@ -64,12 +63,12 @@ fun GameScreen(
     // Estado del premio en tiempo real
     val premioState = premioViewModel.uiState.collectAsState()
 
-    // Al notificar un premio ganado, lo sumamos al saldo local
+    // Al notificar un premio ganado, lo sumamos al saldo local y remoto
     LaunchedEffect(premioState.value.ultimoPremioGanado) {
         val premio = premioState.value.ultimoPremioGanado
         if (premio > 0) {
 
-            mainViewModel.cambiarMonedas(premio)
+            mainViewModel.aplicarPremioComun(premio)
 
             // Evitamos duplicados
             premioViewModel.marcarPremioConsumido()

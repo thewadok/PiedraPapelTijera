@@ -35,7 +35,6 @@ class LoginViewModel(
 
                 if (exists) {
                     // El jugador ya existe accedemos directo
-                    uiState = uiState.copy(loading = false)
                     onLoginOk()
                 }
                 else {

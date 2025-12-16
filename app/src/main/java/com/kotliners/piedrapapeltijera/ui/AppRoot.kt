@@ -28,9 +28,10 @@ fun AppRoot(mainViewModel: MainViewModel) {
                 startDestination = Screen.Splash.route
             ){
                 composable(Screen.Splash.route) {SplashScreen(nav) }
-                composable(Screen.Login.route) { LoginScreen(onLoginOk = {
+                composable(Screen.Login.route) {
+                    LoginScreen(onLoginOk = {
                     nav.navigate(Screen.Home.route) {
-                        popUpTo(Screen.Login.route) { inclusive = true }
+                        popUpTo(0) { inclusive = true }
                         launchSingleTop = true
                     }
                 })}

@@ -52,10 +52,10 @@ fun LoginScreen(
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        vm.setLoading(false)
 
         // Si el usuario cancela el login
         if (result.resultCode != Activity.RESULT_OK) {
+            vm.setLoading(false)
             vm.setError(R.string.login_cancelled)
             return@rememberLauncherForActivityResult
         }
@@ -69,6 +69,7 @@ fun LoginScreen(
 
             // Error si no hay token
             if (idToken.isNullOrBlank()) {
+                vm.setLoading(false)
                 vm.setError(R.string.login_token_error)
                 return@rememberLauncherForActivityResult
             }
@@ -78,7 +79,6 @@ fun LoginScreen(
             val credential = GoogleAuthProvider.getCredential(idToken, null)
             auth.signInWithCredential(credential)
                 .addOnCompleteListener { t ->
-                    vm.setLoading(false)
 
                     if (t.isSuccessful) {
                         val user = auth.currentUser
@@ -98,11 +98,13 @@ fun LoginScreen(
                             onLoginOk = onLoginOk
                         )
                     } else {
+                        vm.setLoading(false)
                         vm.setError(R.string.login_firebase_error)
                     }
                 }
 
         } catch (e: ApiException) {
+            vm.setLoading(false)
             vm.setError(R.string.login_google_error)
         }
     }
@@ -120,7 +122,6 @@ fun LoginScreen(
 
         // Forzamos selector de cuenta
         client.signOut().addOnCompleteListener {
-            vm.setLoading(false)
             launcher.launch(client.signInIntent)
         }
     }
@@ -212,6 +213,18 @@ fun LoginScreen(
                         }
                     }
                 )
+            }
+        }
+        
+        // Overlay de carga encima para mejorar la transicción en el login
+        if (uiState.loading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(FondoNegro.copy(alpha = 0.7f)),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
             }
         }
     }

@@ -14,7 +14,8 @@ import com.kotliners.piedrapapeltijera.ui.components.TituloPrincipal
 import androidx.compose.ui.text.font.FontWeight
 import com.kotliners.piedrapapeltijera.ui.theme.*
 import androidx.compose.ui.unit.sp
-
+import androidx.compose.ui.res.stringResource
+import com.kotliners.piedrapapeltijera.R
 
 @Composable
 fun RankingScreen() {
@@ -31,7 +32,7 @@ fun RankingScreen() {
             .padding(16.dp)
     ) {
 
-        TituloPrincipal(text = "Top 10 Jugadores")
+        TituloPrincipal(text = stringResource(R.string.ranking_title))
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -90,12 +91,12 @@ fun RankingScreen() {
                                 Spacer(modifier = Modifier.height(6.dp))
 
                                 Text(
-                                    text = "$monedas Monedas",
+                                    text = stringResource(R.string.ranking_coins, monedas),
                                     color = TextoNegro,
                                     fontWeight = FontWeight.SemiBold
                                 )
                                 Text(
-                                    text = "$balanceTxt Balance victorias",
+                                    text = stringResource(R.string.ranking_balance, balanceTxt),
                                     color = colorBalance,
                                     fontWeight = FontWeight.Bold
                                 )

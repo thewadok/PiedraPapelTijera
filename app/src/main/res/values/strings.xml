@@ -26,7 +26,7 @@
     <string name="paper_rule">Vence a Piedra</string>
     <string name="scissors_rule">Vence a Papel</string>
 
-    <string name="results_title">Resultados</string>
+    <string name="results_title">Ranking</string>
     <string name="victory_label">Victoria:</string>
     <string name="victory_desc">Ganas tu apuesta.</string>
     <string name="defeat_label">Derrota:</string>
@@ -114,7 +114,6 @@ Sin saldo, pero no sin suerte.
     <string name="music_option_alt2">Música alternativa 2</string>
     <string name="music_option_mute">Silenciar música</string>
 
-
     <!-- Geolocalización -->
     <string name="geo_location">Geolocalización: Lat %1$.4f, Lon %2$.4f</string>
     <string name="geo_not_available">No se han obtenido parámetros de longitud ni latitud</string>
@@ -141,6 +140,12 @@ Sin saldo, pero no sin suerte.
     <string name="permission_calendar">Calendario</string>
     <string name="permission_location">Geolocalización</string>
     <string name="permission_notifications">Notificaciones</string>
+
+    <!-- Ranking -->
+    <string name="ranking_title">Top 10 Jugadores</string>
+    <string name="player_default_name">Jugador</string>
+    <string name="ranking_coins">%1$d Monedas</string>
+    <string name="ranking_balance">%1$s Balance victorias</string>
 
     <!-- Salir del juego -->
     <string name="exit_game">Salir del juego</string>
@@ -169,7 +174,7 @@ Sin saldo, pero no sin suerte.
     <string name="login_title">Iniciar sesión</string>
     <string name="login_desc">Accede con tu cuenta de Google para empezar a jugar</string>
     <string name="login_button">Entrar con Google</string>
-    <string name="login_loading">Cargando...</string>
+    <string name="login_loading">Cargando&#8230;</string>
     <string name="login_cancelled">Inicio de sesión cancelado</string>
     <string name="login_token_error">No se pudo obtener el token de Google</string>
     <string name="login_firebase_error">Error autenticando con Firebase</string>

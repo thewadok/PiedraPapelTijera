@@ -26,7 +26,7 @@
     <string name="paper_rule">Beats Rock</string>
     <string name="scissors_rule">Beats Paper</string>
 
-    <string name="results_title">Results</string>
+    <string name="results_title">Ranking</string>
     <string name="victory_label">Victory:</string>
     <string name="victory_desc">You win your bet.</string>
     <string name="defeat_label">Defeat:</string>
@@ -139,6 +139,12 @@ No balance, but not out of luck.
     <string name="permission_calendar">Calendar</string>
     <string name="permission_location">Location</string>
     <string name="permission_notifications">Notifications</string>
+
+    <!-- Ranking -->
+    <string name="ranking_title">Top 10 Players</string>
+    <string name="player_default_name">Player</string>
+    <string name="ranking_coins">%1$d Coins</string>
+    <string name="ranking_balance">%1$s Wins balance</string>
 
     <!-- Exit game -->
     <string name="exit_game">Exit game</string>

@@ -264,7 +264,6 @@ fun GameScreen(
             Spacer(Modifier.height(24.dp))
 
             NeonGloboBote(
-                titulo = "¡BOTE!",
                 monedas = premioState.value.monedasEnBote,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)

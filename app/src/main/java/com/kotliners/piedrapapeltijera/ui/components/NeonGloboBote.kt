@@ -15,13 +15,16 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.style.TextAlign
 import com.kotliners.piedrapapeltijera.ui.theme.AzulNeon
 import com.kotliners.piedrapapeltijera.ui.theme.TextoNegro
+import androidx.annotation.StringRes
+import androidx.compose.ui.res.stringResource
+import com.kotliners.piedrapapeltijera.R
 
 // Globo de información para mostrar el bote común en la UI
 @Composable
 fun NeonGloboBote(
     monedas: Int,
     modifier: Modifier = Modifier,
-    titulo: String = "¡BOTE!"
+    @StringRes tituloRes: Int = R.string.pot_title
 ) {
     Box(
         modifier = modifier
@@ -39,7 +42,7 @@ fun NeonGloboBote(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = titulo,
+                text = stringResource(tituloRes),
                 color = TextoNegro,
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
@@ -47,7 +50,7 @@ fun NeonGloboBote(
             )
             Spacer(Modifier.height(4.dp))
             Text(
-                text = "$monedas monedas",
+                text = stringResource(R.string.pot_amount, monedas),
                 color = TextoNegro,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold,

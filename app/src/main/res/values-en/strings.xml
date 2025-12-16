@@ -86,6 +86,10 @@ No balance, but not out of luck.
     <string name="move_paper">PAPER</string>
     <string name="move_scissors">SCISSORS</string>
 
+    <!-- Pot -->
+    <string name="pot_title">POT!</string>
+    <string name="pot_amount">%1$d coins</string>
+
     <!-- Moves -->
     <string name="rock">Rock</string>
     <string name="paper">Paper</string>

@@ -86,6 +86,10 @@ Sin saldo, pero no sin suerte.
     <string name="move_paper">PAPEL</string>
     <string name="move_scissors">TIJERA</string>
 
+    <!-- Premio -->
+    <string name="pot_title">¡BOTE!</string>
+    <string name="pot_amount">%1$d monedas</string>
+
     <!-- Movimientos -->
     <string name="rock">Piedra</string>
     <string name="paper">Papel</string>

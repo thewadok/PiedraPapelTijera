@@ -78,6 +78,8 @@ class MainViewModel(
                 onError = { e -> Log.e("MainViewModel", "Error cargando historial", e) }
             )
             .also { disposables.add(it) }
+
+        syncMonedasDesdeFirebase()
     }
 
     // +n o -n para ganar/perder monedas
@@ -197,6 +199,7 @@ class MainViewModel(
         }
     }
 
+    // Sincronizamos el reset del juego en firebase, monedas a 100, victorias y derrotas a 0
     private fun syncReset() {
 
         val uid = authRepo.currentUid() ?: return
@@ -213,7 +216,7 @@ class MainViewModel(
         )
     }
 
-    // Sincronizamos un rescate, sumamos monedas en local y remoto, sin tocar victorias/derrotas.
+    // Sincronizamos rescate, sumamos monedas en local y remoto, sin tocar victorias/derrotas.
     private fun syncRescate() {
         // Local
         cambiarMonedas(50)
@@ -224,6 +227,24 @@ class MainViewModel(
             uid = uid,
             delta = 50,
             onError = { Log.e("MainViewModel", "Error aplicando rescate en Firebase") }
+        )
+    }
+
+    // Sincronizamos monedas en Local tras volver a iniciar sesión
+    private fun syncMonedasDesdeFirebase() {
+        val uid = currentUid() ?: return
+
+        authRepo.obtenerJugador(
+            uid = uid,
+            onOk = { jugador ->
+                val monedasRemotas = jugador?.monedas
+                if (monedasRemotas != null) {
+                    setMonedas(monedasRemotas) // pisa el 100 local
+                }
+            },
+            onError = {
+                Log.e("MainViewModel", "Error leyendo jugador remoto para sincronizar monedas")
+            }
         )
     }
 
@@ -238,7 +259,7 @@ class MainViewModel(
     // Aplicamos rescate sumando 50 monedas
     fun aplicarRescate() = syncRescate()
 
+    // Obtenemos el UID del usuario logueado
     fun currentUid(): String? = authRepo.currentUid()
-
 }
 

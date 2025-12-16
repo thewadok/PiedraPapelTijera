@@ -5,6 +5,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.MutableData
 import com.google.firebase.database.Transaction
+import com.kotliners.piedrapapeltijera.data.remote.firebase.JugadorRemoto
 
 
 /**
@@ -147,6 +148,15 @@ class AuthRepository {
 
         jugadorRef(uid).updateChildren(updates)
             .addOnSuccessListener { onOk() }
+            .addOnFailureListener { onError() }
+    }
+
+    // Obtenemos el jugador completo
+    fun obtenerJugador(uid: String, onOk: (JugadorRemoto?) -> Unit, onError: () -> Unit) {
+        jugadorRef(uid).get()
+            .addOnSuccessListener { snap ->
+                onOk(snap.getValue(JugadorRemoto::class.java))
+            }
             .addOnFailureListener { onError() }
     }
 }

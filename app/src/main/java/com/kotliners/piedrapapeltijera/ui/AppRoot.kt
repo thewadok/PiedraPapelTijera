@@ -15,10 +15,11 @@ import com.kotliners.piedrapapeltijera.ui.screens.SplashScreen
 import com.kotliners.piedrapapeltijera.navigation.Screen
 import com.kotliners.piedrapapeltijera.ui.screens.LoginScreen
 import com.kotliners.piedrapapeltijera.ui.theme.PiedraPapelTijeraTheme
+import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
 
 //Raiz de la app
 @Composable
-fun AppRoot() {
+fun AppRoot(mainViewModel: MainViewModel) {
     PiedraPapelTijeraTheme {
         val nav = rememberNavController()
         MaterialTheme {
@@ -33,12 +34,12 @@ fun AppRoot() {
                         launchSingleTop = true
                     }
                 })}
-                composable(Screen.Home.route) { AppScaffold(nav) { HomeScreen(nav)} }
-                composable(Screen.History.route) { AppScaffold(nav) { HistoryScreen(nav)} }
+                composable(Screen.Home.route) { AppScaffold(nav) { HomeScreen(nav, mainViewModel)} }
+                composable(Screen.History.route) { AppScaffold(nav) { HistoryScreen(mainViewModel)} }
                 composable(Screen.Ranking.route) { AppScaffold(nav) { RankingScreen()} }
-                composable(Screen.Setting.route) { AppScaffold(nav) { SettingScreen(nav)} }
+                composable(Screen.Setting.route) { AppScaffold(nav) { SettingScreen(nav, mainViewModel)} }
                 composable(Screen.Help.route) { AppScaffold(nav) { HelpScreen()} }
-                composable(Screen.Game.route) {AppScaffold(nav) { GameScreen(nav)} }
+                composable(Screen.Game.route) {AppScaffold(nav) { GameScreen(mainViewModel)} }
             }
         }
     }

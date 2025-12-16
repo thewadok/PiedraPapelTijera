@@ -16,7 +16,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kotliners.piedrapapeltijera.R
 import com.kotliners.piedrapapeltijera.data.local.entity.Partida
 import com.kotliners.piedrapapeltijera.game.GameResult
@@ -30,48 +29,13 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.compose.runtime.*
-import com.kotliners.piedrapapeltijera.MyApp
-import com.kotliners.piedrapapeltijera.data.repository.local.JugadorRepository
-import com.kotliners.piedrapapeltijera.data.repository.local.PartidaRepository
-import com.kotliners.piedrapapeltijera.data.repository.remote.AuthRepository
-import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModelFactory
-import com.kotliners.piedrapapeltijera.navigation.Screen
 
 @Composable
 fun HistoryScreen(
-    nav: NavHostController
+    mainViewModel: MainViewModel
 ) {
 
-    val factory = remember {
-        MainViewModelFactory(
-            JugadorRepository(MyApp.db.jugadorDao()),
-            PartidaRepository(MyApp.db.partidaDao()),
-            AuthRepository()
-        )
-    }
-
-    // Key que cambia cuando cambia el backstack
-    val navBackStackEntry by nav.currentBackStackEntryAsState()
-
-    // Intentamos obtener Home; si no está en el backstack, devolvemos null
-    val homeEntry = remember(navBackStackEntry) {
-        runCatching { nav.getBackStackEntry(Screen.Home.route) }.getOrNull()
-    }
-
-    // Si existe Home → compartimos ViewModel
-    // Si no existe → creamos uno nuevo con factory
-    val viewModel: MainViewModel = if (homeEntry != null) {
-        viewModel(
-            viewModelStoreOwner = homeEntry,
-            factory = factory
-        )
-    } else {
-        viewModel(factory = factory)
-    }
-
-    val partidas = viewModel.historialPartidas.observeAsState(emptyList()).value
+    val partidas = mainViewModel.historialPartidas.observeAsState(emptyList()).value
 
     Column(
         modifier = Modifier

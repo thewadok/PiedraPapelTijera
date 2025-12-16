@@ -48,45 +48,15 @@ import androidx.compose.ui.text.font.FontWeight
 import com.kotliners.piedrapapeltijera.ui.theme.AzulNeon
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.LaunchedEffect
-import com.kotliners.piedrapapeltijera.MyApp
-import com.kotliners.piedrapapeltijera.data.repository.local.JugadorRepository
-import com.kotliners.piedrapapeltijera.data.repository.local.PartidaRepository
-import com.kotliners.piedrapapeltijera.data.repository.remote.AuthRepository
 import com.kotliners.piedrapapeltijera.ui.viewmodel.PremioViewModel
 import com.kotliners.piedrapapeltijera.ui.components.NeonGloboBote
-import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModelFactory
 import androidx.compose.runtime.remember
-import com.kotliners.piedrapapeltijera.navigation.Screen
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
-
 
 @Composable
-fun GameScreen(nav: NavHostController) {
-
-    // Creamos la Factory con remember para no recrearla en cada recomposición
-    val factory = remember {
-        MainViewModelFactory(
-            JugadorRepository(MyApp.db.jugadorDao()),
-            PartidaRepository(MyApp.db.partidaDao()),
-            AuthRepository()
-        )
-    }
-
-    // Key que cambia cuando cambia el backstack
-    val navBackStackEntry by nav.currentBackStackEntryAsState()
-
-    // getBackStackEntry protegido: si no existe Home, devuelve null
-    val homeEntry = remember(navBackStackEntry) {
-        runCatching { nav.getBackStackEntry(Screen.Home.route) }.getOrNull()
-    }
-
-    // VM compartido si existe Home; si no, VM local para esta pantalla (pero con factory)
-    val viewModel: MainViewModel = if (homeEntry != null) {
-        viewModel(viewModelStoreOwner = homeEntry, factory = factory)
-    } else {
-        viewModel(factory = factory)
-    }
+fun GameScreen(
+    mainViewModel: MainViewModel
+) {
 
     // ViewModel del premio común
     val premioViewModel: PremioViewModel = viewModel()
@@ -99,7 +69,7 @@ fun GameScreen(nav: NavHostController) {
         val premio = premioState.value.ultimoPremioGanado
         if (premio > 0) {
 
-            viewModel.cambiarMonedas(premio)
+            mainViewModel.cambiarMonedas(premio)
 
             // Evitamos duplicados
             premioViewModel.marcarPremioConsumido()
@@ -118,8 +88,8 @@ fun GameScreen(nav: NavHostController) {
     var isRoundInProgress by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
-    val saldo = viewModel.monedas.observeAsState(0).value
-    val partidas = viewModel.partidas.observeAsState(0).value
+    val saldo = mainViewModel.monedas.observeAsState(0).value
+    val partidas = mainViewModel.partidas.observeAsState(0).value
 
     // Utilidades media
     // Función para capturar la pantalla
@@ -163,10 +133,10 @@ fun GameScreen(nav: NavHostController) {
                 GameResult.GANAS -> {
 
                     // Local + Firebase, monedas + victoria
-                    viewModel.aplicarVictoria(betAmount)
+                    mainViewModel.aplicarVictoria(betAmount)
 
                     // Historial local
-                    viewModel.registrarPartida(
+                    mainViewModel.registrarPartida(
                         mov, c, r, betAmount,
                         location?.latitude,
                         location?.longitude
@@ -182,7 +152,7 @@ fun GameScreen(nav: NavHostController) {
                     showVictoryDialog = true
 
                     // Reclamamos el premio común
-                    viewModel.getCurrentUid()?.let { uidJugador ->
+                    mainViewModel.currentUid()?.let { uidJugador ->
                         premioViewModel.onJugadorGana(uidJugador)
                     }
                 }
@@ -190,10 +160,10 @@ fun GameScreen(nav: NavHostController) {
                 GameResult.PIERDES -> {
 
                     // Local + Firebase, monedas + derrota
-                    viewModel.aplicarDerrota(betAmount)
+                    mainViewModel.aplicarDerrota(betAmount)
 
                     // Historial local
-                    viewModel.registrarPartida(
+                    mainViewModel.registrarPartida(
                         mov, c, r, betAmount,
                         location?.latitude,
                         location?.longitude
@@ -209,7 +179,7 @@ fun GameScreen(nav: NavHostController) {
                 GameResult.EMPATE -> {
 
                     // Historial local
-                    viewModel.registrarPartida(
+                    mainViewModel.registrarPartida(
                         mov, c, r, betAmount,
                         location?.latitude,
                         location?.longitude
@@ -488,7 +458,7 @@ fun GameScreen(nav: NavHostController) {
                                     val screenshot = captureView()
 
                                     // Llamamos a la corrutina onPlayerWin cuando hay victoria
-                                    viewModel.onPlayerWin(
+                                    mainViewModel.onPlayerWin(
                                         context = context,
                                         screenshot = screenshot
                                     )

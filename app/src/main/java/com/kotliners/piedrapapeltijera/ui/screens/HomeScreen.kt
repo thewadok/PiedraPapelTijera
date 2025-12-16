@@ -23,36 +23,17 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.verticalScroll
 import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.livedata.observeAsState
-import com.kotliners.piedrapapeltijera.MyApp
-import com.kotliners.piedrapapeltijera.data.repository.local.JugadorRepository
-import com.kotliners.piedrapapeltijera.data.repository.local.PartidaRepository
-import com.kotliners.piedrapapeltijera.data.repository.remote.AuthRepository
-import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModelFactory
 
 @Composable
 fun HomeScreen(
-    nav: NavHostController
+    nav: NavHostController,
+    mainViewModel: MainViewModel
 ) {
-    // Creamos la Factory con remember para no recrearla en cada recomposición
-    val factory = remember {
-        MainViewModelFactory(
-            JugadorRepository(MyApp.db.jugadorDao()),
-            PartidaRepository(MyApp.db.partidaDao()),
-            AuthRepository()
-        )
-    }
-
-    // ViewModel usando la Factory
-    val viewModel: MainViewModel = viewModel(
-        modelClass = MainViewModel::class.java,
-        factory = factory
-    )
 
     val scroll = rememberScrollState()
-    val saldo = viewModel.monedas.observeAsState(0).value
-    val partidas = viewModel.partidas.observeAsState(0).value
+    val saldo = mainViewModel.monedas.observeAsState(0).value
+    val partidas = mainViewModel.partidas.observeAsState(0).value
 
     Box(
         Modifier

@@ -15,9 +15,15 @@ import com.kotliners.piedrapapeltijera.utils.locale.LocaleManager
 import com.kotliners.piedrapapeltijera.utils.notifications.NotificationsPermission
 import com.kotliners.piedrapapeltijera.utils.media.MusicService
 import com.kotliners.piedrapapeltijera.utils.media.SoundEffects
-import androidx.lifecycle.lifecycleScope
-import com.kotliners.piedrapapeltijera.data.remote.firebase.RetrofitInstance
-import kotlinx.coroutines.launch
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.kotliners.piedrapapeltijera.data.repository.local.JugadorRepository
+import com.kotliners.piedrapapeltijera.data.repository.local.PartidaRepository
+import com.kotliners.piedrapapeltijera.data.repository.remote.AuthRepository
+import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
+import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModelFactory
+import com.kotliners.piedrapapeltijera.data.local.database.AppDatabase
+
+
 
 /**
  * Activity principal combinada:
@@ -125,7 +131,23 @@ class MainActivity : ComponentActivity() {
 
         // Cargar Compose
         setContent {
-            AppRoot()
+
+            val db = AppDatabase.getInstance(applicationContext)
+
+            val jugadorRepo = JugadorRepository(db.jugadorDao())
+            val partidaRepo = PartidaRepository(db.partidaDao())
+            val authRepo = AuthRepository()
+
+            val factory = MainViewModelFactory(
+                repo = jugadorRepo,
+                historial = partidaRepo,
+                authRepo = authRepo
+            )
+
+            val mainViewModel: MainViewModel = viewModel(factory = factory)
+
+            // 4) Pásalo a tu AppRoot (modifica AppRoot para recibirlo)
+            AppRoot(mainViewModel = mainViewModel)
         }
 
         // Permiso de notificaciones

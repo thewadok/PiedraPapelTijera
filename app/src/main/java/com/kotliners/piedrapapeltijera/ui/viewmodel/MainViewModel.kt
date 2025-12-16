@@ -237,5 +237,8 @@ class MainViewModel(
 
     // Aplicamos rescate sumando 50 monedas
     fun aplicarRescate() = syncRescate()
+
+    fun currentUid(): String? = authRepo.currentUid()
+
 }
 

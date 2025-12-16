@@ -16,7 +16,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.kotliners.piedrapapeltijera.R
 import com.kotliners.piedrapapeltijera.MainActivity
@@ -28,45 +27,13 @@ import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
 import com.kotliners.piedrapapeltijera.utils.locale.LocaleManager
 import com.kotliners.piedrapapeltijera.utils.media.MusicService
 import com.kotliners.piedrapapeltijera.utils.system.exitGame
-import androidx.navigation.compose.currentBackStackEntryAsState
-import com.kotliners.piedrapapeltijera.MyApp
-import com.kotliners.piedrapapeltijera.data.repository.local.JugadorRepository
-import com.kotliners.piedrapapeltijera.data.repository.local.PartidaRepository
-import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
-import com.kotliners.piedrapapeltijera.data.repository.remote.AuthRepository
-
 
 @Composable
 fun SettingScreen(
-    nav: NavHostController
+    nav: NavHostController,
+    mainViewModel: MainViewModel
 ) {
-
-    val factory = remember {
-        MainViewModelFactory(
-            JugadorRepository(MyApp.db.jugadorDao()),
-            PartidaRepository(MyApp.db.partidaDao()),
-            AuthRepository()
-        )
-    }
-
-    val navBackStackEntry by nav.currentBackStackEntryAsState()
-
-    // Intentamos obtener el backStackEntry de Home; si no existe, devolvemos null
-    val homeEntry = remember(navBackStackEntry) {
-        runCatching { nav.getBackStackEntry(Screen.Home.route) }.getOrNull()
-    }
-
-    // Si existe Home en el backstack, compartimos VM; si no, usamos VM local del destino
-    val viewModel: MainViewModel = if (homeEntry != null) {
-        viewModel(
-            viewModelStoreOwner = homeEntry,
-            factory = factory
-        )
-    } else {
-        viewModel(factory = factory)
-    }
-
     val scroll = rememberScrollState()
     val context = LocalContext.current
     val activity = context as? Activity
@@ -121,7 +88,7 @@ fun SettingScreen(
 
         // Reset
         NeonTextoBoton(stringResource(R.string.reset_button)) {
-            viewModel.resetJuego()
+            mainViewModel.resetJuego()
             nav.safeNavigate(Screen.Game.route)
         }
 
@@ -133,7 +100,7 @@ fun SettingScreen(
 
         // Rescate
         NeonTextoBoton(stringResource(R.string.rescue_button)) {
-            viewModel.rescate()
+            mainViewModel.rescate()
             nav.safeNavigate(Screen.Game.route)
         }
 

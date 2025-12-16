@@ -21,7 +21,6 @@ import com.kotliners.piedrapapeltijera.game.GameResult
 import com.kotliners.piedrapapeltijera.utils.locale.moveLabel
 import com.kotliners.piedrapapeltijera.ui.theme.FondoNegro
 import com.kotliners.piedrapapeltijera.ui.theme.TextoBlanco
-import com.kotliners.piedrapapeltijera.ui.theme.AmarilloNeon
 import com.kotliners.piedrapapeltijera.ui.components.TituloPrincipal
 import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
 import java.text.SimpleDateFormat

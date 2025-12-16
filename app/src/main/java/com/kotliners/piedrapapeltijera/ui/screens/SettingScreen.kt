@@ -28,6 +28,8 @@ import com.kotliners.piedrapapeltijera.utils.locale.LocaleManager
 import com.kotliners.piedrapapeltijera.utils.media.MusicService
 import com.kotliners.piedrapapeltijera.utils.system.exitGame
 import com.google.firebase.auth.FirebaseAuth
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.font.FontWeight
 
 @Composable
 fun SettingScreen(
@@ -127,9 +129,16 @@ fun SettingScreen(
                     LocaleManager.updateActivityLocale(activity!!, "es")
                 }
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = AzulNeon,
+                contentColor = TextoNegro
+            )
         ) {
-            Text(stringResource(R.string.language_spanish))
+            Text(stringResource(R.string.language_spanish),
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
+            )
         }
 
         Spacer(Modifier.height(8.dp))
@@ -142,9 +151,16 @@ fun SettingScreen(
                     LocaleManager.updateActivityLocale(activity!!, "en")
                 }
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = AzulNeon,
+                contentColor = TextoNegro
+            )
         ) {
-            Text(stringResource(R.string.language_english))
+            Text(stringResource(R.string.language_english),
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
+                )
         }
 
         Spacer(Modifier.height(24.dp))
@@ -179,7 +195,11 @@ fun SettingScreen(
                     selected = selectedTrack == key,
                     onClick = {
                         seleccionarMusica(key)
-                    }
+                    },
+                    colors = RadioButtonDefaults.colors(
+                        selectedColor = AzulNeon,
+                        unselectedColor = AzulNeon.copy(alpha = 0.6f)
+                    )
                 )
                 Spacer(Modifier.width(4.dp))
                 Text(stringResource(labelRes), color = TextoBlanco)

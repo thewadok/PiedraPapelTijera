@@ -34,7 +34,7 @@ fun HomeScreen(
 
     // Al entrar en Home, sincronizamos desde Firebase
     LaunchedEffect(Unit) {
-        mainViewModel.syncMonedasDesdeFirebase()
+        mainViewModel.syncJugadorDesdeFirebase()
     }
 
     val scroll = rememberScrollState()

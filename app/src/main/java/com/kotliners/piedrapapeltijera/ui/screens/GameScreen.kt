@@ -72,12 +72,21 @@ fun GameScreen(
     // Para evitar duplicados aunque recomposicione
     var lastShownEventId by rememberSaveable { mutableLongStateOf(0L) }
 
+    // Para no mostrar el último bote viejo al arrancar la pantalla
+    var initialized by rememberSaveable { mutableStateOf(false) }
 
     // Al notificar un premio ganado, lo sumamos al saldo local y remoto
     LaunchedEffect(premioState.value.ultimoEventoId) {
 
         val eventId = premioState.value.ultimoEventoId
         val premio = premioState.value.ultimoPremioGanado
+
+        // Primera carga
+        if (!initialized) {
+            lastShownEventId = eventId
+            initialized = true
+            return@LaunchedEffect
+        }
 
         if (eventId != 0L && eventId != lastShownEventId && premio > 0) {
             lastShownEventId = eventId
@@ -182,10 +191,13 @@ fun GameScreen(
                     // Mostramos dialogo con opcion de guardar la captura de pantalla
                     showVictoryDialog = true
 
-                    // Reclamamos el premio común
                     mainViewModel.currentUid()?.let { uidJugador ->
-                        premioViewModel.onJugadorGana(uidJugador, nombreJugador)
+                        premioViewModel.onJugadorGana(uidJugador, nombreJugador) { premioGanado ->
+                            // Sumamos el premio
+                            mainViewModel.aplicarPremioComun(premioGanado)
+                        }
                     }
+
                 }
 
                 GameResult.PIERDES -> {

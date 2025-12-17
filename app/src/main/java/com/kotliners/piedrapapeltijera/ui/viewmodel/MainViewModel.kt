@@ -71,12 +71,15 @@ class MainViewModel(
             )
             .also { disposables.add(it) }
 
+        /*
         //Observamos en tiempo real el total de partidas jugadas
         historial.observarTotalPartidas()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(onNext = { partidas.value = it })
             .also { disposables.add(it) }
+
+         */
 
         //Observamos historial completo de partidas
         historial.observarHistorial()
@@ -88,7 +91,7 @@ class MainViewModel(
             )
             .also { disposables.add(it) }
 
-        syncMonedasDesdeFirebase()
+        syncJugadorDesdeFirebase()
     }
 
     // +n o -n para ganar/perder monedas
@@ -105,12 +108,32 @@ class MainViewModel(
 
     // Fijamos un saldo exacto
     fun setMonedas(nuevoSaldo: Int) {
+
+        // Actualizamos la UI
+        monedas.postValue(nuevoSaldo)
+
         repo.setMonedas(nuevoSaldo)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onComplete = { /* OK */ },
                 onError = { e -> Log.e("MainViewModel", "Error fijando monedas", e) }
+            )
+            .also { disposables.add(it) }
+    }
+
+    // Fijamos un número exacto de partidas
+    fun setPartidas(nuevoTotal: Int) {
+
+        // Actualizamos la UI
+        partidas.postValue(nuevoTotal)
+
+        repo.setPartidas(nuevoTotal)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onComplete = { /* OK */ },
+                onError = { e -> Log.e("MainViewModel", "Error fijando partidas", e) }
             )
             .also { disposables.add(it) }
     }
@@ -127,7 +150,27 @@ class MainViewModel(
         historial.registrarPartida(movJugador, movCpu, resultado, apuesta, latitud, longitud)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
-                onComplete = { /* OK */ },
+                onComplete = {
+
+                    //  Actualizamos el contador en pantalla inmediatamente
+                    val actuales = partidas.value ?: 0
+                    partidas.postValue(actuales + 1)
+
+                    // Incrementar partidas en Firebase
+                    val uid = authRepo.currentUid()
+                    if (uid != null) {
+                        authRepo.sumarPartida(
+                            uid = uid,
+                            onError = { e ->
+                                Log.e(
+                                    "MainViewModel",
+                                    "Error sumando partidas en Firebase",
+                                    e
+                                )
+                            }
+                        )
+                    }
+                },
                 onError = { e -> Log.e("MainViewModel", "Error guardando partida", e) }
             )
             .also { disposables.add(it) }
@@ -240,7 +283,7 @@ class MainViewModel(
     }
 
     // Sincronizamos monedas en Local tras volver a iniciar sesión
-    fun syncMonedasDesdeFirebase() {
+    fun syncJugadorDesdeFirebase() {
         val uid = currentUid() ?: return
 
         authRepo.obtenerJugador(
@@ -248,10 +291,15 @@ class MainViewModel(
             onOk = { jugador ->
                 jugador ?: return@obtenerJugador
 
-                val monedasRemotas = jugador?.monedas
+                // Monedas
+                val monedasRemotas = jugador.monedas
+
                 if (monedasRemotas != null) {
                     setMonedas(monedasRemotas) // pisa el 100 local
                 }
+
+                // Partidas
+                jugador.partidas?.let { setPartidas(it) }
 
                 // Sincronizamos nombre
                 jugador.nombre?.let {

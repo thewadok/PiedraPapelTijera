@@ -7,6 +7,7 @@ data class JugadorRemoto(
     val nombre: String? = null,
     val monedas: Int? = null,
     val victorias: Int? = null,
-    val derrotas: Int? = null
+    val derrotas: Int? = null,
+    val partidas: Int? = null
 )
 

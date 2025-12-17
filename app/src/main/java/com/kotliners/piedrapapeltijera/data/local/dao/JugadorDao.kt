@@ -28,6 +28,10 @@ interface JugadorDao {
     @Query("UPDATE jugador SET monedas = :nuevasMonedas WHERE id_jugador = :idJugador")
     fun actualizarMonedas(idJugador: Int, nuevasMonedas: Int): Completable
 
+    // Actualizar partidas de jugador
+    @Query("UPDATE jugador SET partidas = :nuevoTotal WHERE id_jugador = :idJugador")
+    fun actualizarPartidas(idJugador: Int, nuevoTotal: Int): Completable
+
     //Sumar/restar de forma atómica
     @Query("UPDATE jugador SET monedas = monedas + :cantidad")
     fun sumarRestarMonedas(cantidad: Int): Completable

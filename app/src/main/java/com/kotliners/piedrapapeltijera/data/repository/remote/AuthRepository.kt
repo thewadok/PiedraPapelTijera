@@ -6,6 +6,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.MutableData
 import com.google.firebase.database.Transaction
 import com.kotliners.piedrapapeltijera.data.remote.firebase.JugadorRemoto
+import com.google.firebase.database.ServerValue
 
 
 /**
@@ -158,5 +159,19 @@ class AuthRepository {
                 onOk(snap.getValue(JugadorRemoto::class.java))
             }
             .addOnFailureListener { onError() }
+    }
+
+    // Incrementamos en 1 el contador de partidas jugadas del jugador en Firebase
+    fun sumarPartida(
+        uid: String,
+        onError: (Exception) -> Unit = {}
+    ) {
+        val ref = FirebaseDatabase.getInstance()
+            .getReference("jugadores")
+            .child(uid)
+            .child("partidas")
+
+        ref.setValue(ServerValue.increment(1))
+            .addOnFailureListener { e -> onError(e) }
     }
 }

@@ -64,7 +64,7 @@ class PremioRepository (
                         currentData.child("ultimoPremioGanado").value = boteGanado
 
                         // Evento único (para evitar duplicados en UI)
-                        currentData.child("ultimoEventoId").value = ServerValue.TIMESTAMP
+                        currentData.child("ultimoEventoId").value = System.currentTimeMillis()
 
                         Transaction.success(currentData)
                     } else {

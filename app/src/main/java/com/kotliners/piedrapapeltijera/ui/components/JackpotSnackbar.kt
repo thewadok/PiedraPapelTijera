@@ -36,15 +36,15 @@ fun JackpotSnackbar(snackbarData: SnackbarData) {
                     .shadow(20.dp, RoundedCornerShape(22.dp), clip = false)
                     .clip(RoundedCornerShape(22.dp))
                     .background(RosaNeon)
-                    .padding(horizontal = 20.dp, vertical = 18.dp)
+                    .padding(horizontal = 20.dp, vertical = 12.dp)
             ) {
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     // TÍTULO (nombre)
                     Text(
                         text = snackbarData.visuals.actionLabel.orEmpty(),
-                        fontSize = 20.sp,
+                        fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
                         color = AmarilloNeon,
                         maxLines = 1
@@ -53,7 +53,7 @@ fun JackpotSnackbar(snackbarData: SnackbarData) {
                     // TEXTO (premio)
                     Text(
                         text = snackbarData.visuals.message,
-                        fontSize = 18.sp,
+                        fontSize = 14.sp,
                         color = TextoBlanco,
                         maxLines = 2
                     )

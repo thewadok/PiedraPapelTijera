@@ -8,5 +8,6 @@ data class Jugador (
     @PrimaryKey(autoGenerate = true)
     val id_jugador: Int = 0,
     val nombre: String = "Jugador",
-    val monedas: Int = 100
+    val monedas: Int = 100,
+    val partidas: Int = 0
 )

@@ -37,9 +37,20 @@ class JugadorRepository(
             .subscribeOn(Schedulers.io())
     }
 
+    // Establecemos el total de partidas jugadas
+    fun setPartidas(nuevoTotal: Int): Completable {
+        return dao.obtenerJugador()
+            .switchIfEmpty(Maybe.error(Throwable("No hay jugador")))
+            .flatMapCompletable { jugador ->
+                dao.actualizarPartidas(jugador.id_jugador, nuevoTotal)
+            }
+            .subscribeOn(Schedulers.io())
+    }
+
     // Cambiamos el saldo relativo +gana / -pierde
     fun cambiarMonedas(cantidad: Int): Completable {
         return dao.sumarRestarMonedas(cantidad)
             .subscribeOn(Schedulers.io())
     }
+
 }

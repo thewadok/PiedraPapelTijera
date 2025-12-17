@@ -46,9 +46,15 @@ class PremioViewModel(
     }
 
     // Llamamos cuando el jugador gana una partida.
-    fun onJugadorGana(uidJugador: String, nombreJugador: String) {
-        viewModelScope.launch {
-            premioRepository.entregarPremioSiHay(uidJugador,nombreJugador) {/* no-op */}
+    fun onJugadorGana(
+        uidJugador: String,
+        nombreJugador: String,
+        onPremioEntregado: (Int) -> Unit
+        ) {
+        premioRepository.entregarPremioSiHay(uidJugador, nombreJugador)  { premioGanado ->
+            if (premioGanado > 0) {
+                onPremioEntregado(premioGanado)
+            }
         }
     }
 

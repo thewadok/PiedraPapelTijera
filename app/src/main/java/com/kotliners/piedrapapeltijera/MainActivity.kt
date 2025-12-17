@@ -22,8 +22,8 @@ import com.kotliners.piedrapapeltijera.data.repository.remote.AuthRepository
 import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
 import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModelFactory
 import com.kotliners.piedrapapeltijera.data.local.database.AppDatabase
-
-
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.remember
 
 /**
  * Activity principal combinada:
@@ -59,6 +59,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    // Devuelve si la música está activa
     fun isMusicRunning() = MusicService.isRunning
 
     // onCreate
@@ -123,7 +124,7 @@ class MainActivity : ComponentActivity() {
         startService(Intent(this, MusicService::class.java))
         SoundEffects.init(applicationContext)
 
-        // onfiguración visual
+        // Configuración visual
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.dark(FondoNegro.value.toInt()),
             navigationBarStyle = SystemBarStyle.dark(FondoNegro.value.toInt())
@@ -145,9 +146,13 @@ class MainActivity : ComponentActivity() {
             )
 
             val mainViewModel: MainViewModel = viewModel(factory = factory)
+            val snackbarHostState = remember { SnackbarHostState() }
 
-            // 4) Pásalo a tu AppRoot (modifica AppRoot para recibirlo)
-            AppRoot(mainViewModel = mainViewModel)
+            AppRoot(
+                mainViewModel = mainViewModel,
+                snackbarHostState = snackbarHostState
+                )
+
         }
 
         // Permiso de notificaciones
@@ -157,11 +162,13 @@ class MainActivity : ComponentActivity() {
         handleNotificationIntent()
     }
 
+    // Libera recursos de sonido al cerrar
     override fun onDestroy() {
         super.onDestroy()
         SoundEffects.release()
     }
 
+    // Lee el extra de la notificación y muestra un Toast
     private fun handleNotificationIntent() {
         val time = intent.getStringExtra("EXTRA_TIME")
         if (!time.isNullOrEmpty()) {

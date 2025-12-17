@@ -89,6 +89,7 @@ No balance, but not out of luck.
     <!-- Pot -->
     <string name="pot_title">POT!</string>
     <string name="pot_amount">%1$d coins</string>
+    <string name="jackpot_winner_message">Won the jackpot of %2$d coins</string>
 
     <!-- Moves -->
     <string name="rock">Rock</string>

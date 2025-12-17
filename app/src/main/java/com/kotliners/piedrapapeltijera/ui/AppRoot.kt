@@ -16,10 +16,14 @@ import com.kotliners.piedrapapeltijera.navigation.Screen
 import com.kotliners.piedrapapeltijera.ui.screens.LoginScreen
 import com.kotliners.piedrapapeltijera.ui.theme.PiedraPapelTijeraTheme
 import com.kotliners.piedrapapeltijera.ui.viewmodel.MainViewModel
+import androidx.compose.material3.SnackbarHostState
 
 //Raiz de la app
 @Composable
-fun AppRoot(mainViewModel: MainViewModel) {
+fun AppRoot(
+    mainViewModel: MainViewModel,
+    snackbarHostState: SnackbarHostState
+    ) {
     PiedraPapelTijeraTheme {
         val nav = rememberNavController()
         MaterialTheme {
@@ -35,12 +39,13 @@ fun AppRoot(mainViewModel: MainViewModel) {
                         launchSingleTop = true
                     }
                 })}
-                composable(Screen.Home.route) { AppScaffold(nav) { HomeScreen(nav, mainViewModel)} }
-                composable(Screen.History.route) { AppScaffold(nav) { HistoryScreen(mainViewModel)} }
-                composable(Screen.Ranking.route) { AppScaffold(nav) { RankingScreen()} }
-                composable(Screen.Setting.route) { AppScaffold(nav) { SettingScreen(nav, mainViewModel)} }
-                composable(Screen.Help.route) { AppScaffold(nav) { HelpScreen()} }
-                composable(Screen.Game.route) {AppScaffold(nav) { GameScreen(mainViewModel)} }
+                composable(Screen.Home.route) {
+                    AppScaffold(nav, snackbarHostState = snackbarHostState) { HomeScreen(nav, mainViewModel)} }
+                composable(Screen.History.route) { AppScaffold(nav,snackbarHostState = snackbarHostState) { HistoryScreen(mainViewModel)} }
+                composable(Screen.Ranking.route) { AppScaffold(nav,snackbarHostState = snackbarHostState) { RankingScreen()} }
+                composable(Screen.Setting.route) { AppScaffold(nav,snackbarHostState = snackbarHostState) { SettingScreen(nav, mainViewModel)} }
+                composable(Screen.Help.route) { AppScaffold(nav,snackbarHostState = snackbarHostState) { HelpScreen()} }
+                composable(Screen.Game.route) {AppScaffold(nav,snackbarHostState = snackbarHostState) { GameScreen(mainViewModel, snackbarHostState = snackbarHostState)} }
             }
         }
     }

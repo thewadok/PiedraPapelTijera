@@ -30,6 +30,7 @@ class MainViewModel(
     // Repo remoto de autenticación
     private val authRepo: AuthRepository
 
+
 ) : ViewModel() {
 
     // Contenedor para cancelar todas las suscripciones RxJava al cerrar el ViewModel
@@ -43,7 +44,15 @@ class MainViewModel(
     val partidas = MutableLiveData<Int>()
     val historialPartidas = MutableLiveData<List<Partida>>()
 
+    // Nombre del jugador
+    private val _nombreJugador = MutableLiveData("")
+    val nombreJugador: MutableLiveData<String> = _nombreJugador
+
     init {
+
+        // Valor inicial seguro mientras se carga Firebase
+        _nombreJugador.value = "Un jugador"
+
         // Creamos el jugador si no existe
         // Observamos el saldo en tiempo real y lo publicamos en LiveData
         repo.ensureJugador()
@@ -237,9 +246,16 @@ class MainViewModel(
         authRepo.obtenerJugador(
             uid = uid,
             onOk = { jugador ->
+                jugador ?: return@obtenerJugador
+
                 val monedasRemotas = jugador?.monedas
                 if (monedasRemotas != null) {
                     setMonedas(monedasRemotas) // pisa el 100 local
+                }
+
+                // Sincronizamos nombre
+                jugador.nombre?.let {
+                    _nombreJugador.postValue(it)
                 }
             },
             onError = {

@@ -4,5 +4,7 @@ package com.kotliners.piedrapapeltijera.ui.state
  data class PremioUiState (
     val monedasEnBote: Int = 0,
     val ultimoGanadorUid: String = "",
-    val ultimoPremioGanado: Int = 0
+    val ultimoGanadorNombre: String = "",
+    val ultimoPremioGanado: Int = 0,
+    val ultimoEventoId: Long = 0L
 )

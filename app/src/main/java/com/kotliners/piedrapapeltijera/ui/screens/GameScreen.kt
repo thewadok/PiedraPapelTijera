@@ -51,11 +51,17 @@ import androidx.compose.runtime.LaunchedEffect
 import com.kotliners.piedrapapeltijera.ui.viewmodel.PremioViewModel
 import com.kotliners.piedrapapeltijera.ui.components.NeonGloboBote
 import androidx.compose.runtime.remember
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.saveable.rememberSaveable
 
 @Composable
 fun GameScreen(
-    mainViewModel: MainViewModel
+    mainViewModel: MainViewModel,
+    snackbarHostState: SnackbarHostState
 ) {
+
+    val context = LocalContext.current
 
     // ViewModel del premio común
     val premioViewModel: PremioViewModel = viewModel()
@@ -63,15 +69,39 @@ fun GameScreen(
     // Estado del premio en tiempo real
     val premioState = premioViewModel.uiState.collectAsState()
 
+    // Para evitar duplicados aunque recomposicione
+    var lastShownEventId by rememberSaveable { mutableLongStateOf(0L) }
+
+
     // Al notificar un premio ganado, lo sumamos al saldo local y remoto
-    LaunchedEffect(premioState.value.ultimoPremioGanado) {
+    LaunchedEffect(premioState.value.ultimoEventoId) {
+
+        val eventId = premioState.value.ultimoEventoId
         val premio = premioState.value.ultimoPremioGanado
-        if (premio > 0) {
 
-            mainViewModel.aplicarPremioComun(premio)
+        if (eventId != 0L && eventId != lastShownEventId && premio > 0) {
+            lastShownEventId = eventId
 
-            // Evitamos duplicados
-            premioViewModel.marcarPremioConsumido()
+            // Globo para TODOS
+            val nombre = premioState.value.ultimoGanadorNombre.ifBlank { "Un jugador" }
+
+            val message = context.getString(
+                R.string.jackpot_winner_message,
+                nombre,
+                premio
+            )
+
+            snackbarHostState.showSnackbar(
+                message = message,
+                actionLabel = nombre,
+                duration = SnackbarDuration.Long
+            )
+
+            // Solo el ganador se suma el premio
+            val myUid = mainViewModel.currentUid()
+            if (myUid != null && myUid == premioState.value.ultimoGanadorUid) {
+                mainViewModel.aplicarPremioComun(premio)
+            }
         }
     }
 
@@ -86,9 +116,11 @@ fun GameScreen(
     // Estado para bloquear nuevos turnos
     var isRoundInProgress by remember { mutableStateOf(false) }
 
-    val context = LocalContext.current
     val saldo = mainViewModel.monedas.observeAsState(0).value
     val partidas = mainViewModel.partidas.observeAsState(0).value
+    val nombreJugador = mainViewModel.nombreJugador.observeAsState("").value
+        .trim()
+        .ifBlank { "Un jugador" }
 
     // Utilidades media
     // Función para capturar la pantalla
@@ -152,7 +184,7 @@ fun GameScreen(
 
                     // Reclamamos el premio común
                     mainViewModel.currentUid()?.let { uidJugador ->
-                        premioViewModel.onJugadorGana(uidJugador)
+                        premioViewModel.onJugadorGana(uidJugador, nombreJugador)
                     }
                 }
 

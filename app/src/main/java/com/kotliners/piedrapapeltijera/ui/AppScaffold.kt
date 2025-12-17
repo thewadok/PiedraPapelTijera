@@ -43,7 +43,9 @@ import com.kotliners.piedrapapeltijera.ui.theme.FondoNegro
 import com.kotliners.piedrapapeltijera.ui.theme.TextoBlanco
 import com.kotliners.piedrapapeltijera.ui.theme.TextoNegro
 import com.kotliners.piedrapapeltijera.utils.system.exitGame
-
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import com.kotliners.piedrapapeltijera.ui.components.JackpotSnackbar
 
 @Composable
 fun MusicToggleButton() {
@@ -118,6 +120,7 @@ fun ExitGameButton() {
 @Composable
 fun AppScaffold(
     nav: NavHostController,
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     content: @Composable () -> Unit
 ) {
     val backStack by nav.currentBackStackEntryAsState()
@@ -191,6 +194,11 @@ fun AppScaffold(
                         )
                     )
                 }
+            }
+        } ,
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState) { snackbarData ->
+                JackpotSnackbar(snackbarData)
             }
         }
     ) { inner ->

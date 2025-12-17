@@ -37,32 +37,34 @@ class PremioRepository (
         // Intentamos entregar el premio al ganador usando una transacción segura.
         fun entregarPremioSiHay(
             uidJugador: String,
+            nombreJugador: String,
             onResultado: (premioGanado: Int) -> Unit
         ) {
             // Variable para guardar el valor del bote antes de resetearlo
             var boteGanado = 0
 
             premioRef.runTransaction(object : Transaction.Handler {
+
                 override fun doTransaction(currentData: MutableData): Transaction.Result {
 
-                    val nodoMonedas = currentData.child("monedasEnBote")
-                    val nodoUltimo = currentData.child("ultimoGanadorUid")
-
-
-
-
-                    val boteActual = (nodoMonedas.getValue(Long::class.java) ?: 0L).toInt()
-                    android.util.Log.d("PremioRepo", "doTransaction boteActual=$boteActual uidJugador=$uidJugador")
+                    val boteActual = (currentData.child("monedasEnBote").getValue(Long::class.java)?: 0L).toInt()
 
                     return if (boteActual > 0) {
                         // Guardamos el valor del bote antes de ponerlo a 0
                         boteGanado = boteActual
 
                         // Reseteamos el bote
-                        nodoMonedas.value = 0
+                        currentData.child("monedasEnBote").value = 0
 
-                        // Guardamos el último ganador
-                        nodoUltimo.value = uidJugador
+                        // Guardamos info del ganador
+                        currentData.child("ultimoGanadorUid").value = uidJugador
+                        currentData.child("ultimoGanadorNombre").value = nombreJugador
+
+                        // Guardamos cuánto se llevó (para UI)
+                        currentData.child("ultimoPremioGanado").value = boteGanado
+
+                        // Evento único (para evitar duplicados en UI)
+                        currentData.child("ultimoEventoId").value = ServerValue.TIMESTAMP
 
                         Transaction.success(currentData)
                     } else {

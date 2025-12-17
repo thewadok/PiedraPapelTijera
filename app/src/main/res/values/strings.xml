@@ -89,6 +89,8 @@ Sin saldo, pero no sin suerte.
     <!-- Premio -->
     <string name="pot_title">¡BOTE!</string>
     <string name="pot_amount">%1$d monedas</string>
+    <string name="jackpot_winner_message">Se ha llevado el bote de %2$d monedas</string>
+
 
     <!-- Movimientos -->
     <string name="rock">Piedra</string>

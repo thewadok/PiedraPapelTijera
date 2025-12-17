@@ -30,8 +30,11 @@ class PremioViewModel(
         premioListener = premioRepository.observarPremio { premio: PremioComunRemoto ->
             _uiState.update {
                 it.copy(
-                    monedasEnBote = premio.monedasEnBote ?: 0,
-                    ultimoGanadorUid = premio.ultimoGanadorUid ?: ""
+                    monedasEnBote = (premio.monedasEnBote ?: 0L).toInt(),
+                    ultimoGanadorUid = premio.ultimoGanadorUid.orEmpty(),
+                    ultimoGanadorNombre = premio.ultimoGanadorNombre.orEmpty(),
+                    ultimoPremioGanado = (premio.ultimoPremioGanado ?: 0L).toInt(),
+                    ultimoEventoId = premio.ultimoEventoId ?: 0L
                 )
             }
         }
@@ -43,15 +46,9 @@ class PremioViewModel(
     }
 
     // Llamamos cuando el jugador gana una partida.
-    fun onJugadorGana(uidJugador: String) {
+    fun onJugadorGana(uidJugador: String, nombreJugador: String) {
         viewModelScope.launch {
-            premioRepository.entregarPremioSiHay(uidJugador) { premioGanado ->
-                if (premioGanado > 0) {
-                    _uiState.update {
-                        it.copy(ultimoPremioGanado = premioGanado)
-                    }
-                }
-            }
+            premioRepository.entregarPremioSiHay(uidJugador,nombreJugador) {/* no-op */}
         }
     }
 

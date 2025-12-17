@@ -181,6 +181,8 @@ class MainViewModel(
 
         // Local
         setMonedas(100)
+        setPartidas(0)
+
         historial.borrarHistorial()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -266,6 +268,12 @@ class MainViewModel(
             uid = uid,
             onError = { Log.e("MainViewModel", "Error reseteando stats en Firebase") }
         )
+
+        authRepo.resetPartidas(
+            uid = uid,
+            onError = { Log.e("MainViewModel", "Error reseteando partidas en Firebase") }
+        )
+
     }
 
     // Sincronizamos rescate, sumamos monedas en local y remoto, sin tocar victorias/derrotas.

@@ -105,12 +105,6 @@ fun GameScreen(
                 actionLabel = nombre,
                 duration = SnackbarDuration.Long
             )
-
-            // Solo el ganador se suma el premio
-            val myUid = mainViewModel.currentUid()
-            if (myUid != null && myUid == premioState.value.ultimoGanadorUid) {
-                mainViewModel.aplicarPremioComun(premio)
-            }
         }
     }
 

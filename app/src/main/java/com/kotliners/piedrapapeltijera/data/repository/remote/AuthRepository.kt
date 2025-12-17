@@ -152,6 +152,18 @@ class AuthRepository {
             .addOnFailureListener { onError() }
     }
 
+    // Reseteamos partidas a 0
+    fun resetPartidas(
+        uid: String,
+        onOk: () -> Unit = {},
+        onError: () -> Unit = {}
+    ) {
+        jugadorRef(uid).child("partidas")
+            .setValue(0)
+            .addOnSuccessListener { onOk() }
+            .addOnFailureListener { onError() }
+    }
+
     // Obtenemos el jugador completo
     fun obtenerJugador(uid: String, onOk: (JugadorRemoto?) -> Unit, onError: () -> Unit) {
         jugadorRef(uid).get()

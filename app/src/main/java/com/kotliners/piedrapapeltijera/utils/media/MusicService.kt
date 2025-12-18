@@ -44,6 +44,8 @@ class MusicService : Service() {
     override fun onCreate() {
         super.onCreate()
 
+        isRunning = true
+
         //Inicializo el AudioManager para el sistema de audio
         audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
     }
@@ -81,7 +83,6 @@ class MusicService : Service() {
         isRunning = false
 
         // Nos aseguramos de liberar bien el servicio para corregir el error de que siga sonando
-        mediaPlayer?.stop()
         mediaPlayer?.release()
         mediaPlayer = null
         currentTrackResId = null

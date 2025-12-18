@@ -52,10 +52,28 @@ class MainActivity : ComponentActivity() {
 
     // Control de música
     fun toggleMusic() {
-        if (MusicService.isRunning) {
-            stopService(Intent(this, MusicService::class.java))
+        val prefs = getSharedPreferences("settings", MODE_PRIVATE)
+        val track = prefs.getString("music_track", "fondo")
+
+        val shouldStop = MusicService.isRunning && track != "mute"
+
+        if (shouldStop) {
+            // Guardamos mute
+            prefs.edit().putString("music_track", "mute").apply()
+
+            // Paramos
+            startService(Intent(this, MusicService::class.java).apply {
+                action = MusicService.ACTION_STOP
+            })
         } else {
-            startService(Intent(this, MusicService::class.java))
+            // Quitamos mute (ponemos una por defecto si quieres)
+            val newTrack = if (track == "mute") "fondo" else (track ?: "fondo")
+            prefs.edit().putString("music_track", newTrack).apply()
+
+            // Reproducimos
+            startService(Intent(this, MusicService::class.java).apply {
+                action = MusicService.ACTION_PLAY
+            })
         }
     }
 

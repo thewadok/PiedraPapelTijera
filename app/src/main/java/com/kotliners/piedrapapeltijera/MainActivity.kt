@@ -175,4 +175,19 @@ class MainActivity : ComponentActivity() {
             Toast.makeText(this, "Tiempo de resolución: $time", Toast.LENGTH_LONG).show()
         }
     }
+
+    override fun onStop() {
+        super.onStop()
+        startService(Intent(this, MusicService::class.java).apply {
+            action = MusicService.ACTION_PAUSE
+        })
+    }
+
+    override fun onStart() {
+        super.onStart()
+        startService(Intent(this, MusicService::class.java).apply {
+            action = MusicService.ACTION_PLAY
+        })
+    }
+
 }

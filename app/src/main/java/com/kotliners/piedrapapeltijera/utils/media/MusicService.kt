@@ -17,6 +17,11 @@ class MusicService : Service() {
     companion object {
         @Volatile
         var isRunning: Boolean = false
+
+        // Definimos las acciones disponibles para controlar la música
+        const val ACTION_PLAY = "MUSIC_PLAY"
+        const val ACTION_PAUSE = "MUSIC_PAUSE"
+        const val ACTION_STOP = "MUSIC_STOP"
     }
 
     // MediaPlayer va ha  reproducir la música de fondo
@@ -44,12 +49,25 @@ class MusicService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        // Indicamos que el servicio está en ejecución
         isRunning = true
 
-        // Cuando se arranca el servicio, empezamos la música
-        playMusic()
+        // Comprobamos la acción recibida en el Intent
+        when (intent?.action) {
+            // Reproducimos la música
+            ACTION_PLAY -> playMusic()
 
-        // Indicamos al sistema que intente mantener el servicio funcionando
+            // Pausamos la música
+            ACTION_PAUSE -> pauseMusic()
+
+            // Detenemos la música y el servicio
+            ACTION_STOP -> stopMusic()
+
+            // Si no hay acción, reproducimos la música por defecto
+            else -> playMusic()
+        }
+
+        // Mantenemos el servicio activo aunque el sistema lo cierre
         return START_STICKY
     }
 

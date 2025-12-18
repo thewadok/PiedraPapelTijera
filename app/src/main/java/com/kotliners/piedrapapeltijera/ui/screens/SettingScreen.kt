@@ -37,7 +37,10 @@ fun SettingScreen(
     nav: NavHostController,
     mainViewModel: MainViewModel
 ) {
+    // Preparamos el scroll vertical de la pantalla
     val scroll = rememberScrollState()
+
+    // Obtenemos el contexto y la actividad actual
     val context = LocalContext.current
     val activity = context as? Activity
 
@@ -59,10 +62,12 @@ fun SettingScreen(
     // Música
     val prefs = remember { context.getSharedPreferences("settings", Context.MODE_PRIVATE) }
 
+    // Guardamos la pista de música seleccionada
     var selectedTrack by remember {
         mutableStateOf(prefs.getString("music_track", "fondo") ?: "fondo")
     }
 
+    // Cambiamos la música, guardamos la opción y reiniciamos el servicio
     fun seleccionarMusica(trackKey: String) {
         selectedTrack = trackKey
 
@@ -81,6 +86,7 @@ fun SettingScreen(
         }
     }
 
+    // Contenedor principal de la pantalla de ajustes
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -257,6 +263,7 @@ fun SettingScreen(
         Spacer(Modifier.height(24.dp))
     }
 
+    // Diálogo de confirmación para salir del juego
     if (showExitDialog) {
         ExitGameDialog(
             title = stringResource(R.string.exit_game_title),
@@ -272,6 +279,7 @@ fun SettingScreen(
         )
     }
 
+    // Diálogo de confirmación para cerrar sesión
     if (showLogoutDialog) {
         ExitGameDialog(
             title = stringResource(R.string.logout_title),
@@ -280,6 +288,11 @@ fun SettingScreen(
             dismissText = stringResource(R.string.logout_cancel),
             onConfirmExit = {
                 showLogoutDialog = false
+
+                // Paramos la música antes de cerrar
+                activity?.startService(Intent(activity, MusicService::class.java).apply {
+                    action = MusicService.ACTION_STOP
+                })
 
                 // Cerramos sesión Firebase
                 FirebaseAuth.getInstance().signOut()
@@ -293,7 +306,7 @@ fun SettingScreen(
         )
     }
 
-
+    // Diálogo de confirmación para eliminar la cuenta
     if (showDeleteAccountDialog) {
         ExitGameDialog(
             title = stringResource(R.string.delete_account_title),
@@ -306,6 +319,12 @@ fun SettingScreen(
                 // Intentamos borrar completo
                 mainViewModel.eliminarCuentaCompleta(
                     onOk = {
+
+                        // Paramos la música antes de cerrar
+                        activity?.startService(Intent(activity, MusicService::class.java).apply {
+                            action = MusicService.ACTION_STOP
+                        })
+
                         // Cerramos app
                         activity?.finishAffinity()
                     },
@@ -313,6 +332,13 @@ fun SettingScreen(
                         startReauthDelete = true
                     },
                     onError = {
+
+                        // Paramos la música antes de cerrar
+                        activity?.startService(
+                            Intent(activity, MusicService::class.java).apply {
+                                action = MusicService.ACTION_STOP
+                            }
+                        )
                         activity?.finishAffinity()
                     }
                 )
@@ -321,6 +347,7 @@ fun SettingScreen(
         )
     }
 
+    // Gestionamos la reautenticación de Google si es necesaria
     if (startReauthDelete) {
         GoogleReauthAndDelete(
             activity = activity,

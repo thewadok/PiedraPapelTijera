@@ -25,6 +25,7 @@ import com.kotliners.piedrapapeltijera.data.local.database.AppDatabase
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.remember
 
+
 /**
  * Activity principal combinada:
  Localización aplicada al contexto base
@@ -160,7 +161,7 @@ class MainActivity : ComponentActivity() {
             val db = AppDatabase.getInstance(applicationContext)
 
             val jugadorRepo = JugadorRepository(db.jugadorDao())
-            val partidaRepo = PartidaRepository(db.partidaDao())
+            val partidaRepo = PartidaRepository(db.partidaDao(), db.jugadorDao())
             val authRepo = AuthRepository()
 
             val factory = MainViewModelFactory(

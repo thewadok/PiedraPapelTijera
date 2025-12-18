@@ -339,6 +339,7 @@ fun SettingScreen(
                                 action = MusicService.ACTION_STOP
                             }
                         )
+
                         activity?.finishAffinity()
                     }
                 )

@@ -367,27 +367,40 @@ class MainViewModel(
         authRepo.borrarJugadorRemoto(
             uid = uid,
             onOk = {
-                // 2) Borramos los datos locales en Room (jugador e historial)
-                repo.borrarJugador() // Eliminamos el jugador local
-                    .andThen(historial.borrarHistorial()) // Eliminamos el historial de partidas
+                // Borramos los datos locales en Room
+                repo.borrarJugador()
+                    .andThen(historial.borrarHistorial())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeBy(
                         onComplete = {
-                            // 3) Borramos la cuenta del usuario en Firebase Authentication
+                            // Borramos la cuenta del usuario en Firebase Authentication
                             authRepo.borrarCuentaAuth(
-                                onOk = { onOk() },
-                                onRequiresRecentLogin = { onRequiresRecentLogin() },
-                                onError = { e -> onError(e) }
+                                onOk = {
+                                    // Forzamos logout
+                                    com.google.firebase.auth.FirebaseAuth.getInstance().signOut()
+                                    onOk()
+                                       },
+                                onRequiresRecentLogin = {
+                                    onRequiresRecentLogin()
+                                                        },
+                                onError = { e ->
+                                    com.google.firebase.auth.FirebaseAuth.getInstance().signOut()
+                                    onError(e)
+                                }
                             )
                         },
                         // Gestionamos errores al borrar datos locales
-                        onError = { e -> onError(Exception(e)) }
+                        onError = { e ->
+                            com.google.firebase.auth.FirebaseAuth.getInstance().signOut()
+                            onError(Exception(e))
+                        }
                     )
                     .also { disposables.add(it) }
             },
             // Gestionamos errores al borrar los datos remotos
             onError = {
+                com.google.firebase.auth.FirebaseAuth.getInstance().signOut()
                 onError(Exception("Error borrando jugador remoto"))
             }
         )

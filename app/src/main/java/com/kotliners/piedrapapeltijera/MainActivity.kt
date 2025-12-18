@@ -120,8 +120,14 @@ class MainActivity : ComponentActivity() {
             )
         )
 
-        // Iniciar música y efectos
-        startService(Intent(this, MusicService::class.java))
+        // Iniciar música y efectos (respetamos el mute)
+        val prefs = getSharedPreferences("settings", MODE_PRIVATE)
+        val track = prefs.getString("music_track", "fondo")
+
+        if (track != "mute") {
+            startService(Intent(this, MusicService::class.java))
+        }
+
         SoundEffects.init(applicationContext)
 
         // Configuración visual
@@ -178,6 +184,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onStop() {
         super.onStop()
+
+        // Paramos la música cuando la app va a segundo plano
         startService(Intent(this, MusicService::class.java).apply {
             action = MusicService.ACTION_PAUSE
         })
@@ -185,9 +193,15 @@ class MainActivity : ComponentActivity() {
 
     override fun onStart() {
         super.onStart()
-        startService(Intent(this, MusicService::class.java).apply {
-            action = MusicService.ACTION_PLAY
-        })
-    }
 
+        val prefs = getSharedPreferences("settings", MODE_PRIVATE)
+        val track = prefs.getString("music_track", "fondo")
+
+        // Solo reanudamos si no está en mute
+        if (track != "mute") {
+            startService(Intent(this, MusicService::class.java).apply {
+                action = MusicService.ACTION_PLAY
+            })
+        }
+    }
 }

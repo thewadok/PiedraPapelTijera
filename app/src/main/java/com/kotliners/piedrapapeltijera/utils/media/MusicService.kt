@@ -146,7 +146,6 @@ class MusicService : Service() {
         serviceScope.launch {
             if (mediaPlayer?.isPlaying == true) {
                 mediaPlayer?.pause()
-                abandonAudioFocus()
             }
         }
     }

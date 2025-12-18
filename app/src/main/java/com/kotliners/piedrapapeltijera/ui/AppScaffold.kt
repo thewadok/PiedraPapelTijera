@@ -46,6 +46,8 @@ import com.kotliners.piedrapapeltijera.utils.system.exitGame
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import com.kotliners.piedrapapeltijera.ui.components.JackpotSnackbar
+import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.layout.size
 
 @Composable
 fun MusicToggleButton() {
@@ -106,11 +108,15 @@ fun ExitGameButton() {
         )
     }
 
-    IconButton(onClick = { showDialog = true }) {
+    IconButton(
+    onClick = { showDialog = true },
+    modifier = Modifier.size(48.dp)
+    ) {
         Icon(
             imageVector = Icons.AutoMirrored.Filled.ExitToApp,
             contentDescription = "Salir del juego",
-            tint = TextoBlanco
+            tint = TextoBlanco,
+            modifier = Modifier.size(36.dp)
         )
     }
 }

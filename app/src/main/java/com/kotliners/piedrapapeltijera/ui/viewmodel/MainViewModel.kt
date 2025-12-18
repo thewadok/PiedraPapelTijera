@@ -18,6 +18,7 @@ import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.launch
 import com.kotliners.piedrapapeltijera.data.repository.remote.AuthRepository
+import com.google.firebase.auth.AuthCredential
 
 class MainViewModel(
 
@@ -350,5 +351,58 @@ class MainViewModel(
 
     // Obtenemos el UID del usuario logueado
     fun currentUid(): String? = authRepo.currentUid()
+
+    fun eliminarCuentaCompleta(
+        onOk: () -> Unit,
+        onRequiresRecentLogin: () -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        // Obtenemos el UID del usuario autenticado
+        val uid = authRepo.currentUid() ?: run {
+            onError(IllegalStateException("No hay uid"))
+            return
+        }
+
+        // 1) Borramos los datos del jugador en Firebase Realtime Database
+        authRepo.borrarJugadorRemoto(
+            uid = uid,
+            onOk = {
+                // 2) Borramos los datos locales en Room (jugador e historial)
+                repo.borrarJugador() // Eliminamos el jugador local
+                    .andThen(historial.borrarHistorial()) // Eliminamos el historial de partidas
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeBy(
+                        onComplete = {
+                            // 3) Borramos la cuenta del usuario en Firebase Authentication
+                            authRepo.borrarCuentaAuth(
+                                onOk = { onOk() },
+                                onRequiresRecentLogin = { onRequiresRecentLogin() },
+                                onError = { e -> onError(e) }
+                            )
+                        },
+                        // Gestionamos errores al borrar datos locales
+                        onError = { e -> onError(Exception(e)) }
+                    )
+                    .also { disposables.add(it) }
+            },
+            // Gestionamos errores al borrar los datos remotos
+            onError = {
+                onError(Exception("Error borrando jugador remoto"))
+            }
+        )
+    }
+
+    fun reautenticarConCredential(
+        credential: AuthCredential,
+        onOk: () -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        authRepo.reautenticarConCredential(
+            credential = credential,
+            onOk = onOk,
+            onError = onError
+        )
+    }
 }
 

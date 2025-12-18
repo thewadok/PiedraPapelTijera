@@ -154,8 +154,10 @@ Sin saldo, pero no sin suerte.
     <string name="ranking_balance">%1$s Balance victorias</string>
 
     <!-- Salir del juego -->
+    <string name="session_section_title">Sesión</string>
     <string name="exit_game">Salir del juego</string>
     <string name="exit_game_title">Salir del juego</string>
+    <string name="exit_game_description">Cierra la aplicación.</string>
     <string name="exit_game_message">¿Seguro que quieres salir de la aplicación?</string>
     <string name="exit_game_confirm">Salir</string>
     <string name="exit_game_cancel">Cancelar</string>
@@ -163,6 +165,7 @@ Sin saldo, pero no sin suerte.
     <!-- Cerrar sesión -->
     <string name="logout">Cerrar sesión</string>
     <string name="logout_title">Cerrar sesión</string>
+    <string name="logout_description">Cierra tu sesión actual. Tus datos quedan guardados en la nube.</string>
     <string name="logout_message">¿Quieres cerrar sesión y salir de la aplicación?</string>
     <string name="logout_confirm">Cerrar sesión</string>
     <string name="logout_cancel">Cancelar</string>
@@ -178,7 +181,7 @@ Sin saldo, pero no sin suerte.
 
     <!-- Login -->
     <string name="login_title">Iniciar sesión</string>
-    <string name="login_desc">Accede con tu cuenta de Google para empezar a jugar</string>
+    <string name="login_desc">Accede con tu cuenta de Google para empezar a jugar.</string>
     <string name="login_button">Entrar con Google</string>
     <string name="login_loading">Cargando&#8230;</string>
     <string name="login_cancelled">Inicio de sesión cancelado</string>
@@ -191,6 +194,21 @@ Sin saldo, pero no sin suerte.
     <string name="choose_name_hint">Nombre de jugador</string>
     <string name="choose_name_error">Escribe un nombre válido</string>
     <string name="continue_button">Continuar</string>
+
+    <!-- Eliminar cuenta -->
+    <string name="danger_zone_title">Zona de peligro</string>
+    <string name="delete_account_button">Eliminar cuenta</string>
+    <string name="delete_account_description">Elimina tu cuenta y borra tus datos. Esta acción no se puede deshacer.</string>
+    <string name="delete_account_title">Eliminar cuenta</string>
+    <string name="delete_account_message">
+        Se borrarán todos tus datos.
+
+        \n Esta acción no se puede deshacer.
+
+        \n ¿Esta seguro de que quiere eliminar la cuenta?
+    </string>
+    <string name="delete_account_confirm">Eliminar</string>
+    <string name="delete_account_cancel">Cancelar</string>
 
     <!-- Google Sign-In -->
     <string name="default_web_client_id">

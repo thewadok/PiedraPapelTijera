@@ -30,6 +30,7 @@ import com.kotliners.piedrapapeltijera.utils.system.exitGame
 import com.google.firebase.auth.FirebaseAuth
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.FontWeight
+import com.kotliners.piedrapapeltijera.utils.auth.GoogleReauthAndDelete
 
 @Composable
 fun SettingScreen(
@@ -48,6 +49,12 @@ fun SettingScreen(
 
     // Diálogo cerrar sesión
     var showLogoutDialog by remember { mutableStateOf(false) }
+
+    // Diálogo eliminar cuenta
+    var showDeleteAccountDialog by remember { mutableStateOf(false) }
+
+    // Lanzar reauth y delete en Google
+    var startReauthDelete by remember { mutableStateOf(false) }
 
     // Música
     val prefs = remember { context.getSharedPreferences("settings", Context.MODE_PRIVATE) }
@@ -208,10 +215,19 @@ fun SettingScreen(
 
         Spacer(Modifier.height(12.dp))
 
+        // Sesión
+        TituloPrincipal(stringResource(R.string.session_section_title))
+
+        Spacer(Modifier.height(12.dp))
+
         // Salir del juego
         NeonTextoBoton(stringResource(R.string.exit_game)) {
             showExitDialog = true
         }
+
+        Spacer(Modifier.height(8.dp))
+
+        Parrafo(stringResource(R.string.exit_game_description))
 
         Spacer(Modifier.height(24.dp))
 
@@ -220,9 +236,25 @@ fun SettingScreen(
             showLogoutDialog = true
         }
 
+        Spacer(Modifier.height(8.dp))
+
+        Parrafo(stringResource(R.string.logout_description))
+
         Spacer(Modifier.height(24.dp))
 
+        TituloPrincipal(stringResource(R.string.danger_zone_title))
 
+        Spacer(Modifier.height(12.dp))
+
+        // Eliminar cuenta
+        NeonTextoBoton(stringResource(R.string.delete_account_button)) {
+            showDeleteAccountDialog = true
+        }
+
+        Spacer(Modifier.height(8.dp))
+        Parrafo(stringResource(R.string.delete_account_description))
+
+        Spacer(Modifier.height(24.dp))
     }
 
     if (showExitDialog) {
@@ -258,6 +290,43 @@ fun SettingScreen(
             onDismiss = {
                 showLogoutDialog = false
             }
+        )
+    }
+
+
+    if (showDeleteAccountDialog) {
+        ExitGameDialog(
+            title = stringResource(R.string.delete_account_title),
+            message = stringResource(R.string.delete_account_message),
+            confirmText = stringResource(R.string.delete_account_confirm),
+            dismissText = stringResource(R.string.delete_account_cancel),
+            onConfirmExit = {
+                showDeleteAccountDialog = false
+
+                // Intentamos borrar completo
+                mainViewModel.eliminarCuentaCompleta(
+                    onOk = {
+                        // Cerramos app
+                        activity?.finishAffinity()
+                    },
+                    onRequiresRecentLogin = {
+                        startReauthDelete = true
+                    },
+                    onError = {
+                        activity?.finishAffinity()
+                    }
+                )
+            },
+            onDismiss = { showDeleteAccountDialog = false }
+        )
+    }
+
+    if (startReauthDelete) {
+        GoogleReauthAndDelete(
+            activity = activity,
+            context = context,
+            mainViewModel = mainViewModel,
+            onFinish = { startReauthDelete = false }
         )
     }
 }

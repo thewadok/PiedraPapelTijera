@@ -37,10 +37,11 @@ class RankingViewModel(
             try {
                 _loading.value = true
                 _error.value = null
-                _topJugadores.value = repository.fetchTopJugadores()
+                _topJugadores.value = repository.fetchTopJugadores(limit = 10)
             } catch (e: Exception) {
                 // Si ocurre un error, mostramos un mensaje
                 _error.value = "Error al cargar el ranking"
+                e.printStackTrace()
             } finally {
                 // Finaliza el estado de carga
                 _loading.value = false

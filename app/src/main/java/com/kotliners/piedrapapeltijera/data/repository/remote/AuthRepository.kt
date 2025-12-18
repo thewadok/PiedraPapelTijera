@@ -7,6 +7,7 @@ import com.google.firebase.database.MutableData
 import com.google.firebase.database.Transaction
 import com.kotliners.piedrapapeltijera.data.remote.firebase.JugadorRemoto
 import com.google.firebase.database.ServerValue
+import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
 
 
 /**
@@ -184,6 +185,56 @@ class AuthRepository {
             .child("partidas")
 
         ref.setValue(ServerValue.increment(1))
+            .addOnFailureListener { e -> onError(e) }
+    }
+
+    // Eliminamos los datos del jugador en la base de datos remota
+    fun borrarJugadorRemoto(
+        uid: String,
+        onOk: () -> Unit = {},
+        onError: () -> Unit = {}
+    ) {
+        jugadorRef(uid).removeValue()
+            .addOnSuccessListener { onOk() }
+            .addOnFailureListener { onError() }
+    }
+
+    // Eliminamos la cuenta del usuario en Firebase Authentication
+    fun borrarCuentaAuth(
+        onOk: () -> Unit,
+        onRequiresRecentLogin: () -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        val user = auth.currentUser
+        if (user == null) {
+            onError(IllegalStateException("No hay usuario logueado"))
+            return
+        }
+
+        user.delete()
+            .addOnSuccessListener { onOk() }
+            .addOnFailureListener { e ->
+                if (e is FirebaseAuthRecentLoginRequiredException) {
+                    onRequiresRecentLogin()
+                } else {
+                    onError(e)
+                }
+            }
+    }
+
+    // Reautenticamos al usuario antes de realizar acciones sensibles
+    fun reautenticarConCredential(
+        credential: com.google.firebase.auth.AuthCredential,
+        onOk: () -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        val user = auth.currentUser ?: run {
+            onError(IllegalStateException("No hay usuario logueado"))
+            return
+        }
+
+        user.reauthenticate(credential)
+            .addOnSuccessListener { onOk() }
             .addOnFailureListener { e -> onError(e) }
     }
 }

@@ -53,4 +53,10 @@ class JugadorRepository(
             .subscribeOn(Schedulers.io())
     }
 
+    // Eliminamos el jugador local de Room
+    fun borrarJugador(): Completable {
+        return dao.borrarJugador()
+            .subscribeOn(Schedulers.io())
+    }
+
 }

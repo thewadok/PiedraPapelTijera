@@ -133,7 +133,7 @@ No balance, but not out of luck.
     <string name="notif_victory_channel_name">Victories</string>
     <string name="notif_victory_channel_desc">Notifications when you win a game</string>
     <string name="notif_victory_title">Victory!</string>
-    <string name="notif_victory_text">You finished the game in %1$.1f seconds</string>
+    <string name="notif_victory_text">You finished the game in %1$.1f seconds.</string>
 
     <!--Permissions-->
     <string name="permissions_section_title">Permissions</string>
@@ -152,8 +152,10 @@ No balance, but not out of luck.
     <string name="ranking_balance">%1$s Wins balance</string>
 
     <!-- Exit game -->
+    <string name="session_section_title">Session</string>
     <string name="exit_game">Exit game</string>
     <string name="exit_game_title">Exit game</string>
+    <string name="exit_game_description">Closes the app and returns to your home screen.</string>
     <string name="exit_game_message">Are you sure you want to close the app?</string>
     <string name="exit_game_confirm">Exit</string>
     <string name="exit_game_cancel">Cancel</string>
@@ -161,6 +163,7 @@ No balance, but not out of luck.
     <!-- Log out -->
     <string name="logout">Log out</string>
     <string name="logout_title">Log out</string>
+    <string name="logout_description">Signs you out. Your data stays saved in the cloud.</string>
     <string name="logout_message">Do you want to log out and exit the application?</string>
     <string name="logout_confirm">Log out</string>
     <string name="logout_cancel">Cancel</string>
@@ -176,7 +179,7 @@ No balance, but not out of luck.
 
     <!-- Login -->
     <string name="login_title">Sign in</string>
-    <string name="login_desc">Sign in with your Google account to start playing</string>
+    <string name="login_desc">Sign in with your Google account to start playing.</string>
     <string name="login_button">Sign in with Google</string>
     <string name="login_loading">Loading&#8230;</string>
     <string name="login_cancelled">Sign-in cancelled</string>
@@ -189,6 +192,21 @@ No balance, but not out of luck.
     <string name="choose_name_hint">Player name</string>
     <string name="choose_name_error">Please enter a valid name</string>
     <string name="continue_button">Continue</string>
+
+    <!-- Delete account -->
+    <string name="danger_zone_title">Danger zone</string>
+    <string name="delete_account_button">Delete account</string>
+    <string name="delete_account_description">Deletes your account and data. This action cannot be undone.</string>
+    <string name="delete_account_title">Delete account</string>
+    <string name="delete_account_message">
+    All your data will be deleted.
+
+    \n This action cannot be undone.
+
+    \n Are you sure you want to delete your account?
+</string>
+    <string name="delete_account_confirm">Delete</string>
+    <string name="delete_account_cancel">Cancel</string>
 
     <!-- Google Sign-In -->
     <string name="default_web_client_id">

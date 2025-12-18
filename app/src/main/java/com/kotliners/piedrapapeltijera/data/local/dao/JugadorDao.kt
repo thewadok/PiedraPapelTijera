@@ -36,4 +36,8 @@ interface JugadorDao {
     @Query("UPDATE jugador SET monedas = monedas + :cantidad")
     fun sumarRestarMonedas(cantidad: Int): Completable
 
+    // Eliminamos el jugador
+    @Query("DELETE FROM jugador")
+    fun borrarJugador(): Completable
+
 }
